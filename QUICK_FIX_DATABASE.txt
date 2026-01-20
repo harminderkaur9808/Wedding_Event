@@ -1,0 +1,54 @@
+===========================================
+QUICK FIX FOR DATABASE ERROR
+===========================================
+
+The error shows: SQLite database file is missing.
+
+FASTEST FIX (No Database Needed):
+-----------------------------------
+Since your wedding site doesn't need a database, change session driver:
+
+1. Edit .env file on server
+2. Add or change this line:
+   SESSION_DRIVER=file
+
+3. Via SSH or cPanel Terminal, run:
+   php artisan config:clear
+
+This will use file-based sessions instead of database.
+
+===========================================
+
+ALTERNATIVE FIX (Create SQLite Database):
+------------------------------------------
+1. Via cPanel File Manager:
+   - Go to /database/ folder (in root, not public_html)
+   - Create new file: database.sqlite
+   - Set permissions to 644
+
+2. Via SSH or Terminal:
+   php artisan migrate
+   php artisan config:clear
+
+===========================================
+
+BEST FIX (Use MySQL - Recommended):
+-------------------------------------
+1. In cPanel → MySQL Databases:
+   - Create database: wedding_event
+   - Create user and password
+   - Add user to database
+
+2. Edit .env file:
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=wedding_event
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+
+3. Via SSH:
+   php artisan migrate
+   php artisan config:clear
+
+===========================================
