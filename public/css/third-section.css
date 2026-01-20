@@ -1,0 +1,240 @@
+/* Third Section - Wedding Day Countdown Styles */
+
+.wedding-mele-third-section {
+    width: 100%;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wedding-mele-third-section-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.wedding-mele-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.wedding-mele-third-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+}
+
+/* Title Section */
+.wedding-mele-third-title-section {
+    margin-bottom: 30px;
+}
+
+.wedding-mele-wedding-day-text {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 32px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-third-decorative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.wedding-mele-third-decorative-img {
+    width: auto;
+    height: 40px;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.wedding-mele-date-text {
+    font-family: 'Volkhov', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+
+/* Countdown Wrapper */
+.wedding-mele-countdown-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Countdown Box */
+.wedding-mele-countdown-box {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 25px 35px;
+    min-width: 160px;
+    box-shadow: 0 4px 15px rgba(47, 79, 117, 0.15);
+    border-top: 2px solid rgba(47, 79, 117, 0.1);
+    border-left: 2px solid rgba(47, 79, 117, 0.1);
+    border-right: 2px solid rgba(47, 79, 117, 0.1);
+    border-bottom: 3px solid #054C82;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wedding-mele-countdown-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(47, 79, 117, 0.25);
+}
+
+.wedding-mele-countdown-number {
+    font-family: 'Volkhov', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #2F4F75;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wedding-mele-countdown-label {
+    font-family: 'Volkhov', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #2F4F75;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .wedding-mele-third-section {
+        height: 50vh;
+        padding: 0;
+    }
+
+    .wedding-mele-wedding-day-text {
+        font-size: 32px;
+    }
+
+    .wedding-mele-date-text {
+        font-size: 28px;
+    }
+
+    .wedding-mele-countdown-wrapper {
+        gap: 20px;
+    }
+
+    .wedding-mele-countdown-box {
+        padding: 30px 40px;
+        min-width: 150px;
+    }
+
+    .wedding-mele-countdown-number {
+        font-size: 40px;
+        min-height: 50px;
+    }
+
+    .wedding-mele-countdown-label {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-third-section {
+        height: 50vh;
+        padding: 0;
+    }
+
+    .wedding-mele-third-title-section {
+        margin-bottom: 20px;
+    }
+
+    .wedding-mele-wedding-day-text {
+        font-size: 28px;
+    }
+
+    .wedding-mele-third-decorative-img {
+        height: 35px;
+    }
+
+    .wedding-mele-date-text {
+        font-size: 24px;
+    }
+
+    .wedding-mele-countdown-wrapper {
+        gap: 15px;
+    }
+
+    .wedding-mele-countdown-box {
+        padding: 25px 30px;
+        min-width: 120px;
+    }
+
+    .wedding-mele-countdown-number {
+        font-size: 36px;
+        min-height: 45px;
+    }
+
+    .wedding-mele-countdown-label {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-third-section {
+        height: 50vh;
+        padding: 0;
+    }
+
+    .wedding-mele-wedding-day-text {
+        font-size: 24px;
+    }
+
+    .wedding-mele-third-decorative-img {
+        height: 30px;
+    }
+
+    .wedding-mele-date-text {
+        font-size: 20px;
+    }
+
+    .wedding-mele-countdown-wrapper {
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .wedding-mele-countdown-box {
+        padding: 20px 25px;
+        min-width: 100%;
+        max-width: 200px;
+    }
+
+    .wedding-mele-countdown-number {
+        font-size: 32px;
+        min-height: 40px;
+    }
+
+    .wedding-mele-countdown-label {
+        font-size: 13px;
+    }
+}

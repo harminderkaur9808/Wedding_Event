@@ -1,0 +1,247 @@
+/* Header Styles */
+.wedding-header {
+    width: 100%;
+    font-family: 'Jost', sans-serif;
+}
+
+/* Top Header - Dark Blue */
+.top-header {
+    background-color: #0055A5;
+    color: #ffffff;
+    padding: 12px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.top-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.save-date-text {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.date-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendar-icon {
+    color: #ffffff;
+    position: relative;
+}
+
+.calendar-icon circle {
+    fill: #ffd205;
+}
+
+.wedding-date {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Main Header - Light Blue/White */
+.main-header {
+    background: linear-gradient(135deg, #E6F3FF 0%, #F0F8FF 100%);
+    padding: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.main-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+/* Left Side - Logo Section */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.wedding-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.couple-names {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.initials {
+    font-size: 32px;
+    font-weight: 600;
+    color: #0055A5;
+    letter-spacing: 2px;
+}
+
+.full-names {
+    font-size: 18px;
+    font-weight: 400;
+    color: #0055A5;
+    letter-spacing: 0.5px;
+}
+
+/* Right Side - Navigation */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-link {
+    color: #0055A5;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: #003d7a;
+    text-decoration: underline;
+}
+
+.book-appointment-btn {
+    background-color: #ffd205;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-family: 'Jost', sans-serif;
+    box-shadow: 0 2px 8px rgba(255, 210, 5, 0.3);
+}
+
+.book-appointment-btn:hover {
+    background-color: #e6c004;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 210, 5, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .main-header-content {
+        flex-wrap: wrap;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    .main-nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-header-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .main-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-left {
+        width: 100%;
+    }
+
+    .header-right {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .book-appointment-btn {
+        width: 100%;
+    }
+
+    .wedding-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .initials {
+        font-size: 24px;
+    }
+
+    .full-names {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .top-header {
+        padding: 10px 0;
+    }
+
+    .main-header {
+        padding: 15px 0;
+    }
+
+    .save-date-text {
+        font-size: 14px;
+    }
+
+    .wedding-date {
+        font-size: 14px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    .book-appointment-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}

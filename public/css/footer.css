@@ -1,0 +1,508 @@
+/* Footer Styles */
+.wedding-footer {
+    background-color: #2F4F75;
+    color: #ffffff;
+    position: relative;
+    padding: 60px 0 30px;
+    overflow: hidden;
+    font-family: 'Volkhov', serif;
+}
+
+/* Decorative Flowers */
+.footer-left-flower,
+.footer-right-flower {
+    position: absolute;
+    top: 0;
+    width: 170px;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.3;
+}
+
+.footer-left-flower {
+    left: 0;
+}
+
+.footer-right-flower {
+    right: 0;
+}
+
+.footer-flower-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Footer Content */
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 70px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+    align-items: start;
+}
+
+/* Footer Columns */
+.footer-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Brand Column - Left Aligned */
+.footer-brand {
+    max-width: 100%;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
+    justify-self: start;
+}
+
+/* Quick Links Column - Center Position but Left Text */
+.footer-links {
+    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 0 auto;
+}
+
+/* Contact Column - Left Text Aligned */
+.footer-contact {
+    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
+    justify-self: end;
+}
+
+.footer-logo-section {
+    margin-bottom: 20px;
+}
+
+.footer-logo {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+}
+
+.footer-couple-names {
+    font-family: 'Volkhov', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.footer-description {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+/* Links Column */
+.footer-heading {
+    font-family: 'Volkhov', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+.footer-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.footer-link-list li {
+    margin-bottom: 12px;
+    display: block;
+    text-align: left;
+}
+
+.footer-link {
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    opacity: 0.9;
+    display: inline-block;
+}
+
+.footer-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    padding-left: 5px;
+}
+
+/* Contact Column */
+.footer-contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.contact-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke: #ffffff;
+    fill: none;
+}
+
+.footer-contact-item span {
+    line-height: 1.5;
+}
+
+/* Footer Divider */
+.footer-divider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 0px;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-divider-img {
+    max-width: 180px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Copyright */
+.footer-copyright {
+    text-align: center;
+    padding-top: 2px;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-copyright p {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* Responsive Design */
+
+/* iPad Pro and Large Tablets (834px - 1024px) */
+@media (max-width: 1024px) and (min-width: 834px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+    }
+
+    .footer-contact {
+        grid-column: 1 / -1;
+        text-align: left;
+        align-items: flex-start;
+        justify-self: start;
+    }
+
+    .footer-contact-item {
+        justify-content: flex-start;
+    }
+
+    .footer-links {
+        justify-self: center;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 180px;
+        opacity: 0.25;
+    }
+}
+
+/* iPad and Medium Tablets (768px - 834px) */
+@media (max-width: 834px) and (min-width: 768px) {
+    .wedding-footer {
+        padding: 45px 0 30px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 45px;
+        margin-bottom: 35px;
+    }
+
+    .footer-contact {
+        grid-column: 1 / -1;
+        text-align: left;
+        align-items: flex-start;
+        justify-self: start;
+    }
+
+    .footer-contact-item {
+        justify-content: flex-start;
+    }
+
+    .footer-links {
+        justify-self: center;
+    }
+
+    .footer-heading {
+        font-size: 21px;
+        margin-bottom: 22px;
+    }
+
+    .footer-couple-names {
+        font-size: 23px;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 150px;
+        opacity: 0.2;
+    }
+}
+
+/* Small Tablets and Large Mobile (600px - 768px) */
+@media (max-width: 768px) {
+    .wedding-footer {
+        padding: 40px 0 25px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        margin-bottom: 30px;
+    }
+
+    .footer-brand {
+        max-width: 100%;
+        justify-self: start;
+    }
+
+    .footer-links {
+        text-align: left;
+        align-items: flex-start;
+        justify-self: start;
+        margin: 0;
+    }
+
+    .footer-link-list li {
+        text-align: left;
+    }
+
+    .footer-contact {
+        text-align: left;
+        align-items: flex-start;
+        justify-self: start;
+    }
+
+    .footer-contact-item {
+        justify-content: flex-start;
+    }
+
+    .footer-heading {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .footer-couple-names {
+        font-size: 22px;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 150px;
+        opacity: 0.2;
+    }
+
+    .footer-divider {
+        margin: 30px 0 20px;
+    }
+
+    .footer-divider-img {
+        max-width: 150px;
+    }
+}
+
+/* Mobile Devices (480px - 600px) */
+@media (max-width: 600px) {
+    .wedding-footer {
+        padding: 35px 0 22px;
+    }
+
+    .container {
+        padding: 0 20px;
+    }
+
+    .footer-content {
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+
+    .footer-logo {
+        width: 110px;
+    }
+
+    .footer-couple-names {
+        font-size: 21px;
+        margin-bottom: 12px;
+    }
+
+    .footer-description {
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+    .footer-heading {
+        font-size: 19px;
+        margin-bottom: 18px;
+    }
+
+    .footer-link,
+    .footer-contact-item {
+        font-size: 14px;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 120px;
+        opacity: 0.15;
+    }
+
+    .footer-divider {
+        margin: 25px 0 15px;
+    }
+}
+
+/* Small Mobile Devices (max-width: 480px) */
+@media (max-width: 480px) {
+    .wedding-footer {
+        padding: 30px 0 20px;
+    }
+
+    .container {
+        padding: 0 15px;
+    }
+
+    .footer-content {
+        gap: 28px;
+        margin-bottom: 22px;
+    }
+
+    .footer-logo {
+        width: 100px;
+    }
+
+    .footer-logo-section {
+        margin-bottom: 15px;
+    }
+
+    .footer-couple-names {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .footer-description {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .footer-heading {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .footer-link-list li {
+        margin-bottom: 10px;
+    }
+
+    .footer-link {
+        font-size: 13px;
+    }
+
+    .footer-contact-item {
+        font-size: 13px;
+        margin-bottom: 12px;
+        gap: 10px;
+    }
+
+    .contact-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 100px;
+        opacity: 0.1;
+    }
+
+    .footer-divider {
+        margin: 22px 0 12px;
+    }
+
+    .footer-divider-img {
+        max-width: 120px;
+    }
+
+    .footer-copyright {
+        padding-top: 0;
+    }
+
+    .footer-copyright p {
+        font-size: 12px;
+    }
+}
+
+/* Extra Small Mobile Devices (max-width: 360px) */
+@media (max-width: 360px) {
+    .wedding-footer {
+        padding: 25px 0 18px;
+    }
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .footer-logo {
+        width: 90px;
+    }
+
+    .footer-couple-names {
+        font-size: 18px;
+    }
+
+    .footer-heading {
+        font-size: 17px;
+    }
+
+    .footer-link,
+    .footer-contact-item {
+        font-size: 12px;
+    }
+
+    .footer-left-flower,
+    .footer-right-flower {
+        width: 80px;
+    }
+
+    .footer-divider-img {
+        max-width: 100px;
+    }
+}
