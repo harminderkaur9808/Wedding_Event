@@ -1,0 +1,227 @@
+/* Eleventh Section - Wedding */
+.wedding-mele-eleventh-section {
+    width: 100%;
+    position: relative;
+    padding: 70px 0;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.wedding-mele-eleventh-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Corner hearts */
+.wedding-mele-eleventh-heart {
+    position: absolute;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
+.wedding-mele-eleventh-heart--left {
+    left: 20px;
+    top: 40px;
+}
+
+.wedding-mele-eleventh-heart--right {
+    right: 20px;
+    bottom: 40px;
+    transform: scaleX(-1);
+}
+
+/* Header */
+.wedding-mele-eleventh-header {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.wedding-mele-eleventh-subtitle {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 26px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-eleventh-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0 10px;
+}
+
+.wedding-mele-eleventh-between-img {
+    width: auto;
+    height: 22px;
+    max-width: 320px;
+    object-fit: contain;
+}
+
+.wedding-mele-eleventh-title {
+    font-family: 'Volkhov', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Main layout */
+.wedding-mele-eleventh-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.wedding-mele-eleventh-left {
+    flex: 0 0 440px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-eleventh-right {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-eleventh-image-wrapper {
+    width: 100%;
+    max-width: 520px;
+}
+
+.wedding-mele-eleventh-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+}
+
+/* Details */
+.wedding-mele-eleventh-details {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.wedding-mele-eleventh-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wedding-mele-eleventh-detail-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    object-fit: contain;
+    display: block;
+}
+
+.wedding-mele-eleventh-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.7;
+}
+
+.wedding-mele-eleventh-detail-subtext {
+    display: block;
+    font-family: 'Volkhov', serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #2F4F75;
+    opacity: 0.9;
+    margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wedding-mele-eleventh-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-eleventh-main {
+        flex-direction: column;
+        gap: 26px;
+    }
+
+    /* Mobile: image first, details below */
+    .wedding-mele-eleventh-right {
+        width: 100%;
+        order: 1;
+    }
+
+    .wedding-mele-eleventh-left {
+        width: 100%;
+        order: 2;
+    }
+
+    .wedding-mele-eleventh-details {
+        max-width: 560px;
+    }
+
+    .wedding-mele-eleventh-image-wrapper {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-eleventh-subtitle {
+        font-size: 22px;
+    }
+
+    .wedding-mele-eleventh-title {
+        font-size: 38px;
+    }
+
+    .wedding-mele-eleventh-between-img {
+        height: 20px;
+    }
+
+    .wedding-mele-eleventh-heart {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-eleventh-section {
+        padding: 55px 0;
+    }
+
+    .wedding-mele-eleventh-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-eleventh-detail-text {
+        font-size: 15px;
+    }
+
+    .wedding-mele-eleventh-detail-subtext {
+        font-size: 12px;
+    }
+
+    .wedding-mele-eleventh-heart {
+        opacity: 0.45;
+    }
+}
+

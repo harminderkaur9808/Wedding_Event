@@ -1,0 +1,204 @@
+/* Tenth Section - Sehra & Surma Ceremony */
+.wedding-mele-tenth-section {
+    width: 100%;
+    position: relative;
+    padding: 30px 0;
+    overflow: hidden;
+    background-color: #f6f6ff;
+}
+
+/* Background Image - Full Width */
+.wedding-mele-tenth-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.wedding-mele-tenth-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 1;
+}
+
+.wedding-mele-tenth-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.wedding-mele-tenth-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.wedding-mele-tenth-subtitle {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 26px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-tenth-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.wedding-mele-tenth-between-img {
+    width: auto;
+    height: 26px;
+    max-width: 260px;
+    object-fit: contain;
+}
+
+.wedding-mele-tenth-title {
+    font-family: 'Volkhov', serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Main layout */
+.wedding-mele-tenth-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+.wedding-mele-tenth-left {
+    flex: 0 0 440px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.wedding-mele-tenth-right {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-tenth-image-wrapper {
+    width: 100%;
+    max-width: 460px;
+    border: 0;
+    outline: 0;
+}
+
+.wedding-mele-tenth-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+    border: 0;
+    outline: 0;
+}
+
+/* Details */
+.wedding-mele-tenth-details {
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 0;
+    outline: 0;
+}
+
+.wedding-mele-tenth-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wedding-mele-tenth-detail-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    object-fit: contain;
+    display: block;
+}
+
+.wedding-mele-tenth-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wedding-mele-tenth-section {
+        padding: 70px 0;
+    }
+
+    .wedding-mele-tenth-main {
+        flex-direction: column;
+        gap: 26px;
+    }
+
+    /* Mobile: image first, details below */
+    .wedding-mele-tenth-right {
+        width: 100%;
+        flex: 1;
+        order: 1;
+    }
+
+    .wedding-mele-tenth-left {
+        width: 100%;
+        order: 2;
+        align-items: center;
+    }
+
+    .wedding-mele-tenth-details {
+        max-width: 560px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-tenth-subtitle {
+        font-size: 22px;
+    }
+
+    .wedding-mele-tenth-title {
+        font-size: 38px;
+    }
+
+    .wedding-mele-tenth-between-img {
+        height: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-tenth-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-tenth-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-tenth-detail-text {
+        font-size: 15px;
+    }
+}
+

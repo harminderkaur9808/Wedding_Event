@@ -1,14 +1,6 @@
 /* Our Story Section Styles - wedding-mele prefix */
 
-/* Britania Vintage Font */
-@font-face {
-    font-family: 'Britania Vintage';
-    src: url('../Fonts/britania-vintage-Font/Britania Vintage Italic.ttf') format('truetype'),
-         url('../Fonts/britania-vintage-Font/Britania Vintage Italic.otf') format('opentype');
-    font-weight: normal;
-    font-style: italic;
-    font-display: swap;
-}
+/* Font is registered globally in `public/css/style.css` */
 
 .wedding-mele-our-story-section {
     width: 100%;
@@ -27,7 +19,7 @@
 }
 
 .wedding-mele-bride-groom-text {
-    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif;
     font-size: 28px;
     font-weight: normal;
     font-style: italic;
@@ -222,11 +214,12 @@
     position: relative;
     z-index: 3;
     flex: 0 0 auto;
-    width: 53%;
+    width: 65%;
     max-width: 900px;
     margin: 0 auto;
     min-height: 550px;
-    transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 260ms ease-out; /* smooth while scrolling */
+    will-change: width;
 }
 
 .wedding-mele-person-image {
@@ -246,10 +239,9 @@
     opacity: 0.7;
 }
 
-/* Animated positions - container width decreases from 53% to 23% on scroll */
+/* Animated state: only used for opacity (width handled by JS) */
 .wedding-mele-couple-images.animate {
     justify-content: space-between;
-    width: 23%; /* Decrease from 53% to 23% on scroll - images come closer */
 }
 
 .wedding-mele-couple-images.animate .wedding-mele-vickram-image,
@@ -453,7 +445,7 @@
 
     .wedding-mele-left-frame,
     .wedding-mele-right-frame {
-        /* display: none; */
+        display: block;
     }
 }
 

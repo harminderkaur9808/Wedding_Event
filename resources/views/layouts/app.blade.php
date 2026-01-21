@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="{{ asset('css/hero-section.css') }}">
     <link rel="stylesheet" href="{{ asset('css/our-story-section.css') }}">
     <link rel="stylesheet" href="{{ asset('css/third-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fourth-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fifth-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sixth-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/seventh-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ninth-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/tenth-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/eleventh-section.css') }}">
     @stack('styles')
 </head>
 <body>
@@ -39,6 +46,7 @@
     <script src="{{ asset('js/header.js') }}"></script>
     <script src="{{ asset('js/our-story-animation.js') }}"></script>
     <script src="{{ asset('js/countdown.js') }}"></script>
+    <script src="{{ asset('js/section-reveal.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

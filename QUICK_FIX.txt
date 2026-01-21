@@ -1,0 +1,35 @@
+===========================================
+QUICK FIX - 3 STEPS
+===========================================
+
+STEP 1: Edit .env file
+-----------------------
+Change this line:
+DB_CONNECTION=sqlite
+
+To this:
+DB_CONNECTION=mysql
+
+Save the file.
+
+STEP 2: Run these commands (via SSH/Terminal)
+-----------------------------------------------
+php artisan migrate
+php artisan config:clear
+php artisan cache:clear
+
+STEP 3: Refresh your website
+-----------------------------
+Go to: https://palegoldenrod-lemur-907257.hostingersite.com
+
+===========================================
+IF YOU CAN'T RUN COMMANDS:
+===========================================
+
+1. Still change DB_CONNECTION=mysql in .env
+2. Go to phpMyAdmin
+3. Select database: u797489514_weddingevent
+4. Import or run the SQL from create_sessions_table.sql
+5. Refresh website
+
+===========================================

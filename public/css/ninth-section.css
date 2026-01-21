@@ -1,0 +1,269 @@
+/* Ninth Section - Jaggo, Gidha and Bhangra Night */
+.wedding-mele-ninth-section {
+    width: 100%;
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+    background-color: #ffffff;
+}
+
+.wedding-mele-ninth-content {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.wedding-mele-ninth-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.wedding-mele-ninth-subtitle {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 28px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-ninth-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.wedding-mele-ninth-between-img {
+    width: auto;
+    height: 28px;
+    max-width: 260px;
+    object-fit: contain;
+}
+
+.wedding-mele-ninth-title {
+    font-family: 'Volkhov', serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 1px;
+    line-height: 1.15;
+}
+
+/* Main layout */
+.wedding-mele-ninth-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+}
+
+.wedding-mele-ninth-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.wedding-mele-ninth-right {
+    flex: 0 0 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-ninth-image-wrapper {
+    width: 100%;
+    max-width: 520px;
+}
+
+.wedding-mele-ninth-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+}
+
+/* Details */
+.wedding-mele-ninth-details {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.wedding-mele-ninth-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wedding-mele-ninth-detail-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    object-fit: contain;
+    display: block;
+}
+
+.wedding-mele-ninth-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.7;
+}
+
+/* Entertainment */
+.wedding-mele-ninth-entertainment {
+    width: 100%;
+    max-width: 640px;
+    margin-top: 8px;
+}
+
+.wedding-mele-ninth-entertainment-title {
+    font-family: 'Volkhov', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2F4F75;
+}
+
+.wedding-mele-ninth-entertainment-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 28px;
+    align-items: start;
+}
+
+.wedding-mele-ninth-entertainment-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.wedding-mele-ninth-nameplate {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    flex: 1;
+}
+
+.wedding-mele-ninth-nameplate-bg {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.wedding-mele-ninth-nameplate-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    text-align: center;
+    font-family: 'Volkhov', serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wedding-mele-ninth-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-ninth-main {
+        flex-direction: column;
+        gap: 26px;
+    }
+
+    /* Mobile preference: image first, text below */
+    .wedding-mele-ninth-right {
+        width: 100%;
+        flex: 1;
+        order: 1;
+    }
+
+    .wedding-mele-ninth-left {
+        width: 100%;
+        order: 2;
+        align-items: center;
+    }
+
+    .wedding-mele-ninth-details,
+    .wedding-mele-ninth-entertainment {
+        max-width: 560px;
+    }
+
+    /* Stack nameplates, Performance first */
+    .wedding-mele-ninth-entertainment-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .wedding-mele-ninth-entertainment-col--performance {
+        order: 1;
+    }
+
+    .wedding-mele-ninth-entertainment-col--entertainment {
+        order: 2;
+    }
+
+    .wedding-mele-ninth-nameplate {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-ninth-subtitle {
+        font-size: 24px;
+    }
+
+    .wedding-mele-ninth-title {
+        font-size: 36px;
+    }
+
+    .wedding-mele-ninth-between-img {
+        height: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-ninth-section {
+        padding: 50px 0;
+    }
+
+    .wedding-mele-ninth-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-ninth-detail-text {
+        font-size: 15px;
+    }
+
+    .wedding-mele-ninth-entertainment-title {
+        font-size: 20px;
+    }
+
+    .wedding-mele-ninth-nameplate-text {
+        font-size: 12px;
+    }
+}
+

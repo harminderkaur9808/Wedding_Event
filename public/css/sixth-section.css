@@ -1,0 +1,221 @@
+/* Sixth Section - Mehndi */
+.wedding-mele-sixth-section {
+    width: 100%;
+    position: relative;
+    padding: 70px 0;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.wedding-mele-sixth-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.wedding-mele-sixth-decor.wedding-mele-sixth-decor-right {
+    top: 29%;
+}
+
+/* Decorative side SVGs */
+.wedding-mele-sixth-decor {
+    position: absolute;
+    top: -45%;
+    bottom: 0;
+    width: 21%;
+    max-width: 420px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 7.22;
+    display: flex;
+    align-items: center;
+}
+
+.wedding-mele-sixth-decor-left {
+    left: 0;
+    justify-content: flex-start;
+}
+
+.wedding-mele-sixth-decor-right {
+    right: 0;
+    justify-content: flex-end;
+}
+
+.wedding-mele-sixth-decor-img {
+    width: 100%;
+    height: auto;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Header */
+.wedding-mele-sixth-header {
+    text-align: center;
+    /* margin-bottom: 50px; */
+}
+
+.wedding-mele-colorful-vibes-text {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 28px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin-bottom: 0;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-sixth-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4px 0;
+}
+
+.wedding-mele-sixth-between-img {
+    width: auto;
+    height: 34px;
+    max-width: 220px;
+    object-fit: contain;
+}
+
+.wedding-mele-mehndi-text {
+    font-family: 'Volkhov', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin-top: 0;
+    letter-spacing: 1px;
+}
+
+/* Main layout */
+.wedding-mele-sixth-main-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    width: 100%;
+}
+
+/* Left: Details */
+.wedding-mele-sixth-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.wedding-mele-sixth-details {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.wedding-mele-sixth-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wedding-mele-sixth-detail-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    object-fit: contain;
+    display: block;
+}
+
+.wedding-mele-sixth-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.7;
+}
+
+/* Right: Image */
+.wedding-mele-sixth-right {
+    flex: 0 0 44%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.wedding-mele-sixth-image-wrapper {
+    width: 100%;
+    max-width: 430px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-sixth-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wedding-mele-sixth-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-sixth-decor {
+        width: 40%;
+        opacity: 0.18;
+    }
+
+    .wedding-mele-sixth-main-box {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    /* Image first on mobile */
+    .wedding-mele-sixth-right {
+        order: 1;
+        width: 100%;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .wedding-mele-sixth-left {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .wedding-mele-sixth-image-wrapper {
+        max-width: 420px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-colorful-vibes-text {
+        font-size: 24px;
+    }
+
+    .wedding-mele-mehndi-text {
+        font-size: 36px;
+    }
+
+    .wedding-mele-sixth-between-img {
+        height: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-sixth-section {
+        padding: 50px 0;
+    }
+
+    .wedding-mele-sixth-detail-text {
+        font-size: 15px;
+    }
+}
+

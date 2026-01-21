@@ -1,3 +1,58 @@
+/* Custom Fonts */
+@font-face {
+    font-family: 'Britaniya';
+    /* Use ONLY this single font file */
+    src: url("/Fonts/britania-vintage-Font/Britaniya%20Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Backward-compatible alias (maps to same single file) */
+@font-face {
+    font-family: 'Britania Vintage';
+    src: url("/Fonts/britania-vintage-Font/Britaniya%20Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Reveal on scroll (shared) */
+.wm-reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+        opacity 700ms ease,
+        transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.wm-reveal.wm-reveal--left {
+    transform: translate3d(-26px, 0, 0);
+}
+
+.wm-reveal.wm-reveal--right {
+    transform: translate3d(26px, 0, 0);
+}
+
+.wm-reveal.wm-reveal--scale {
+    transform: translate3d(0, 16px, 0) scale(0.985);
+}
+
+.wm-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wm-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;

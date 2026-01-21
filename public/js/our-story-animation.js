@@ -1,63 +1,61 @@
-// Our Story Section Scroll Animation
-// Images start at endpoints, come close together when scrolling from first section to second section
-document.addEventListener('DOMContentLoaded', function() {
+// Our Story Section Scroll Effect
+// On scroll into the section: width 53% -> 45% in 1% steps
+document.addEventListener('DOMContentLoaded', function () {
     const storySection = document.querySelector('.wedding-mele-our-story-section');
     const coupleImages = document.querySelector('.wedding-mele-couple-images');
-    const vickramImage = document.querySelector('.wedding-mele-vickram-image');
-    const nishaImage = document.querySelector('.wedding-mele-nisha-image');
-    
-    if (!storySection || !coupleImages || !vickramImage || !nishaImage) return;
-    
-    // Track scroll position and direction
-    let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    let isScrollingDown = true;
-    
-    // Ensure container starts at default width (53%) - no animation on page load
-    coupleImages.classList.remove('animate');
-    coupleImages.style.width = '53%'; // Default width
-    
-    // Track scroll direction
-    window.addEventListener('scroll', function() {
-        const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        isScrollingDown = currentScrollTop > lastScrollTop;
-        lastScrollTop = currentScrollTop;
-        
-        // Check section position on every scroll
+    if (!storySection || !coupleImages) return;
+
+    const MAX_WIDTH = 65; // %
+    const MIN_WIDTH = 43; // %
+    const RANGE = MAX_WIDTH - MIN_WIDTH; // 8
+
+    // Start at default
+    coupleImages.style.width = `${MAX_WIDTH}%`;
+
+    let ticking = false;
+
+    function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+    }
+
+    function update() {
+        ticking = false;
+
         const rect = storySection.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const sectionTop = rect.top;
-        const sectionBottom = rect.bottom;
-        
-        // Check if section is in viewport (when scrolling down from first section)
-        if (sectionTop < windowHeight * 0.8 && sectionTop > -200 && sectionBottom > 0) {
-            // Section is coming into view - animate images to come close
-            if (isScrollingDown || sectionTop < windowHeight * 0.5) {
-                coupleImages.classList.add('animate');
-            }
-        } else if (sectionTop > windowHeight || sectionBottom < -100) {
-            // Section is out of view - reset to default width
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+
+        // Out of view => reset
+        if (rect.bottom <= 0 || rect.top >= vh) {
+            coupleImages.style.width = `${MAX_WIDTH}%`;
             coupleImages.classList.remove('animate');
-            coupleImages.style.width = '53%';
+            return;
         }
-    }, { passive: true });
-    
-    // Create Intersection Observer as backup
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Add animate class when section comes into view
-                coupleImages.classList.add('animate');
-            } else {
-                // Remove animate class when section is out of view - reset to default width
-                coupleImages.classList.remove('animate');
-                coupleImages.style.width = '53%';
-            }
-        });
-    }, {
-        threshold: 0.2, // Trigger when 20% of section is visible
-        rootMargin: '0px 0px -100px 0px'
-    });
-    
-    // Observe the story section
-    observer.observe(storySection);
+
+        // In view => show "animate" (used for opacity) and adjust width
+        coupleImages.classList.add('animate');
+
+        // Progress based on viewport center position inside the section.
+        // This works smoothly scrolling both down and up.
+        const viewportFocusY = vh * 0.55; // slightly below center feels nicer
+        const base = clamp((viewportFocusY - rect.top) / rect.height, 0, 1);
+
+        // Make it "close" by the time you reach the main/middle part of section.
+        // (65% -> 43% reaches MIN around mid scroll)
+        const t = clamp(base * 2.0, 0, 1);
+
+        // 1% step changes (53 -> 45)
+        const step = Math.round(RANGE * t); // 0..RANGE (1% steps, slower)
+        const width = MAX_WIDTH - step;
+        coupleImages.style.width = `${width}%`;
+    }
+
+    function onScrollOrResize() {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize, { passive: true });
+    update();
 });

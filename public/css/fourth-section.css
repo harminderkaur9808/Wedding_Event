@@ -1,0 +1,429 @@
+/* Fourth Section - Invitation Styles */
+
+.wedding-mele-fourth-section {
+    width: 100%;
+    position: relative;
+    padding: 80px 0;
+    background-color: #ffffff;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wedding-mele-fourth-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Section */
+.wedding-mele-fourth-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.wedding-mele-blessings-text {
+    font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif !important;
+    font-size: 28px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin-bottom: 0px;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-fourth-decorative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+}
+
+.wedding-mele-fourth-decorative-img {
+    width: auto;
+    height: 40px;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.wedding-mele-shagun-text {
+    font-family: 'Volkhov', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin-top: 0px;
+    letter-spacing: 1px;
+}
+
+/* Main Invitation Box */
+.wedding-mele-invitation-box {
+    background-color: #2F4F75;
+    border-radius: 30px;
+    padding: 50px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(47, 79, 117, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Image Inside Invitation Box */
+.wedding-mele-invitation-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: 30px;
+}
+
+.wedding-mele-invitation-bg-image {
+    width: 126%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.1;
+}
+
+/* Left Section - Text Content */
+.wedding-mele-invitation-left {
+    flex: 0 0 40%;
+    color: #ffffff;
+    position: relative;
+    z-index: 3;
+    left: 9%;
+}
+
+.wedding-mele-invitation-title {
+    font-family: 'Volkhov', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.wedding-mele-invitation-intro {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #E0E0E0;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.wedding-mele-invitation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wedding-mele-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.wedding-mele-detail-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: block;
+    object-fit: contain;
+}
+
+.wedding-mele-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #E0E0E0;
+    line-height: 1.5;
+}
+
+/* Right Section - Image */
+.wedding-mele-invitation-right {
+    flex: 1;
+    position: relative;
+    height: 100%;
+    min-height: 400px;
+    z-index: 3;
+    margin: -50px -50px -50px 0;
+    overflow: hidden;
+    border-radius: 0 30px 30px 0;
+}
+
+.wedding-mele-right-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 30px 30px 0;
+    overflow: hidden;
+}
+
+.wedding-mele-right-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .wedding-mele-fourth-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-fourth-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-invitation-box {
+        flex-direction: column;
+        padding: 0;
+        gap: 0;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .wedding-mele-invitation-left {
+        flex: 1;
+        width: 100%;
+        order: 2;
+    }
+
+    .wedding-mele-invitation-right {
+        width: 100%;
+        min-height: 350px;
+        order: 1;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image-wrapper {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px 20px 0 0;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .wedding-mele-invitation-left {
+        padding: 30px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .wedding-mele-invitation-title {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-fourth-section {
+        padding: 50px 0;
+    }
+
+    .wedding-mele-fourth-header {
+        margin-bottom: 40px;
+    }
+
+    .wedding-mele-blessings-text {
+        font-size: 24px;
+    }
+
+    .wedding-mele-shagun-text {
+        font-size: 36px;
+    }
+
+    .wedding-mele-fourth-decorative-img {
+        height: 35px;
+    }
+
+    .wedding-mele-invitation-box {
+        padding: 0;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .wedding-mele-fourth-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-invitation-bg {
+        border-radius: 20px;
+    }
+
+    .wedding-mele-invitation-left {
+        order: 2;
+    }
+
+    .wedding-mele-invitation-right {
+        order: 1;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image-wrapper {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px 20px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px 20px 0 0;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .wedding-mele-invitation-left {
+        padding: 30px 20px;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .wedding-mele-invitation-title {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+
+    .wedding-mele-invitation-intro {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .wedding-mele-detail-text {
+        font-size: 14px;
+    }
+
+    .wedding-mele-invitation-left {
+        order: 2;
+    }
+
+    .wedding-mele-invitation-right {
+        order: 1;
+        min-height: 300px;
+        margin: 0;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image-wrapper {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-fourth-section {
+        padding: 40px 0;
+    }
+
+    .wedding-mele-blessings-text {
+        font-size: 20px;
+    }
+
+    .wedding-mele-shagun-text {
+        font-size: 30px;
+    }
+
+    .wedding-mele-fourth-decorative-img {
+        height: 30px;
+    }
+
+    .wedding-mele-invitation-box {
+        padding: 0;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .wedding-mele-fourth-content {
+        padding: 0 10px;
+    }
+
+    .wedding-mele-invitation-bg {
+        border-radius: 15px;
+    }
+
+    .wedding-mele-invitation-left {
+        order: 2;
+    }
+
+    .wedding-mele-invitation-right {
+        order: 1;
+        margin: 0;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image-wrapper {
+        width: 100%;
+        height: 100%;
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+    }
+
+    .wedding-mele-right-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 15px 15px 0 0;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .wedding-mele-invitation-left {
+        padding: 20px 15px;
+        border-radius: 0 0 15px 15px;
+    }
+
+    .wedding-mele-invitation-title {
+        font-size: 32px;
+    }
+
+    .wedding-mele-invitation-details {
+        gap: 15px;
+    }
+
+    .wedding-mele-detail-item {
+        gap: 12px;
+    }
+
+    .wedding-mele-detail-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .wedding-mele-detail-text {
+        font-size: 13px;
+    }
+
+    .wedding-mele-invitation-right {
+        min-height: 250px;
+    }
+}

@@ -1,0 +1,221 @@
+/* Seventh Section - Sangeet Night */
+.wedding-mele-seventh-section {
+    width: 100%;
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+    background-color: #f6f6ff;
+}
+
+/* Background Image - Full Width */
+.wedding-mele-seventh-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.wedding-mele-seventh-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 1;
+}
+
+.wedding-mele-seventh-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.wedding-mele-seventh-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.wedding-mele-seventh-subtitle {
+    font-family: 'Britania Vintage', 'Volkhov', serif;
+    font-size: 28px;
+    font-weight: normal;
+    font-style: italic;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.wedding-mele-seventh-between {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.wedding-mele-seventh-between-img {
+    width: auto;
+    height: 28px;
+    max-width: 260px;
+    object-fit: contain;
+}
+
+.wedding-mele-seventh-title {
+    font-family: 'Volkhov', serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Main layout */
+.wedding-mele-seventh-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+}
+
+.wedding-mele-seventh-left {
+    flex: 0 0 44%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wedding-mele-seventh-image-wrapper {
+    width: 100%;
+    max-width: 460px;
+}
+
+.wedding-mele-seventh-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.18));
+}
+
+.wedding-mele-seventh-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+}
+
+.wedding-mele-seventh-details {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.wedding-mele-seventh-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wedding-mele-seventh-detail-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    object-fit: contain;
+    display: block;
+}
+
+.wedding-mele-seventh-detail-text {
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.7;
+}
+
+/* Entertainment */
+.wedding-mele-seventh-entertainment {
+    width: 100%;
+    max-width: 600px;
+}
+
+.wedding-mele-seventh-entertainment-title {
+    font-family: 'Volkhov', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin-bottom: 10px;
+}
+
+.wedding-mele-seventh-nameplate {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .wedding-mele-seventh-section {
+        padding: 60px 0;
+    }
+
+    .wedding-mele-seventh-main {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .wedding-mele-seventh-left {
+        width: 100%;
+        flex: 1;
+        order: 1;
+    }
+
+    .wedding-mele-seventh-right {
+        width: 100%;
+        order: 2;
+        align-items: center;
+        text-align: left;
+    }
+
+    .wedding-mele-seventh-details,
+    .wedding-mele-seventh-entertainment {
+        max-width: 560px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wedding-mele-seventh-subtitle {
+        font-size: 24px;
+    }
+
+    .wedding-mele-seventh-title {
+        font-size: 38px;
+    }
+
+    .wedding-mele-seventh-between-img {
+        height: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .wedding-mele-seventh-section {
+        padding: 50px 0;
+    }
+
+    .wedding-mele-seventh-content {
+        padding: 0 15px;
+    }
+
+    .wedding-mele-seventh-detail-text {
+        font-size: 15px;
+    }
+}
+

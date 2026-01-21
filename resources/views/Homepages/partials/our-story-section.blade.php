@@ -5,10 +5,11 @@
     </div>
 
     <!-- Right Decorative Frame -->
-   
+    <div class="wedding-mele-right-frame">
+        <img src="{{ asset('Images/Home/SecSection/right_Frame_best1_h1.png') }}" alt="Right Decorative Frame" class="wedding-mele-frame-image">
+    </div>
 
     <div class="container">
-        
         <!-- Title Section -->
         <div class="wedding-mele-story-title-section">
             <h3 class="wedding-mele-bride-groom-text">Bride & Groom</h3>
@@ -17,9 +18,7 @@
             </div>
             <h2 class="wedding-mele-our-story-title">Our Story</h2>
         </div>
-        <div class="wedding-mele-right-frame">
-        <img src="{{ asset('Images/Home/SecSection/right_Frame_best1_h1.png') }}" alt="Right Decorative Frame" class="wedding-mele-frame-image">
-    </div>
+
         <!-- Main Content Section -->
         <div class="wedding-mele-story-content-wrapper">
             <!-- Center Content -->
