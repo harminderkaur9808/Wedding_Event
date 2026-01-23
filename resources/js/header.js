@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Book appointment clicked');
                 // You can add modal or redirect logic here
             });
+        } else {
+            // Ensure link is clickable - remove any event listeners that might interfere
+            bookAppointmentBtn.style.pointerEvents = 'auto';
+            bookAppointmentBtn.style.cursor = 'pointer';
         }
         // If it's a link, let it navigate normally
     }

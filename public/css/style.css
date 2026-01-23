@@ -362,7 +362,13 @@ body {
     transform: translateX(-50%) scaleX(1);
 }
 
-.book-appointment-btn {
+.book-appointment-btn,
+a.book-appointment-btn,
+a.book-appointment-btn:link,
+a.book-appointment-btn:visited,
+a.book-appointment-btn:hover,
+a.book-appointment-btn:active,
+a.book-appointment-btn:focus {
     background-color: #A3A5C7;
     color: #ffffff;
     border: none;
@@ -375,8 +381,12 @@ body {
     white-space: nowrap;
     font-family: 'Volkhov', serif;
     box-shadow: 0 2px 8px rgba(163, 165, 199, 0.3);
-    text-decoration: none;
+    text-decoration: none !important;
     display: inline-block;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
+    outline: none;
 }
 
 /* Button Animation Code - Commented Out
@@ -421,10 +431,15 @@ body {
 }
 */
 
-.book-appointment-btn:hover {
+.book-appointment-btn:hover,
+.book-appointment-btn:focus,
+.book-appointment-btn:active,
+.book-appointment-btn:visited {
     background-color: #8B8DB0;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(163, 165, 199, 0.4);
+    text-decoration: none !important;
+    color: #ffffff;
 }
 
 /* Button Animation Hover - Commented Out
