@@ -375,6 +375,8 @@ body {
     white-space: nowrap;
     font-family: 'Volkhov', serif;
     box-shadow: 0 2px 8px rgba(163, 165, 199, 0.3);
+    text-decoration: none;
+    display: inline-block;
 }
 
 /* Button Animation Code - Commented Out

@@ -1,15 +1,22 @@
 // Header JavaScript functionality
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Book appointment button
+    // Book appointment button - only prevent default if it's a button without href
     const bookAppointmentBtn = document.querySelector('.book-appointment-btn');
     
     if (bookAppointmentBtn) {
-        bookAppointmentBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Book appointment clicked');
-            // Add your appointment booking logic here
-        });
+        // Check if it's a link (has href attribute)
+        const isLink = bookAppointmentBtn.tagName === 'A' && bookAppointmentBtn.getAttribute('href');
+        
+        if (!isLink) {
+            // Only prevent default if it's a button without href
+            bookAppointmentBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Book appointment clicked');
+                // Add your appointment booking logic here
+            });
+        }
+        // If it's a link, let it navigate normally
     }
 
     // Smooth scroll for navigation links

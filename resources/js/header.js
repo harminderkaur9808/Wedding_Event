@@ -5,12 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookAppointmentBtn = document.querySelector('.book-appointment-btn');
     
     if (bookAppointmentBtn) {
-        bookAppointmentBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add your appointment booking logic here
-            console.log('Book appointment clicked');
-            // You can add modal or redirect logic here
-        });
+        // Check if it's a link (has href attribute)
+        const isLink = bookAppointmentBtn.tagName === 'A' && bookAppointmentBtn.getAttribute('href');
+        
+        if (!isLink) {
+            // Only prevent default if it's a button without href
+            bookAppointmentBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Add your appointment booking logic here
+                console.log('Book appointment clicked');
+                // You can add modal or redirect logic here
+            });
+        }
+        // If it's a link, let it navigate normally
     }
 
     // Smooth scroll for navigation links

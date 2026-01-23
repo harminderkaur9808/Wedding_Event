@@ -213,13 +213,22 @@
                             <div class="admin-dashboard-decorative-svg">
                                 <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
                             </div>
-                            <h1 class="admin-dashboard-title">All Users</h1>
+                            <div class="admin-dashboard-title-with-action">
+                                <h1 class="admin-dashboard-title">All Users</h1>
+                                <button type="button" class="admin-dashboard-btn admin-dashboard-btn-primary" onclick="openAddUserModal()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Add New User
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Users Table -->
                         <div class="admin-dashboard-users-section">
                             <div class="admin-dashboard-users-table-wrapper">
-                                <table class="admin-dashboard-users-table">
+                                <div class="admin-dashboard-table-scroll">
+                                    <table class="admin-dashboard-users-table">
                                     <thead>
                                         <tr>
                                             <th>S.No</th>
@@ -296,6 +305,7 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                             
                             <!-- Pagination -->
@@ -443,6 +453,142 @@
     </div>
 </div>
 
+<!-- Add User Modal -->
+<div class="admin-dashboard-modal" id="addUserModal">
+    <div class="admin-dashboard-modal-overlay" onclick="closeAddUserModal()"></div>
+    <div class="admin-dashboard-modal-container">
+        <div class="admin-dashboard-modal-header">
+            <h2 class="admin-dashboard-modal-title">Add New User</h2>
+            <button type="button" class="admin-dashboard-modal-close" onclick="closeAddUserModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="admin-dashboard-modal-body">
+            <form method="POST" action="{{ route('admin.users.create') }}" id="addUserForm">
+                @csrf
+                
+                @if($errors->any())
+                    <div class="admin-dashboard-alert admin-dashboard-alert-error" style="margin-bottom: 20px;">
+                        <ul style="margin: 0; padding-left: 20px;">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- First Name -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_first_name" class="admin-dashboard-label">First name <span class="admin-dashboard-required">*</span></label>
+                    <input type="text" id="modal_first_name" name="first_name" class="admin-dashboard-input @error('first_name') admin-dashboard-input-error @enderror" value="{{ old('first_name') }}" required>
+                    @error('first_name')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Last Name -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_last_name" class="admin-dashboard-label">Last name <span class="admin-dashboard-required">*</span></label>
+                    <input type="text" id="modal_last_name" name="last_name" class="admin-dashboard-input @error('last_name') admin-dashboard-input-error @enderror" value="{{ old('last_name') }}" required>
+                    @error('last_name')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Email -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_email" class="admin-dashboard-label">Email <span class="admin-dashboard-required">*</span></label>
+                    <input type="email" id="modal_email" name="email" class="admin-dashboard-input @error('email') admin-dashboard-input-error @enderror" value="{{ old('email') }}" required>
+                    @error('email')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Family Relation -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_family_relation" class="admin-dashboard-label">Family relation <span class="admin-dashboard-required">*</span></label>
+                    <select id="modal_family_relation" name="family_relation" class="admin-dashboard-input @error('family_relation') admin-dashboard-input-error @enderror" required>
+                        <option value="">Choose</option>
+                        <option value="father" {{ old('family_relation') == 'father' ? 'selected' : '' }}>Father</option>
+                        <option value="mother" {{ old('family_relation') == 'mother' ? 'selected' : '' }}>Mother</option>
+                        <option value="brother" {{ old('family_relation') == 'brother' ? 'selected' : '' }}>Brother</option>
+                        <option value="sister" {{ old('family_relation') == 'sister' ? 'selected' : '' }}>Sister</option>
+                        <option value="uncle" {{ old('family_relation') == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                        <option value="aunt" {{ old('family_relation') == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                        <option value="cousin" {{ old('family_relation') == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                        <option value="grandfather" {{ old('family_relation') == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                        <option value="grandmother" {{ old('family_relation') == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                        <option value="nephew" {{ old('family_relation') == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                        <option value="niece" {{ old('family_relation') == 'niece' ? 'selected' : '' }}>Niece</option>
+                        <option value="brother_in_law" {{ old('family_relation') == 'brother_in_law' ? 'selected' : '' }}>Brother-in-law</option>
+                        <option value="sister_in_law" {{ old('family_relation') == 'sister_in_law' ? 'selected' : '' }}>Sister-in-law</option>
+                        <option value="father_in_law" {{ old('family_relation') == 'father_in_law' ? 'selected' : '' }}>Father-in-law</option>
+                        <option value="mother_in_law" {{ old('family_relation') == 'mother_in_law' ? 'selected' : '' }}>Mother-in-law</option>
+                        <option value="friend" {{ old('family_relation') == 'friend' ? 'selected' : '' }}>Friend</option>
+                        <option value="other" {{ old('family_relation') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                    @error('family_relation')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Role -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_role" class="admin-dashboard-label">Role</label>
+                    <select id="modal_role" name="role" class="admin-dashboard-input">
+                        <option value="user" {{ old('role', 'user') == 'user' ? 'selected' : '' }}>User</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    </select>
+                </div>
+
+                <!-- Password -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_password" class="admin-dashboard-label">Password <span class="admin-dashboard-required">*</span></label>
+                    <div class="admin-dashboard-password-wrapper">
+                        <input type="password" id="modal_password" name="password" class="admin-dashboard-input @error('password') admin-dashboard-input-error @enderror" required>
+                        <span class="admin-dashboard-password-toggle" onclick="togglePassword('modal_password')">
+                            <svg class="admin-dashboard-eye-icon admin-dashboard-eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <svg class="admin-dashboard-eye-icon admin-dashboard-eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <path d="M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68192 3.96914 7.65663 6.06 6.06M9.9 4.24C10.5883 4.0789 11.2931 3.99836 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2048 20.84 15.19M14.12 14.12C13.8454 14.4148 13.5141 14.6512 13.1462 14.8151C12.7782 14.9791 12.3809 15.0673 11.9781 15.0744C11.5753 15.0815 11.1751 15.0074 10.8016 14.8565C10.4281 14.7056 10.0887 14.4811 9.80385 14.1962C9.51897 13.9113 9.29439 13.5719 9.14351 13.1984C8.99262 12.8249 8.91853 12.4247 8.92563 12.0219C8.93274 11.6191 9.02091 11.2218 9.18488 10.8538C9.34884 10.4859 9.58525 10.1546 9.88 9.88M1 1L23 23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                    @error('password')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Password Confirmation -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_password_confirmation" class="admin-dashboard-label">Confirm password <span class="admin-dashboard-required">*</span></label>
+                    <div class="admin-dashboard-password-wrapper">
+                        <input type="password" id="modal_password_confirmation" name="password_confirmation" class="admin-dashboard-input" required>
+                        <span class="admin-dashboard-password-toggle" onclick="togglePassword('modal_password_confirmation')">
+                            <svg class="admin-dashboard-eye-icon admin-dashboard-eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <svg class="admin-dashboard-eye-icon admin-dashboard-eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <path d="M17.94 17.94C16.2306 19.243 14.1491 19.9649 12 20C5 20 1 12 1 12C2.24389 9.68192 3.96914 7.65663 6.06 6.06M9.9 4.24C10.5883 4.0789 11.2931 3.99836 12 4C19 4 23 12 23 12C22.393 13.1356 21.6691 14.2048 20.84 15.19M14.12 14.12C13.8454 14.4148 13.5141 14.6512 13.1462 14.8151C12.7782 14.9791 12.3809 15.0673 11.9781 15.0744C11.5753 15.0815 11.1751 15.0074 10.8016 14.8565C10.4281 14.7056 10.0887 14.4811 9.80385 14.1962C9.51897 13.9113 9.29439 13.5719 9.14351 13.1984C8.99262 12.8249 8.91853 12.4247 8.92563 12.0219C8.93274 11.6191 9.02091 11.2218 9.18488 10.8538C9.34884 10.4859 9.58525 10.1546 9.88 9.88M1 1L23 23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="admin-dashboard-modal-actions">
+                    <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                    <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
 function togglePassword(inputId) {
@@ -510,6 +656,29 @@ function filterMedia() {
     
     window.location.href = url.toString();
 }
+
+// Add User Modal Functions
+function openAddUserModal() {
+    document.getElementById('addUserModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAddUserModal() {
+    document.getElementById('addUserModal').classList.remove('active');
+    document.body.style.overflow = '';
+    // Reset form
+    document.getElementById('addUserForm').reset();
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('addUserModal');
+        if (modal && modal.classList.contains('active')) {
+            closeAddUserModal();
+        }
+    }
+});
 
 // Connect upload button to file input
 document.addEventListener('DOMContentLoaded', function() {

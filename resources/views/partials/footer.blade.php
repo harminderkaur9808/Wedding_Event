@@ -30,7 +30,7 @@
                     <li><a href="#" class="footer-link">Ask The Host</a></li>
                     <li><a href="#" class="footer-link">Updates By Family</a></li>
                     <li><a href="#" class="footer-link">Lets Plan Our Outfits</a></li>
-                    <li><a href="#" class="footer-link">Book Your Appointments</a></li>
+                    <li><a href="{{ route('book.appointments') }}" class="footer-link">Book Your Appointments</a></li>
                 </ul>
             </div>
 

@@ -285,6 +285,45 @@ class AdminDashboardController extends Controller
     }
 
     /**
+     * Create a new user (Admin only)
+     */
+    public function createUser(Request $request)
+    {
+        $admin = Auth::user();
+        
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied. Admin privileges required.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'family_relation' => 'required|string|max:255',
+            'role' => 'nullable|string|in:user,admin',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput()->with('error', 'Please fix the errors below.');
+        }
+
+        $user = new User();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->family_relation = $request->family_relation;
+        $user->role = $request->role ?? 'user';
+        $user->is_approved = $request->role === 'admin' ? true : false; // Auto-approve admins
+        $user->status = 'active';
+        $user->save();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'all-users'])
+            ->with('success', 'User ' . $user->first_name . ' ' . $user->last_name . ' has been created successfully!');
+    }
+
+    /**
      * Delete a media file
      */
     public function deleteMedia(Request $request)

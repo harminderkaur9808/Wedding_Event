@@ -12,6 +12,11 @@ use App\Http\Controllers\PicturesVideosController;
 Route::get('/pictures-videos', [PicturesVideosController::class, 'index'])->name('pictures_videos');
 Route::get('/pictures-videos/{category}', [PicturesVideosController::class, 'showCategory'])->name('pictures_videos.category');
 
+// Book Appointments Route
+Route::get('/book-appointments', function () {
+    return view('pages.book_appointments');
+})->name('book.appointments');
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -28,6 +33,7 @@ use App\Http\Controllers\UserDashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::post('/admin/users/create', [AdminDashboardController::class, 'createUser'])->name('admin.users.create');
     Route::post('/admin/users/{id}/approve', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
     Route::post('/admin/users/{id}/reject', [AdminDashboardController::class, 'rejectUser'])->name('admin.users.reject');
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
