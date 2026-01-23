@@ -8,7 +8,6 @@
 
 @section('content')
     @include('pages.pictures_videos.partials.hero-section')
-
-    {{-- Add your next sections here (gallery grid, videos, etc.) --}}
+    @include('pages.pictures_videos.partials.gallery-section')
 @endsection
 

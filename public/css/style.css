@@ -163,6 +163,114 @@ body {
     display: block;
 }
 
+/* User Welcome Section */
+.user-welcome-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    cursor: pointer;
+}
+
+.welcome-text {
+    font-size: 15px;
+    font-weight: 400;
+    font-family: 'Volkhov', serif;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.header-profile-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-profile-initials {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #2F4F75;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Volkhov', serif;
+    border: 2px solid #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.header-profile-img:hover,
+.header-profile-initials:hover {
+    border-color: #ffd205;
+    transform: scale(1.1);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    padding: 8px 0;
+}
+
+.user-welcome-section:hover .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 16px;
+    color: #2F4F75;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Volkhov', serif;
+    transition: background-color 0.3s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #E6F3FF;
+    color: #0055A5;
+}
+
+.dropdown-form {
+    margin: 0;
+    padding: 0;
+}
+
+.logout-btn {
+    color: #dc3545 !important;
+}
+
+.logout-btn:hover {
+    background-color: #fff5f5 !important;
+    color: #c82333 !important;
+}
+
 /* Main Header - Light Blue/White */
 .main-header {
     background: linear-gradient(135deg, #E6F3FF 0%, #F0F8FF 100%);
@@ -242,6 +350,15 @@ body {
 }
 
 .nav-link:hover::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.nav-link.active {
+    font-weight: 700;
+    color: #003d7a;
+}
+
+.nav-link.active::after {
     transform: translateX(-50%) scaleX(1);
 }
 
@@ -489,6 +606,17 @@ main {
         font-size: 14px;
     }
 
+    .welcome-text {
+        font-size: 13px;
+    }
+
+    .header-profile-img,
+    .header-profile-initials {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+
     .login-icon {
         width: 16px;
         height: 16px;
@@ -556,9 +684,57 @@ main {
     }
 
     .top-header-right {
+        justify-content: center;
+        width: 100%;
+        margin-top: 8px;
+    }
+
+    .welcome-text {
+        font-size: 12px;
+    }
+
+    .header-profile-img,
+    .header-profile-initials {
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+    }
+
+    .user-dropdown {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    .user-welcome-section:hover .user-dropdown {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .top-header-right {
         width: 100%;
         justify-content: center;
         margin-left: 0;
+    }
+
+    .welcome-text {
+        font-size: 12px;
+    }
+
+    .header-profile-img,
+    .header-profile-initials {
+        width: 26px;
+        height: 26px;
+        font-size: 10px;
+    }
+
+    .user-dropdown {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    .user-welcome-section:hover .user-dropdown {
+        transform: translateX(-50%) translateY(0);
     }
 
     .login-btn {

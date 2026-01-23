@@ -1,0 +1,841 @@
+/* Pictures & Videos page */
+
+.wm-pv-hero {
+    position: relative;
+    width: 100%;
+    height: 33vh; /* 1/3 desktop height */
+    min-height: 260px;
+    overflow: hidden;
+    background: #2F4F75;
+}
+
+.wm-pv-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.wm-pv-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.wm-pv-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        90deg,
+        rgba(47, 79, 117, 0.70) 0%,
+        rgba(47, 79, 117, 0.45) 55%,
+        rgba(47, 79, 117, 0.20) 100%
+    );
+}
+
+.wm-pv-hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.wm-pv-hero-eyebrow {
+    font-family: 'Volkhov', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.wm-pv-hero-decorative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.wm-pv-hero-decorative-img {
+    width: auto;
+    height: 40px;
+    max-width: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+.wm-pv-hero-title {
+    font-family: 'Volkhov', serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(30px, 3.2vw, 46px);
+    color: #ffffff;
+    margin: 0;
+}
+
+@media (max-width: 991.98px) {
+    .wm-pv-hero {
+        height: 30vh;
+        min-height: 230px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .wm-pv-hero {
+    height: 26vh;
+    min-height: 200px;
+    }
+    .wm-pv-hero-eyebrow {
+        font-size: 16px;
+    }
+    .wm-pv-hero-decorative-img {
+        height: 35px;
+    }
+}
+
+/* Gallery Section */
+.wm-pv-gallery-section {
+    width: 100%;
+    padding: 80px 0;
+    background-color: #ffffff;
+}
+
+.wm-pv-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.wm-pv-gallery-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.wm-pv-gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.wm-pv-gallery-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.wm-pv-gallery-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.wm-pv-gallery-card-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(5, 76, 130, 0.75); /* #054C82 with 75% opacity */
+}
+
+.wm-pv-gallery-card-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.wm-pv-gallery-card-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.wm-pv-gallery-card-btn {
+    background-color: #ffffff;
+    color: #054C82;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.wm-pv-gallery-card-btn:hover {
+    background-color: #A3A5C7;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(5, 76, 130, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+    .wm-pv-gallery-section {
+        padding: 60px 0;
+    }
+
+    .wm-pv-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .wm-pv-gallery-section {
+        padding: 40px 0;
+    }
+
+    .wm-pv-gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .wm-pv-gallery-card {
+        aspect-ratio: 16 / 9;
+    }
+
+    .wm-pv-gallery-card-title {
+        font-size: 22px;
+    }
+
+    .wm-pv-gallery-card-btn {
+        padding: 10px 24px;
+        font-size: 14px;
+    }
+}
+
+/* Category Page Styles */
+.wm-pv-category-controls {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    padding-bottom: 0;
+    position: relative;
+    border-bottom: 2px solid #2F4F75;
+}
+
+.wm-pv-category-tabs {
+    display: flex;
+    gap: 0;
+    position: relative;
+    align-items: flex-end;
+    justify-content: center;
+    margin: 0 auto;
+    z-index: 1;
+}
+button.wm-pv-category-add-btn {
+    margin-bottom: 4px;
+}
+.wm-pv-category-tab {
+    padding: 12px 24px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2F4F75;
+    text-decoration: none;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    background-color: #ffffff;
+    margin-bottom: 0;
+    z-index: 1;
+    line-height: 1.5;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+}
+
+.wm-pv-category-tab:hover {
+    color: #2F4F75;
+}
+
+.wm-pv-category-tab.active {
+    color: #2F4F75;
+    font-weight: 600;
+    z-index: 2;
+    margin-bottom: 0;
+    padding-bottom: 12px;
+}
+
+.wm-pv-category-tab:not(.active) {
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 12px;
+}
+
+.wm-pv-category-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #2F4F75;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: -1px;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+}
+a.wm-pv-category-tab.active {
+    border: 2px solid #2F4F75;
+    border-bottom-color: #ffffff;
+    border-radius: 7px 7px 0px 0px;
+    position: relative;
+    top: 2px;
+}
+.wm-pv-category-add-btn:hover {
+    background-color: #A3A5C7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+}
+
+.wm-pv-category-add-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.wm-pv-category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.wm-pv-category-item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.wm-pv-category-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.wm-pv-category-item-image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.wm-pv-category-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.wm-pv-category-item-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(255 255 255 / 54%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin: 10px;
+}
+
+.wm-pv-category-item:hover .wm-pv-category-item-overlay {
+    opacity: 1;
+}
+
+.wm-pv-category-item-hover-icon {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    display: block;
+}
+
+.wm-pv-category-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #666666;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+}
+
+.wm-pv-category-view-more {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.wm-pv-category-view-more-btn {
+    padding: 14px 40px;
+    background-color: #2F4F75;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.wm-pv-category-view-more-btn:hover {
+    background-color: #0055A5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+}
+
+/* Image Viewer Modal */
+.wm-pv-image-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.wm-pv-image-viewer.active {
+    display: flex;
+    opacity: 1;
+}
+
+.wm-pv-image-viewer-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.wm-pv-image-viewer-container {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.wm-pv-image-viewer-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.wm-pv-image-viewer-close:hover {
+    transform: scale(1.1);
+    color: #ffd700;
+}
+
+.wm-pv-image-viewer-nav {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.wm-pv-image-viewer-nav:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
+    transform: scale(1.1);
+}
+
+.wm-pv-image-viewer-content {
+    position: relative;
+    max-width: 80vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.wm-pv-image-viewer-img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.wm-pv-image-viewer-info {
+    color: #ffffff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Responsive for Category Page */
+@media (max-width: 768px) {
+    .wm-pv-category-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .wm-pv-category-tabs {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .wm-pv-category-add-btn {
+        position: relative;
+        right: auto;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .wm-pv-category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+
+    .wm-pv-image-viewer-container {
+        max-width: 95vw;
+        gap: 10px;
+    }
+
+    .wm-pv-image-viewer-nav {
+        width: 40px;
+        height: 40px;
+    }
+
+    .wm-pv-image-viewer-close {
+        top: -40px;
+    }
+}
+
+/* Upload Modal Styles */
+.wm-pv-upload-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.wm-pv-upload-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.wm-pv-upload-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+.wm-pv-upload-modal-container {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 10001;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.wm-pv-upload-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+    z-index: 10002;
+}
+
+.wm-pv-upload-modal-close:hover {
+    background: #f0f0f0;
+}
+
+.wm-pv-upload-modal-content {
+    padding: 40px;
+}
+
+.wm-pv-upload-modal-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+    font-family: 'Volkhov', serif;
+}
+
+.wm-pv-upload-form-group {
+    margin-bottom: 25px;
+}
+
+.wm-pv-upload-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.wm-pv-upload-label span {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.wm-pv-upload-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    font-size: 14px;
+}
+
+.wm-pv-upload-input:hover {
+    border-color: #2F4F75;
+    background: #f0f4f8;
+}
+
+.wm-pv-upload-file-info {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.wm-pv-upload-form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.wm-pv-upload-btn-cancel,
+.wm-pv-upload-btn-submit {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.wm-pv-upload-btn-cancel {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.wm-pv-upload-btn-cancel:hover {
+    background: #e0e0e0;
+}
+
+.wm-pv-upload-btn-submit {
+    background: #2F4F75;
+    color: white;
+}
+
+.wm-pv-upload-btn-submit:hover {
+    background: #1e3a52;
+}
+
+@media (max-width: 768px) {
+    .wm-pv-upload-modal-container {
+        width: 95%;
+        max-height: 95vh;
+    }
+
+    .wm-pv-upload-modal-content {
+        padding: 30px 20px;
+    }
+
+    .wm-pv-upload-modal-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wm-pv-upload-form-actions {
+        flex-direction: column;
+    }
+
+    .wm-pv-upload-btn-cancel,
+    .wm-pv-upload-btn-submit {
+        width: 100%;
+    }
+}
+
+/* Lock Icon Styles for Non-Logged In Users */
+.wm-pv-category-lock-container {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.wm-pv-category-lock-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.wm-pv-category-lock-link:hover {
+    transform: scale(1.05);
+}
+
+.wm-pv-category-lock-icon {
+    color: #2F4F75;
+    margin-bottom: 20px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.wm-pv-category-lock-link:hover .wm-pv-category-lock-icon {
+    opacity: 1;
+}
+
+.wm-pv-category-lock-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2F4F75;
+    margin-bottom: 12px;
+    font-family: 'Volkhov', serif;
+}
+
+.wm-pv-category-lock-message {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 24px;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+.wm-pv-category-lock-btn {
+    background: #2F4F75;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.wm-pv-category-lock-btn:hover {
+    background: #1e3a52;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .wm-pv-category-lock-container {
+        min-height: 300px;
+        padding: 40px 20px;
+    }
+
+    .wm-pv-category-lock-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .wm-pv-category-lock-icon svg {
+        width: 60px;
+        height: 60px;
+    }
+
+    .wm-pv-category-lock-title {
+        font-size: 24px;
+    }
+
+    .wm-pv-category-lock-message {
+        font-size: 14px;
+    }
+}
+

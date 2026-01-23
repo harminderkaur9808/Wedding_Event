@@ -18,9 +18,20 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'family_relation',
+        'role',
+        'is_admin',
+        'is_approved',
+        'phone',
+        'address',
+        'date_of_birth',
+        'status',
+        'last_login_at',
+        'profile_image',
     ];
 
     /**
@@ -43,6 +54,42 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
+            'is_approved' => 'boolean',
+            'date_of_birth' => 'date',
+            'last_login_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin === true || $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is simple user
+     */
+    public function isSimpleUser(): bool
+    {
+        return $this->role === 'simpleuser' && !$this->is_admin;
+    }
+
+    /**
+     * Get full name
+     */
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
+     * Get the media for the user
+     */
+    public function media()
+    {
+        return $this->hasMany(UserMedia::class);
     }
 }
