@@ -65,7 +65,11 @@
                             <a href="#" class="nav-link">Updates by family</a>
                             <a href="#" class="nav-link">Lets Plan Our Outfits</a>
                         </nav>
-                        <a href="{{ route('book.appointments') }}" class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3">Book your appointments</a>
+                        <a href="{{ route('book.appointments') }}" 
+                           class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3"
+                           style="z-index: 9999 !important; pointer-events: auto !important; text-decoration: none !important; cursor: pointer !important;">
+                           Book your appointments
+                        </a>
                     </div>
                 </div>
             </nav>

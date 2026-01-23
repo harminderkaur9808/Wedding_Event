@@ -298,6 +298,15 @@ body {
     flex-grow: 0;
 }
 
+/* Ensure book appointment button is always clickable */
+.header-right .book-appointment-btn,
+.navbar-collapse .book-appointment-btn,
+#navbarNav .book-appointment-btn {
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+}
+
 .wedding-logo {
     width: 120px;
     height: 120px;
@@ -369,24 +378,28 @@ a.book-appointment-btn:visited,
 a.book-appointment-btn:hover,
 a.book-appointment-btn:active,
 a.book-appointment-btn:focus {
-    background-color: #A3A5C7;
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
+    background-color: #A3A5C7 !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 5px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
     transition: all 0.3s ease;
     white-space: nowrap;
     font-family: 'Volkhov', serif;
     box-shadow: 0 2px 8px rgba(163, 165, 199, 0.3);
     text-decoration: none !important;
-    display: inline-block;
-    pointer-events: auto;
-    position: relative;
-    z-index: 1;
+    display: inline-block !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 9999 !important;
     outline: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* Button Animation Code - Commented Out
