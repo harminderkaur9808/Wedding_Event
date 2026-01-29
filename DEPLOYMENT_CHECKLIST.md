@@ -21,6 +21,8 @@ php artisan view:clear
 php artisan route:clear
 ```
 
+**Important for email:** If you change any `MAIL_*` settings in `.env` on live, run `php artisan config:clear` (then optionally `php artisan config:cache`). Otherwise Laravel may keep using the old mail driver and emails won’t send. See **EMAIL_LIVE_FIX.md** for full email troubleshooting.
+
 ### 3. **Check File Permissions**
 Ensure your `public` folder and its contents are readable:
 

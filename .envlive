@@ -52,14 +52,13 @@ REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
 
-MAIL_MAILER=log
-MAIL_SCHEME=null
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=amit.owninfotech@gmail.com
-MAIL_PASSWORD="otqg qmgp brqh jjyi"
-MAIL_FROM_ADDRESS="amit.owninfotech@gmail.com"
+MAIL_HOST=smtp.hostinger.com
+MAIL_PORT=465
+MAIL_USERNAME=info@wedding.owninfotech.com
+MAIL_PASSWORD="ECnYQ7f^D"
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=info@wedding.owninfotech.com
 MAIL_FROM_NAME="${APP_NAME}"
 
 AWS_ACCESS_KEY_ID=

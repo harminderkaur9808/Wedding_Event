@@ -77,6 +77,8 @@ body {
     background-color: #2F4F75;
     color: #ffffff;
     padding: 12px 0;
+    position: relative;
+    z-index: 10002;
 }
 
 .container {
@@ -170,6 +172,7 @@ body {
     gap: 12px;
     position: relative;
     cursor: pointer;
+    z-index: 10001;
 }
 
 .welcome-text {
@@ -226,7 +229,7 @@ body {
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s ease;
-    z-index: 1000;
+    z-index: 10000 !important;
     padding: 8px 0;
 }
 
@@ -734,6 +737,7 @@ main {
         right: auto;
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
+        z-index: 10000 !important;
     }
 
     .user-welcome-section:hover .user-dropdown {
@@ -761,6 +765,7 @@ main {
         right: auto;
         left: 50%;
         transform: translateX(-50%) translateY(-10px);
+        z-index: 10000 !important;
     }
 
     .user-welcome-section:hover .user-dropdown {
