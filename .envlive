@@ -3,7 +3,8 @@ APP_NAME="Wedding Event"
 APP_ENV=production
 APP_KEY=base64:L5ByixfIuGNOfFgl12bK+njfYVOxrZEUWlsUDSXZPPw=
 APP_DEBUG=false
-APP_URL=https://palegoldenrod-lemur-907257.hostingersite.com
+# Must match your live domain (used for storage URLs, emails, etc.). No trailing slash.
+APP_URL=https://wedding.owninfotech.com
 
 
 
