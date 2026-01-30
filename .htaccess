@@ -5,12 +5,16 @@
 
     RewriteEngine On
 
+    # ✅ Allow direct access to storage files
+    RewriteRule ^storage/ - [L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Redirect to public directory if accessing root
     RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_URI} !^/storage/          # <-- IMPORTANT: exclude storage
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/$1 [L]
