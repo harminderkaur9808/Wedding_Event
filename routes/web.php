@@ -1,11 +1,37 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Test email route – sends a test email to amit.owninfotech@gmail.com (remove or protect in production)
+Route::get('/testemail', function () {
+    $to = 'amit.owninfotech@gmail.com';
+    try {
+        Mail::raw(
+            'This is a test email from your Wedding Event project. If you received this, mail is working correctly.' . "\n\n" .
+            'Sent at: ' . now()->toDateTimeString() . "\n" .
+            'APP_ENV: ' . config('app.env') . "\n" .
+            'MAIL_MAILER: ' . config('mail.default'),
+            function ($message) use ($to) {
+                $message->to($to)
+                    ->subject('Wedding Event – Test Email');
+            }
+        );
+        return response()->view('testemail-result', ['success' => true, 'to' => $to], 200);
+    } catch (\Exception $e) {
+        \Log::error('Test email failed: ' . $e->getMessage());
+        return response()->view('testemail-result', [
+            'success' => false,
+            'to' => $to,
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+})->name('testemail');
 
 use App\Http\Controllers\PicturesVideosController;
 
