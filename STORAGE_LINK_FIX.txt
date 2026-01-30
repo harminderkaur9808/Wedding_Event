@@ -1,0 +1,23 @@
+============================================
+FIX: Images not showing (broken storage symlink)
+============================================
+
+--- OPTION A: One command after every deploy (recommended) ---
+On the server, after each "git pull", run:
+   chmod +x deploy.sh
+   ./deploy.sh
+This fixes the storage link and clears Laravel caches.
+
+--- OPTION B: Symlink is in Git ---
+public/storage is now a symlink in the repo (-> ../storage/app/public).
+If you commit and push it, "git pull" on the server will restore the link.
+(If your host overwrites public/ on deploy, use Option A instead.)
+
+--- Manual fix (if needed) ---
+From project root (public_html):
+   rm -f public/storage
+   ln -s ../storage/app/public public/storage
+   php artisan config:clear && php artisan cache:clear
+
+Verify: ls -l public/storage  => storage -> ../storage/app/public
+============================================
