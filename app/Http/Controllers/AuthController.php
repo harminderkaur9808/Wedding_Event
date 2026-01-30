@@ -14,10 +14,18 @@ use App\Mail\AdminNewUserNotification;
 class AuthController extends Controller
 {
     /**
-     * Show login form
+     * Show login form. Store intended URL (e.g. ask-the-host) so we can redirect back after login.
      */
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        if ($request->filled('intended')) {
+            $intended = $request->get('intended');
+            // Only allow same-origin or relative path (avoid open redirect)
+            if (str_starts_with($intended, url('/')) || str_starts_with($intended, '/')) {
+                session(['url.intended' => $intended]);
+            }
+        }
+
         return view('auth.login');
     }
 
@@ -54,12 +62,12 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            // Redirect based on user role
+            // Redirect to intended URL (e.g. ask-the-host) if set, otherwise to dashboard by role
             if ($user->isAdmin()) {
-                return redirect()->route('admin.dashboard')->with('success', 'Welcome back, ' . $user->first_name . '!');
+                return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, ' . $user->first_name . '!');
             }
 
-            return redirect()->route('user.dashboard')->with('success', 'Welcome back, ' . $user->first_name . '!');
+            return redirect()->intended(route('user.dashboard'))->with('success', 'Welcome back, ' . $user->first_name . '!');
         }
 
         return back()->withErrors([

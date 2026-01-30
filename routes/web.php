@@ -43,10 +43,12 @@ Route::get('/book-appointments', function () {
     return view('pages.book_appointments');
 })->name('book.appointments');
 
-// Ask the Host Route
-Route::get('/ask-the-host', function () {
-    return view('pages.ask_the_host');
-})->name('ask.the.host');
+// Ask the Host (public page; post actions require auth)
+use App\Http\Controllers\AskTheHostController;
+
+Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.the.host');
+Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store')->middleware('auth');
+Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store')->middleware('auth');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

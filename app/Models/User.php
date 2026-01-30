@@ -92,4 +92,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserMedia::class);
     }
+
+    /**
+     * Questions asked by the user (Ask the Host).
+     */
+    public function askTheHostQueries()
+    {
+        return $this->hasMany(AskTheHostQuery::class);
+    }
+
+    /**
+     * Replies posted by the user (Ask the Host).
+     */
+    public function askTheHostReplies()
+    {
+        return $this->hasMany(AskTheHostReply::class);
+    }
 }
