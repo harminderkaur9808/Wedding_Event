@@ -2,22 +2,30 @@
 FIX: Images not showing (broken storage symlink)
 ============================================
 
---- OPTION A: One command after every deploy (recommended) ---
-On the server, after each "git pull", run:
-   chmod +x deploy.sh
-   ./deploy.sh
-This fixes the storage link and clears Laravel caches.
+--- ROOT .HTACCESS (already fixed in repo) ---
+When document root is project root (public_html), Apache looks for
+/storage/ at public_html/storage/ (missing). The root .htaccess now
+REWRITES /storage/ to public/storage/ so the symlink is used:
+  RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+Deploy the updated .htaccess and ensure public/storage symlink exists.
 
---- OPTION B: Symlink is in Git ---
-public/storage is now a symlink in the repo (-> ../storage/app/public).
-If you commit and push it, "git pull" on the server will restore the link.
-(If your host overwrites public/ on deploy, use Option A instead.)
+--- Manual symlink fix (run on server from public_html) ---
 
---- Manual fix (if needed) ---
-From project root (public_html):
+1. Remove the wrong symlink:
    rm -f public/storage
-   ln -s ../storage/app/public public/storage
-   php artisan config:clear && php artisan cache:clear
 
-Verify: ls -l public/storage  => storage -> ../storage/app/public
+2. Create the correct symlink (target must be RELATIVE to the public folder):
+   ln -s ../storage/app/public public/storage
+
+3. Verify:
+   ls -l public/storage
+   Should show: storage -> ../storage/app/public
+
+4. Test an image in browser:
+   https://wedding.owninfotech.com/storage/user_media/1769750245_1_697c3ee51a666.png
+
+============================================
+Why: You had run "ln -s storage/app/public public/storage" so the
+link pointed to public/storage/app/public (wrong). It must point
+to ../storage/app/public (from inside public/).
 ============================================
