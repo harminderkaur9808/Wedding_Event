@@ -40,7 +40,7 @@ class UserRejectionMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user-rejection',
+            view: 'Emails.user-rejection',
         );
     }
 

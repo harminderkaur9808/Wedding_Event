@@ -97,6 +97,9 @@ Trigger a signup or action that sends an email. Look for mail-related errors (SM
 - **`config/mail.php`**  
   - Added `'encryption' => env('MAIL_ENCRYPTION')` to the `smtp` mailer so `MAIL_ENCRYPTION` is used.
 
+- **Mail view names (signup/approval/rejection emails)**  
+  - Live servers (Linux) are case-sensitive. Views are in `resources/views/Emails/` (capital E) but Mail classes used `emails.xxx` (lowercase), so Laravel could not find the views and signup emails failed. All Mail classes now use `Emails.xxx`.
+
 - **Your local `.env`**  
   - If you have both `MAIL_MAILER=log` and `MAIL_MAILER=smtp`, remove the `MAIL_MAILER=log` line and keep only `MAIL_MAILER=smtp` (and set `MAIL_ENCRYPTION` as above).  
   - You can use `.envlive` as a reference for the live server.

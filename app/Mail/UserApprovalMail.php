@@ -42,7 +42,7 @@ class UserApprovalMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user-approval',
+            view: 'Emails.user-approval',
         );
     }
 

@@ -42,7 +42,7 @@ class UserWelcomeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user-welcome',
+            view: 'Emails.user-welcome',
         );
     }
 
