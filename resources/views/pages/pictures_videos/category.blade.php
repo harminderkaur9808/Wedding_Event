@@ -53,10 +53,16 @@
                 @endauth
             </div>
 
-            <!-- Image/Video Grid -->
-            <div class="wm-pv-category-grid" id="galleryGrid">
+            @php
+                $perPage = 12;
+                $itemsInitial = array_slice($items, 0, $perPage);
+                $totalItems = count($items);
+                $hasMore = $totalItems > $perPage;
+            @endphp
+            <!-- Image/Video Grid (12 shown by default, View More loads next 12) -->
+            <div class="wm-pv-category-grid" id="galleryGrid" data-shown="{{ count($itemsInitial) }}" data-total="{{ $totalItems }}" data-per-page="{{ $perPage }}">
                 @auth
-                    @forelse($items as $index => $item)
+                    @forelse($itemsInitial as $index => $item)
                         <div class="wm-pv-category-item" data-index="{{ $index }}" onclick="openImageViewer({{ $index }})">
                             <div class="wm-pv-category-item-image">
                                 @if(isset($item['is_video']) && $item['is_video'])
@@ -96,10 +102,10 @@
                 @endauth
             </div>
 
-            <!-- View More Button (if needed) -->
-            @if(count($items) >= 12)
-                <div class="wm-pv-category-view-more">
-                    <button class="wm-pv-category-view-more-btn">View More</button>
+            <!-- View More Button (shows when more than 12 items; loads next 12 on click) -->
+            @if($hasMore)
+                <div class="wm-pv-category-view-more" id="viewMoreContainer">
+                    <button type="button" class="wm-pv-category-view-more-btn" id="viewMoreBtn">View More</button>
                 </div>
             @endif
         </div>
@@ -124,7 +130,7 @@
             <div class="wm-pv-image-viewer-content">
                 <img id="viewerImage" src="" alt="" class="wm-pv-image-viewer-img">
                 <div class="wm-pv-image-viewer-info">
-                    <span id="viewerCounter">1 / {{ count($items) }}</span>
+                    <span id="viewerCounter">1 / {{ $totalItems ?? count($items) }}</span>
                 </div>
             </div>
             
@@ -202,6 +208,8 @@ const galleryItems = @json($items);
 let currentImageIndex = 0;
 const currentCategory = '{{ $category }}';
 const currentType = '{{ $type }}';
+const perPage = {{ $perPage ?? 12 }};
+const showFullViewIconUrl = @json(asset('Images/picturesandvideos/Showfullviewicon.png'));
 
 // Fix history navigation - prevent multiple history entries when switching tabs
 document.addEventListener('DOMContentLoaded', function() {
@@ -355,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Keyboard navigation
 document.addEventListener('keydown', function(e) {
     const viewer = document.getElementById('imageViewer');
-    if (viewer.classList.contains('active')) {
+    if (viewer && viewer.classList.contains('active')) {
         if (e.key === 'ArrowLeft') {
             navigateImage(-1);
         } else if (e.key === 'ArrowRight') {
@@ -365,6 +373,49 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// View More: load next 12 items
+document.addEventListener('DOMContentLoaded', function() {
+    const viewMoreBtn = document.getElementById('viewMoreBtn');
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!viewMoreBtn || !galleryGrid) return;
+
+    viewMoreBtn.addEventListener('click', function() {
+        const shown = parseInt(galleryGrid.getAttribute('data-shown') || '0', 10);
+        const total = galleryItems.length;
+        const next = Math.min(shown + perPage, total);
+
+        for (let i = shown; i < next; i++) {
+            const item = galleryItems[i];
+            const div = document.createElement('div');
+            div.className = 'wm-pv-category-item';
+            div.setAttribute('data-index', i);
+            div.onclick = function() { openImageViewer(i); };
+
+            let mediaHtml;
+            if (item.is_video) {
+                mediaHtml = '<video src="' + escapeHtml(item.url) + '" class="wm-pv-category-item-img" style="object-fit: cover;"></video>';
+            } else {
+                mediaHtml = '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" class="wm-pv-category-item-img">';
+            }
+            const badgeHtml = item.is_current_user ? '<div style="position: absolute; top: 8px; right: 8px; background: rgba(46, 125, 50, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">Your Upload</div>' : '';
+            div.innerHTML = '<div class="wm-pv-category-item-image">' + mediaHtml +
+                '<div class="wm-pv-category-item-overlay"><img src="' + escapeHtml(showFullViewIconUrl) + '" alt="View Full" class="wm-pv-category-item-hover-icon"></div>' +
+                badgeHtml + '</div>';
+            galleryGrid.appendChild(div);
+        }
+
+        galleryGrid.setAttribute('data-shown', next);
+        if (next >= total) {
+            document.getElementById('viewMoreContainer').style.display = 'none';
+        }
+    });
+});
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 </script>
 @endpush
 @endsection

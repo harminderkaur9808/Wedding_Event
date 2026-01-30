@@ -29,42 +29,58 @@ class PicturesVideosController extends Controller
         $items = [];
         
         if (Auth::check()) {
-            // Get all uploaded media from database for this category (from all users and admins)
-            $allUserMedia = UserMedia::where('category', $category)->get();
-            
+            // Get all uploaded media from database for this category (newest first by updated_at)
+            $allUserMedia = UserMedia::where('category', $category)->orderByDesc('updated_at')->get();
+
             foreach ($allUserMedia as $userMedia) {
                 if ($type === 'images' && $userMedia->images && is_array($userMedia->images)) {
-                    foreach ($userMedia->images as $index => $imagePath) {
+                    // Newest filenames are at end of array (time() in filename); reverse so newest first
+                    $imagesList = array_reverse($userMedia->images);
+                    foreach ($imagesList as $index => $imagePath) {
                         $path = 'user_media/' . ltrim($imagePath, '/\\');
                         if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_img_' . $index,
                                 'url' => Storage::disk('public')->url($path),
-                                'title' => 'Uploaded Image ' . ($index + 1),
+                                'title' => 'Uploaded Image',
                                 'is_user_media' => true,
                                 'user_id' => $userMedia->user_id,
-                                'is_current_user' => $userMedia->user_id === Auth::id()
+                                'is_current_user' => $userMedia->user_id === Auth::id(),
+                                'sort_ts' => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
                             ];
                         }
                     }
                 } elseif ($type === 'videos' && $userMedia->videos && is_array($userMedia->videos)) {
-                    foreach ($userMedia->videos as $index => $videoPath) {
+                    $videosList = array_reverse($userMedia->videos);
+                    foreach ($videosList as $index => $videoPath) {
                         $path = 'user_media/' . ltrim($videoPath, '/\\');
                         if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_vid_' . $index,
                                 'url' => Storage::disk('public')->url($path),
-                                'title' => 'Uploaded Video ' . ($index + 1),
+                                'title' => 'Uploaded Video',
                                 'is_user_media' => true,
                                 'is_video' => true,
                                 'user_id' => $userMedia->user_id,
-                                'is_current_user' => $userMedia->user_id === Auth::id()
+                                'is_current_user' => $userMedia->user_id === Auth::id(),
+                                'sort_ts' => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
                             ];
                         }
                     }
                 }
             }
         }
+
+        // Sort all items by upload time (newest first)
+        usort($items, function ($a, $b) {
+            return ($b['sort_ts'] ?? 0) <=> ($a['sort_ts'] ?? 0);
+        });
+        // Set title by position (1, 2, 3...) and remove sort_ts
+        $items = array_values(array_map(function ($item, $index) {
+            unset($item['sort_ts']);
+            $item['title'] = ($item['is_video'] ?? false) ? 'Uploaded Video ' . ($index + 1) : 'Uploaded Image ' . ($index + 1);
+            return $item;
+        }, $items, array_keys($items)));
         
         // Category names mapping
         $categoryNames = [
@@ -87,6 +103,18 @@ class PicturesVideosController extends Controller
             'type' => $type,
             'items' => $items
         ]);
+    }
+
+    /**
+     * Get sort timestamp from filename (format: 1234567890_userId_uniqid.ext) or fallback to model date.
+     */
+    private function getSortTimestampFromFilename(string $filename, $fallbackDate): int
+    {
+        $base = basename($filename);
+        if (preg_match('/^(\d+)_/', $base, $m)) {
+            return (int) $m[1];
+        }
+        return $fallbackDate ? (int) \Carbon\Carbon::parse($fallbackDate)->timestamp : 0;
     }
 
     /**
