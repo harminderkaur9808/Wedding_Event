@@ -58,6 +58,13 @@ All CSS/JS files should be in:
 ### 8. **Browser Cache**
 Clear browser cache or test in incognito mode to ensure you're seeing the latest files.
 
+### 9. **Uploaded images/videos not showing (new uploads only)**
+- **URL fix:** The app now uses `Storage::disk('public')->url(...)` so image URLs use your live `APP_URL` correctly.
+- **On live server:** Ensure `APP_URL` in `.env` is your live URL (e.g. `https://wedding.owninfotech.com`) with no trailing slash.
+- **Storage link:** Run `php artisan storage:link` so `public/storage` → `storage/app/public`. New uploads go to `storage/app/public/user_media/`.
+- **Permissions:** `chmod -R 775 storage/app/public` and `chmod -R 775 public/storage` so the web server can read new files.
+- **Cache:** After any change, run `php artisan config:clear` and `php artisan view:clear`.
+
 ## Quick Fix Script
 
 Run this on your live server after deployment:

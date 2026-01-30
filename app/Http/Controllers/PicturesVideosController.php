@@ -35,11 +35,11 @@ class PicturesVideosController extends Controller
             foreach ($allUserMedia as $userMedia) {
                 if ($type === 'images' && $userMedia->images && is_array($userMedia->images)) {
                     foreach ($userMedia->images as $index => $imagePath) {
-                        // Check if file exists before adding
-                        if (Storage::disk('public')->exists('user_media/' . $imagePath)) {
+                        $path = 'user_media/' . ltrim($imagePath, '/\\');
+                        if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_img_' . $index,
-                                'url' => asset('storage/user_media/' . $imagePath),
+                                'url' => Storage::disk('public')->url($path),
                                 'title' => 'Uploaded Image ' . ($index + 1),
                                 'is_user_media' => true,
                                 'user_id' => $userMedia->user_id,
@@ -49,11 +49,11 @@ class PicturesVideosController extends Controller
                     }
                 } elseif ($type === 'videos' && $userMedia->videos && is_array($userMedia->videos)) {
                     foreach ($userMedia->videos as $index => $videoPath) {
-                        // Check if file exists before adding
-                        if (Storage::disk('public')->exists('user_media/' . $videoPath)) {
+                        $path = 'user_media/' . ltrim($videoPath, '/\\');
+                        if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_vid_' . $index,
-                                'url' => asset('storage/user_media/' . $videoPath),
+                                'url' => Storage::disk('public')->url($path),
                                 'title' => 'Uploaded Video ' . ($index + 1),
                                 'is_user_media' => true,
                                 'is_video' => true,
