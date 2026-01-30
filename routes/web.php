@@ -43,6 +43,11 @@ Route::get('/book-appointments', function () {
     return view('pages.book_appointments');
 })->name('book.appointments');
 
+// Ask the Host Route
+Route::get('/ask-the-host', function () {
+    return view('pages.ask_the_host');
+})->name('ask.the.host');
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');

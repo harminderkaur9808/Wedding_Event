@@ -61,7 +61,7 @@
                     <div class="header-right ms-auto d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                         <nav class="main-nav d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                             <a href="{{ route('pictures_videos') }}" class="nav-link {{ request()->routeIs('pictures_videos') ? 'active' : '' }}">Pictures and Videos</a>
-                            <a href="#" class="nav-link">Ask the Host</a>
+                            <a href="{{ route('ask.the.host') }}" class="nav-link">Ask the Host</a>
                             <a href="#" class="nav-link">Updates by family</a>
                             <a href="#" class="nav-link">Lets Plan Our Outfits</a>
                         </nav>

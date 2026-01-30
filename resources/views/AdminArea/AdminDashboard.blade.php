@@ -226,6 +226,7 @@
 
                         <!-- Users Table -->
                         <div class="admin-dashboard-users-section">
+                            <p class="admin-dashboard-table-scroll-hint">← Scroll horizontally to see all columns →</p>
                             <div class="admin-dashboard-users-table-wrapper">
                                 <div class="admin-dashboard-table-scroll">
                                     <table class="admin-dashboard-users-table">
@@ -244,8 +245,8 @@
                                     <tbody>
                                         @forelse($users ?? [] as $userItem)
                                             <tr>
-                                                <td>{{ $users->firstItem() + $loop->index }}</td>
-                                                <td>
+                                                <td data-label="S.No">{{ $users->firstItem() + $loop->index }}</td>
+                                                <td data-label="Name">
                                                     <div class="admin-dashboard-user-info">
                                                         @if($userItem->profile_image)
                                                             <img src="{{ asset('storage/profile_images/' . $userItem->profile_image) }}" alt="{{ $userItem->first_name }}" class="admin-dashboard-user-avatar">
@@ -255,19 +256,19 @@
                                                         <span>{{ $userItem->first_name }} {{ $userItem->last_name }}</span>
                                                     </div>
                                                 </td>
-                                                <td>{{ $userItem->email }}</td>
-                                                <td>
+                                                <td data-label="Email">{{ $userItem->email }}</td>
+                                                <td data-label="Role">
                                                     <span class="admin-dashboard-role-badge {{ $userItem->isAdmin() ? 'role-admin' : 'role-user' }}">
                                                         {{ $userItem->isAdmin() ? 'Admin' : 'User' }}
                                                     </span>
                                                 </td>
-                                                <td>{{ $userItem->family_relation ?? 'N/A' }}</td>
-                                                <td>
+                                                <td data-label="Family Relation">{{ $userItem->family_relation ?? 'N/A' }}</td>
+                                                <td data-label="Status">
                                                     <span class="admin-dashboard-status-badge status-{{ $userItem->status ?? 'active' }}">
                                                         {{ ucfirst($userItem->status ?? 'active') }}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td data-label="Approval">
                                                     @if($userItem->isAdmin())
                                                         <span class="admin-dashboard-approval-badge approved">Auto Approved</span>
                                                     @elseif($userItem->is_approved)
@@ -276,17 +277,17 @@
                                                         <span class="admin-dashboard-approval-badge pending">Pending</span>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td data-label="Actions">
                                                     @if(!$userItem->isAdmin())
                                                         @if($userItem->is_approved)
-                                                            <form action="{{ route('admin.users.reject', $userItem->id) }}" method="POST" style="display: inline;">
+                                                            <form action="{{ route('admin.users.reject', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
                                                                 @csrf
                                                                 <button type="submit" class="admin-dashboard-action-btn reject-btn" onclick="return confirm('Are you sure you want to reject this user?')">
                                                                     Reject
                                                                 </button>
                                                             </form>
                                                         @else
-                                                            <form action="{{ route('admin.users.approve', $userItem->id) }}" method="POST" style="display: inline;">
+                                                            <form action="{{ route('admin.users.approve', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
                                                                 @csrf
                                                                 <button type="submit" class="admin-dashboard-action-btn approve-btn">
                                                                     Approve
@@ -699,6 +700,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Form will submit normally with the file input included
         });
     }
+
+    // When add user validation fails, keep the modal open so user can see and fix errors
+    @if(session('open_add_user_modal'))
+    if (document.getElementById('addUserModal')) {
+        openAddUserModal();
+    }
+    @endif
 });
 </script>
 @endpush

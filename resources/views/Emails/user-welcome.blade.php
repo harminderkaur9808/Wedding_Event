@@ -155,9 +155,15 @@
                 </div>
             </div>
 
+            @if($user->is_approved)
+            <div class="content-text">
+                <strong>Important:</strong> Your account is ready. You can log in now using the credentials above.
+            </div>
+            @else
             <div class="content-text">
                 <strong>Important:</strong> Your account is currently pending approval. You will receive an email notification once your account has been approved by the administrator. After approval, you'll be able to log in and access all features.
             </div>
+            @endif
 
             <div style="text-align: center;">
                 <a href="{{ url('/login') }}" class="cta-button">Login to Your Account</a>

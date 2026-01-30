@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserApprovalMail;
 use App\Mail\UserRejectionMail;
+use App\Mail\AccountCreatedByAdminMail;
 use Illuminate\Support\Str;
 
 class AdminDashboardController extends Controller
@@ -305,7 +306,9 @@ class AdminDashboardController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput()->with('error', 'Please fix the errors below.');
+            return back()->withErrors($validator)->withInput()
+                ->with('error', 'Please fix the errors below.')
+                ->with('open_add_user_modal', true);
         }
 
         $user = new User();
@@ -314,13 +317,22 @@ class AdminDashboardController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->family_relation = $request->family_relation;
-        $user->role = $request->role ?? 'user';
-        $user->is_approved = $request->role === 'admin' ? true : false; // Auto-approve admins
+        // DB enum is 'simpleuser' | 'admin'; form sends 'user' | 'admin'
+        $user->role = ($request->role === 'admin') ? 'admin' : 'simpleuser';
+        $user->is_admin = ($request->role === 'admin');
+        $user->is_approved = true; // Admin-created users are always auto-approved and get credentials email
         $user->status = 'active';
         $user->save();
 
+        // Send credentials email to the new user (different template for admin-created accounts)
+        try {
+            Mail::to($user->email)->send(new AccountCreatedByAdminMail($user, $request->password));
+        } catch (\Exception $e) {
+            \Log::error('Failed to send credentials email to new user: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.dashboard', ['tab' => 'all-users'])
-            ->with('success', 'User ' . $user->first_name . ' ' . $user->last_name . ' has been created successfully!');
+            ->with('success', 'User ' . $user->first_name . ' ' . $user->last_name . ' has been created successfully! Credentials have been sent to their email.');
     }
 
     /**
