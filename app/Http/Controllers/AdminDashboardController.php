@@ -448,6 +448,38 @@ class AdminDashboardController extends Controller
     }
 
     /**
+     * Download a media file (admin only). Query: path (relative to user_media/), type=image|video.
+     */
+    public function downloadMedia(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $path = $request->query('path');
+        $type = $request->query('type', 'image');
+        if (!in_array($type, ['image', 'video'], true) || empty($path)) {
+            abort(400, 'Invalid request.');
+        }
+
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+        if (strpos($path, '..') !== false || strpos($path, 'user_media/') === 0) {
+            $path = preg_replace('#^user_media/#', '', $path);
+        }
+        $fullPath = 'user_media/' . $path;
+
+        if (!Storage::disk('public')->exists($fullPath)) {
+            abort(404, 'File not found.');
+        }
+
+        $filename = basename($path);
+        return Storage::disk('public')->download($fullPath, $filename, [
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
+    }
+
+    /**
      * Update a page section (homepage content)
      */
     public function updatePageSection(Request $request)

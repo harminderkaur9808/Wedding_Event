@@ -1151,22 +1151,53 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     opacity: 1;
 }
 
-.admin-dashboard-media-delete-form {
-    margin: 0;
+.admin-dashboard-media-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
-.admin-dashboard-media-delete-btn {
-    background: rgba(220, 53, 69, 0.9);
+.admin-dashboard-media-delete-form {
+    margin: 0;
+    display: inline-flex;
+}
+
+.admin-dashboard-media-action-btn {
     border: none;
     border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
     padding: 0;
+    text-decoration: none;
+}
+
+.admin-dashboard-media-view-btn {
+    background: rgba(47, 79, 117, 0.9);
+}
+
+.admin-dashboard-media-view-btn:hover {
+    background: rgba(47, 79, 117, 1);
+    transform: scale(1.1);
+}
+
+.admin-dashboard-media-download-btn {
+    background: rgba(40, 167, 69, 0.9);
+}
+
+.admin-dashboard-media-download-btn:hover {
+    background: rgba(40, 167, 69, 1);
+    transform: scale(1.1);
+}
+
+.admin-dashboard-media-delete-btn {
+    background: rgba(220, 53, 69, 0.9);
 }
 
 .admin-dashboard-media-delete-btn:hover {
@@ -1174,7 +1205,7 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     transform: scale(1.1);
 }
 
-.admin-dashboard-media-delete-btn svg {
+.admin-dashboard-media-action-btn svg {
     color: white;
 }
 

@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/users/{id}/approve', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
     Route::post('/admin/users/{id}/reject', [AdminDashboardController::class, 'rejectUser'])->name('admin.users.reject');
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
+    Route::get('/admin/media/download', [AdminDashboardController::class, 'downloadMedia'])->name('admin.media.download');
     Route::post('/admin/page-sections/update', [AdminDashboardController::class, 'updatePageSection'])->name('admin.page-sections.update');
     
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');

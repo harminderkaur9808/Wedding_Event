@@ -342,7 +342,7 @@
                             <div class="admin-dashboard-decorative-svg">
                                 <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
                             </div>
-                            <h1 class="admin-dashboard-title">Page Sections</h1>
+                            <h1 class="admin-dashboard-title">Home Page Sections</h1>
                             <p class="admin-dashboard-subtitle">Manage homepage section titles, descriptions, wedding date (countdown), and event details. All admins can edit; changes save to the database and show on the homepage.</p>
                         </div>
 
@@ -587,18 +587,26 @@
                                                                 <div class="admin-dashboard-media-item">
                                                                     <img src="{{ $image['url'] }}" alt="Image" class="admin-dashboard-media-thumb">
                                                                     <div class="admin-dashboard-media-overlay">
-                                                                        <form action="{{ route('admin.media.delete') }}" method="POST" class="admin-dashboard-media-delete-form" onsubmit="return confirm('Are you sure you want to delete this image?');">
-                                                                            @csrf
-                                                                            <input type="hidden" name="media_id" value="{{ $image['id'] }}">
-                                                                            <input type="hidden" name="file_path" value="{{ $image['path'] }}">
-                                                                            <input type="hidden" name="file_type" value="image">
-                                                                            <button type="submit" class="admin-dashboard-media-delete-btn" title="Delete Image">
-                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                                    <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                                </svg>
-                                                                            </button>
-                                                                        </form>
+
+
+
+                                                                    <div class="admin-dashboard-media-actions">
+                                                                            <a href="{{ $image['url'] }}" target="_blank" rel="noopener" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" title="View full image">
+                                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/></svg>
+                                                                            </a>
+                                                                            <a href="{{ route('admin.media.download', ['path' => $image['path'], 'type' => 'image']) }}" class="admin-dashboard-media-action-btn admin-dashboard-media-download-btn" title="Download">
+                                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                            </a>
+                                                                            <form action="{{ route('admin.media.delete') }}" method="POST" class="admin-dashboard-media-delete-form" onsubmit="return confirm('Are you sure you want to delete this image?');">
+                                                                                @csrf
+                                                                                <input type="hidden" name="media_id" value="{{ $image['id'] }}">
+                                                                                <input type="hidden" name="file_path" value="{{ $image['path'] }}">
+                                                                                <input type="hidden" name="file_type" value="image">
+                                                                                <button type="submit" class="admin-dashboard-media-action-btn admin-dashboard-media-delete-btn" title="Delete">
+                                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             @endforeach
@@ -614,18 +622,23 @@
                                                                 <div class="admin-dashboard-media-item">
                                                                     <video src="{{ $video['url'] }}" class="admin-dashboard-media-thumb"></video>
                                                                     <div class="admin-dashboard-media-overlay">
-                                                                        <form action="{{ route('admin.media.delete') }}" method="POST" class="admin-dashboard-media-delete-form" onsubmit="return confirm('Are you sure you want to delete this video?');">
-                                                                            @csrf
-                                                                            <input type="hidden" name="media_id" value="{{ $video['id'] }}">
-                                                                            <input type="hidden" name="file_path" value="{{ $video['path'] }}">
-                                                                            <input type="hidden" name="file_type" value="video">
-                                                                            <button type="submit" class="admin-dashboard-media-delete-btn" title="Delete Video">
-                                                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                                    <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                                                </svg>
-                                                                            </button>
-                                                                        </form>
+                                                                        <div class="admin-dashboard-media-actions">
+                                                                            <a href="{{ $video['url'] }}" target="_blank" rel="noopener" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" title="View full video">
+                                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/></svg>
+                                                                            </a>
+                                                                            <a href="{{ route('admin.media.download', ['path' => $video['path'], 'type' => 'video']) }}" class="admin-dashboard-media-action-btn admin-dashboard-media-download-btn" title="Download">
+                                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                            </a>
+                                                                            <form action="{{ route('admin.media.delete') }}" method="POST" class="admin-dashboard-media-delete-form" onsubmit="return confirm('Are you sure you want to delete this video?');">
+                                                                                @csrf
+                                                                                <input type="hidden" name="media_id" value="{{ $video['id'] }}">
+                                                                                <input type="hidden" name="file_path" value="{{ $video['path'] }}">
+                                                                                <input type="hidden" name="file_type" value="video">
+                                                                                <button type="submit" class="admin-dashboard-media-action-btn admin-dashboard-media-delete-btn" title="Delete">
+                                                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             @endforeach
