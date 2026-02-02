@@ -591,9 +591,9 @@
 
 
                                                                     <div class="admin-dashboard-media-actions">
-                                                                            <a href="{{ $image['url'] }}" target="_blank" rel="noopener" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" title="View full image">
+                                                                            <button type="button" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" data-view-url="{{ e($image['url']) }}" data-view-type="image" title="View full image" onclick="openAdminMediaViewModal(this)">
                                                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/></svg>
-                                                                            </a>
+                                                                            </button>
                                                                             <a href="{{ route('admin.media.download', ['path' => $image['path'], 'type' => 'image']) }}" class="admin-dashboard-media-action-btn admin-dashboard-media-download-btn" title="Download">
                                                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                                             </a>
@@ -623,9 +623,9 @@
                                                                     <video src="{{ $video['url'] }}" class="admin-dashboard-media-thumb"></video>
                                                                     <div class="admin-dashboard-media-overlay">
                                                                         <div class="admin-dashboard-media-actions">
-                                                                            <a href="{{ $video['url'] }}" target="_blank" rel="noopener" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" title="View full video">
+                                                                            <button type="button" class="admin-dashboard-media-action-btn admin-dashboard-media-view-btn" data-view-url="{{ e($video['url']) }}" data-view-type="video" title="View full video" onclick="openAdminMediaViewModal(this)">
                                                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="white" stroke-width="2"/></svg>
-                                                                            </a>
+                                                                            </button>
                                                                             <a href="{{ route('admin.media.download', ['path' => $video['path'], 'type' => 'video']) }}" class="admin-dashboard-media-action-btn admin-dashboard-media-download-btn" title="Download">
                                                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10M12 15V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                                                             </a>
@@ -658,6 +658,20 @@
                     </div>
                 @endif
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Media View Modal (full image/video on current page) -->
+<div class="admin-dashboard-modal admin-media-view-modal" id="adminMediaViewModal">
+    <div class="admin-dashboard-modal-overlay" onclick="closeAdminMediaViewModal()"></div>
+    <div class="admin-media-view-modal-container">
+        <button type="button" class="admin-media-view-modal-close" onclick="closeAdminMediaViewModal()" title="Close">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="admin-media-view-modal-content" id="adminMediaViewContent">
+            <img id="adminMediaViewImage" src="" alt="Full size" style="display: none; max-width: 90vw; max-height: 85vh; object-fit: contain;">
+            <video id="adminMediaViewVideo" src="" controls style="display: none; max-width: 90vw; max-height: 85vh;"></video>
         </div>
     </div>
 </div>
@@ -930,6 +944,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         showPageSection(pageSectionSelect.value);
     }
+
+    // Admin Media View Modal (open image/video on current page)
+    window.openAdminMediaViewModal = function(btn) {
+        var url = btn.getAttribute('data-view-url');
+        var type = btn.getAttribute('data-view-type');
+        var modal = document.getElementById('adminMediaViewModal');
+        var imgEl = document.getElementById('adminMediaViewImage');
+        var videoEl = document.getElementById('adminMediaViewVideo');
+        if (!modal || !url || !type) return;
+        imgEl.style.display = 'none';
+        imgEl.removeAttribute('src');
+        videoEl.style.display = 'none';
+        videoEl.removeAttribute('src');
+        videoEl.pause();
+        if (type === 'image') {
+            imgEl.src = url;
+            imgEl.style.display = 'block';
+        } else {
+            videoEl.src = url;
+            videoEl.style.display = 'block';
+        }
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+    window.closeAdminMediaViewModal = function() {
+        var modal = document.getElementById('adminMediaViewModal');
+        var videoEl = document.getElementById('adminMediaViewVideo');
+        if (modal) modal.classList.remove('active');
+        if (videoEl) { videoEl.pause(); videoEl.removeAttribute('src'); }
+        document.body.style.overflow = '';
+    };
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var modal = document.getElementById('adminMediaViewModal');
+            if (modal && modal.classList.contains('active')) closeAdminMediaViewModal();
+        }
+    });
 });
 </script>
 @endpush

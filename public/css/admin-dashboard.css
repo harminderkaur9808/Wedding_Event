@@ -1209,6 +1209,62 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     color: white;
 }
 
+/* Admin Media View Modal (full image/video on current page) */
+.admin-media-view-modal {
+    display: none;
+}
+
+.admin-media-view-modal.active {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+.admin-media-view-modal-container {
+    position: relative;
+    z-index: 1;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-media-view-modal-close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.admin-media-view-modal-close:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+.admin-media-view-modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-media-view-modal-content img,
+.admin-media-view-modal-content video {
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
 /* Modal Styles */
 .admin-dashboard-modal {
     position: fixed;
