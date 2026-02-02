@@ -503,7 +503,7 @@
                                         @endif
 
                                         <div class="admin-dashboard-form-group admin-dashboard-section-actions">
-                                            <button type="submit" class="admin-dashboard-action-btn approve-btn">Save {{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</button>
+                                            <button type="submit" class="admin-dashboard-action-btn approve-btn">Save {{ str_replace(["\r", "\n"], ' ', $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug))) }}</button>
                                         </div>
                                     </form>
                                 </div>
