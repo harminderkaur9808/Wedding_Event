@@ -12,11 +12,11 @@
     <div class="container">
         <!-- Title Section -->
         <div class="wedding-mele-story-title-section">
-            <h3 class="wedding-mele-bride-groom-text">Bride & Groom</h3>
+            <h3 class="wedding-mele-bride-groom-text">{{ optional($sections['our_story'] ?? null)->subtitle ?? 'Bride & Groom' }}</h3>
             <div class="wedding-mele-title-decorative">
                 <img src="{{ asset('Images/Home/SecSection/betweentxtframe.png') }}" alt="Decorative Element" class="wedding-mele-decorative-img">
             </div>
-            <h2 class="wedding-mele-our-story-title">Our Story</h2>
+            <h2 class="wedding-mele-our-story-title">{{ optional($sections['our_story'] ?? null)->title ?? 'Our Story' }}</h2>
         </div>
 
         <!-- Main Content Section -->
@@ -27,8 +27,9 @@
                 <div class="wedding-mele-person-section wedding-mele-vickram-section">
                     <div class="wedding-mele-text-bubble wedding-mele-left-bubble">
                         <div class="wedding-mele-bubble-content">
-                            <h4 class="wedding-mele-person-name">Vickram</h4>
-                            <p class="wedding-mele-person-description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
+                            @php $ourStory = $sections['our_story'] ?? null; @endphp
+                            <h4 class="wedding-mele-person-name">{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}</h4>
+                            <p class="wedding-mele-person-description">{{ $ourStory?->getExtra('groom_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.' }}</p>
                             <div class="wedding-mele-heart-icon wedding-mele-heart-right">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#A3A5C7"/>
@@ -42,10 +43,12 @@
                 <!-- Couple Images -->
                 <div class="wedding-mele-couple-images">
                     <div class="wedding-mele-person-image wedding-mele-vickram-image">
-                        <img src="{{ asset('Images/Home/SecSection/Vickram_img.png') }}" alt="Vickram" class="wedding-mele-person-img">
+                        @php $groomImg = $ourStory?->getExtra('groom_image'); @endphp
+                        <img src="{{ $groomImg ? asset('storage/' . $groomImg) : asset('Images/Home/SecSection/Vickram_img.png') }}" alt="{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}" class="wedding-mele-person-img">
                     </div>
                     <div class="wedding-mele-person-image wedding-mele-nisha-image">
-                        <img src="{{ asset('Images/Home/SecSection/Nisha_img.png') }}" alt="Nisha" class="wedding-mele-person-img">
+                        @php $brideImg = $ourStory?->getExtra('bride_image'); @endphp
+                        <img src="{{ $brideImg ? asset('storage/' . $brideImg) : asset('Images/Home/SecSection/Nisha_img.png') }}" alt="{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}" class="wedding-mele-person-img">
                     </div>
                 </div>
 
@@ -53,8 +56,8 @@
                 <div class="wedding-mele-person-section wedding-mele-nisha-section">
                     <div class="wedding-mele-text-bubble wedding-mele-right-bubble">
                         <div class="wedding-mele-bubble-content">
-                            <h4 class="wedding-mele-person-name">Nisha</h4>
-                            <p class="wedding-mele-person-description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.</p>
+                            <h4 class="wedding-mele-person-name">{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}</h4>
+                            <p class="wedding-mele-person-description">{{ $ourStory?->getExtra('bride_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.' }}</p>
                             <div class="wedding-mele-heart-icon wedding-mele-heart-left">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#A3A5C7"/>

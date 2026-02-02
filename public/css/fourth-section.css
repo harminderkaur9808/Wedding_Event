@@ -164,7 +164,72 @@
     width: 100%;
     height: 100%;
     border-radius: 0 30px 30px 0;
-    overflow: hidden;
+    overflow: visible;
+}
+
+/* Board / clip on image + date text (top-left of couple image) */
+
+
+.wedding-mele-fourth-board-on-image {
+    position: absolute;
+    top: 38%;
+    left: 7%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.wedding-mele-fourth-dynamic-board {
+    width: auto;
+    min-width: 100px;
+    max-width: 140px;
+    height: auto;
+    min-height: 80px;
+    object-fit: contain;
+    display: block !important;
+    margin: 0 0 2px 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+.wedding-mele-fourth-board-date-text {
+    position: absolute;
+    top: 81px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    color: #ffffff !important;
+    font-family: 'Volkhov', serif;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transform: rotate(5deg);
+}
+
+.wedding-mele-fourth-board-line1 {
+    display: block;
+}
+
+.wedding-mele-fourth-board-day {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.wedding-mele-fourth-board-month {
+    font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif !important;
+    font-size: 30px;
+}
+
+.wedding-mele-fourth-board-year {
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .wedding-mele-right-image {
@@ -235,6 +300,14 @@
 }
 
 @media (max-width: 768px) {
+
+
+    .wedding-mele-fourth-board-on-image {
+        position: absolute;
+        top: 39%;
+        left: 2%;
+    }
+    
     .wedding-mele-fourth-section {
         padding: 50px 0;
     }
@@ -425,5 +498,18 @@
 
     .wedding-mele-invitation-right {
         min-height: 250px;
+    }
+}
+
+/* Mobile: board / clip and date text on fourth section image */
+@media only screen and (max-width: 767px) {
+    .wedding-mele-fourth-board-date-text {
+        top: 56px;
+    }
+
+    .wedding-mele-fourth-dynamic-board {
+        width: auto;
+        min-width: 86px;
+        max-width: 107px;
     }
 }

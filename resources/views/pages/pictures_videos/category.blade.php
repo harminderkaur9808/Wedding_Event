@@ -291,12 +291,20 @@ function updateImageViewer() {
         viewerContent.appendChild(img);
     }
     
-    // Add counter
-    const counter = document.createElement('div');
-    counter.className = 'wm-pv-image-viewer-info';
-    counter.id = 'viewerCounter';
-    counter.textContent = `${currentImageIndex + 1} / ${galleryItems.length}`;
-    viewerContent.appendChild(counter);
+    // Add counter and download link
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'wm-pv-image-viewer-info';
+    infoDiv.innerHTML = `<span id="viewerCounter">${currentImageIndex + 1} / ${galleryItems.length}</span>`;
+    if (item.download_url) {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = item.download_url;
+        downloadLink.className = 'wm-pv-image-viewer-download';
+        downloadLink.setAttribute('download', '');
+        downloadLink.title = 'Download';
+        downloadLink.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download';
+        infoDiv.appendChild(downloadLink);
+    }
+    viewerContent.appendChild(infoDiv);
     
     // Update button states
     document.getElementById('prevBtn').style.opacity = galleryItems.length > 1 ? '1' : '0.5';

@@ -87,8 +87,73 @@
 }
 
 .wedding-mele-seventh-image-wrapper {
+    position: relative;
     width: 100%;
     max-width: 460px;
+    overflow: visible;
+}
+
+/* Board on image + date text (top-right of main image) */
+.wedding-mele-seventh-board-on-image {
+    position: absolute;
+    top: 0;
+    right: 3%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.wedding-mele-seventh-dynamic-board {
+    width: auto;
+    min-width: 100px;
+    max-width: 140px;
+    height: auto;
+    min-height: 80px;
+    object-fit: contain;
+    display: block !important;
+    margin: 0 0 2px 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+.wedding-mele-seventh-board-date-text {
+    position: absolute;
+    top: 81px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    color: #ffffff !important;
+    font-family: 'Volkhov', serif;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transform: rotate(5deg);
+}
+
+.wedding-mele-seventh-board-line1 {
+    display: block;
+}
+
+.wedding-mele-seventh-board-day {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.wedding-mele-seventh-board-month {
+    font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif !important;
+    font-size: 30px;
+}
+
+.wedding-mele-seventh-board-year {
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .wedding-mele-seventh-image {
@@ -153,12 +218,35 @@
     margin-bottom: 10px;
 }
 
+.wedding-mele-seventh-nameplate-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+}
+
 .wedding-mele-seventh-nameplate {
     width: 100%;
     max-width: 520px;
     height: auto;
     display: block;
     object-fit: contain;
+}
+
+.wedding-mele-seventh-nameplate-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 86%;
+    text-align: start;
+    font-family: 'Volkhov', serif;
+    font-size: 23px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    pointer-events: none;
 }
 
 /* Responsive */
@@ -216,6 +304,30 @@
 
     .wedding-mele-seventh-detail-text {
         font-size: 15px;
+    }
+}
+
+/* Mobile: board and date text on image (must be last so it overrides on small screens) */
+@media only screen and (max-width: 767px) {
+
+    .wedding-mele-seventh-board-day {
+        font-size: 21px;
+    }
+    .wedding-mele-seventh-board-month {
+        font-size: 25px;
+    }
+    .wedding-mele-seventh-board-year {
+        font-size: 20px;
+    }
+    .wedding-mele-seventh-board-date-text {
+        top: 56px;
+        transform: rotate(5deg);
+    }
+
+    .wedding-mele-seventh-dynamic-board {
+        width: auto;
+        min-width: 86px;
+        max-width: 107px;
     }
 }
 

@@ -47,6 +47,7 @@ class PicturesVideosController extends Controller
                                 'user_id' => $userMedia->user_id,
                                 'is_current_user' => $userMedia->user_id === Auth::id(),
                                 'sort_ts' => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
+                                'download_url' => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
                             ];
                         }
                     }
@@ -64,6 +65,7 @@ class PicturesVideosController extends Controller
                                 'user_id' => $userMedia->user_id,
                                 'is_current_user' => $userMedia->user_id === Auth::id(),
                                 'sort_ts' => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
+                                'download_url' => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
                             ];
                         }
                     }
@@ -172,6 +174,42 @@ class PicturesVideosController extends Controller
         $type = $request->get('type', 'images');
         return redirect()->route('pictures_videos.category', ['category' => $category, 'type' => $type])
             ->with('success', 'Media uploaded successfully!');
+    }
+
+    /**
+     * Download a single image or video (auth required).
+     */
+    public function downloadMedia($mediaId, $type, $index)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to download media.');
+        }
+
+        $userMedia = UserMedia::findOrFail($mediaId);
+        $index = (int) $index;
+
+        if ($type === 'image') {
+            $files = $userMedia->images ?? [];
+            if (!isset($files[$index])) {
+                abort(404);
+            }
+            $path = 'user_media/' . ltrim($files[$index], '/\\');
+        } else {
+            $files = $userMedia->videos ?? [];
+            if (!isset($files[$index])) {
+                abort(404);
+            }
+            $path = 'user_media/' . ltrim($files[$index], '/\\');
+        }
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        $filename = basename($path);
+        return Storage::disk('public')->download($path, $filename, [
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 
 }

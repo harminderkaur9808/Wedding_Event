@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\WelcomeController;
+
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // Test email route – sends a test email to amit.owninfotech@gmail.com (remove or protect in production)
 Route::get('/testemail', function () {
@@ -50,6 +50,11 @@ Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.t
 Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store')->middleware('auth');
 Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store')->middleware('auth');
 
+// Updates by Family Route
+Route::get('/updates-by-family', function () {
+    return view('pages.updates_by_family');
+})->name('updates.by.family');
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
@@ -70,10 +75,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/users/{id}/approve', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
     Route::post('/admin/users/{id}/reject', [AdminDashboardController::class, 'rejectUser'])->name('admin.users.reject');
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
+    Route::post('/admin/page-sections/update', [AdminDashboardController::class, 'updatePageSection'])->name('admin.page-sections.update');
     
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::post('/user/profile/update', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
     
     // Media upload route
     Route::post('/pictures-videos/{category}/upload', [PicturesVideosController::class, 'uploadMedia'])->name('pictures_videos.upload');
+    // Download image/video (auth required)
+    Route::get('/pictures-videos/download/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'downloadMedia'])->name('pictures_videos.download');
 });

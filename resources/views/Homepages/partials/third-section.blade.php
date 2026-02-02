@@ -7,15 +7,16 @@
         <div class="wedding-mele-third-content">
             <!-- Title Section -->
             <div class="wedding-mele-third-title-section">
-                <h2 class="wedding-mele-wedding-day-text">Wedding Day</h2>
+                @php $weddingDay = $sections['wedding_day'] ?? null; @endphp
+                <h2 class="wedding-mele-wedding-day-text">{{ $weddingDay?->subtitle ?? 'Wedding Day' }}</h2>
                 <div class="wedding-mele-third-decorative">
                     <img src="{{ asset('Images/Home/thirdsec/thirdbetweentxtframe.png') }}" alt="Decorative Element" class="wedding-mele-third-decorative-img">
                 </div>
-                <h3 class="wedding-mele-date-text">Date We Getting Married</h3>
+                <h3 class="wedding-mele-date-text">{{ $weddingDay?->title ?? 'Date We Getting Married' }}</h3>
             </div>
 
-            <!-- Countdown Section -->
-            <div class="wedding-mele-countdown-wrapper">
+            <!-- Countdown Section (date from backend for wedding_day section) -->
+            <div class="wedding-mele-countdown-wrapper" id="wedding-countdown" @if($weddingDate) data-wedding-date="{{ $weddingDate->format('Y-m-d\TH:i:s') }}" @endif>
                 <div class="wedding-mele-countdown-box">
                     <div class="wedding-mele-countdown-number" id="days">0</div>
                     <div class="wedding-mele-countdown-label">Day</div>

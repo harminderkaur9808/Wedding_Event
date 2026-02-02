@@ -57,8 +57,16 @@
                             <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                       
                         </svg>
                         <span>All Users</span>
+                    </a>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'page-sections']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'page-sections' ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Page Sections</span>
                     </a>
                     <a href="{{ route('admin.dashboard', ['tab' => 'media-files']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'media-files' ? 'active' : '' }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -322,6 +330,191 @@
                             @endif
                         </div>
                     </div>
+                @elseif(($activeTab ?? 'my-account') === 'page-sections')
+                    <!-- Page Sections Tab Content -->
+                    <div class="admin-dashboard-tab-content">
+                        <div class="admin-dashboard-title-section">
+                            <div class="admin-dashboard-decorative-top">
+                                <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="admin-dashboard-decorative-svg">
+                                <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
+                            </div>
+                            <h1 class="admin-dashboard-title">Page Sections</h1>
+                            <p class="admin-dashboard-subtitle">Manage homepage section titles, descriptions, wedding date (countdown), and event details. All admins can edit; changes save to the database and show on the homepage.</p>
+                        </div>
+
+                        @if($pageSectionsError ?? null)
+                            <div class="admin-dashboard-alert admin-dashboard-alert-error" style="margin-bottom: 20px;">
+                                <span>{{ $pageSectionsError }}</span>
+                            </div>
+                        @endif
+
+                        <div class="admin-dashboard-section-select-wrap">
+                            <label for="pageSectionSelect" class="admin-dashboard-label">Select section to edit</label>
+                            <select id="pageSectionSelect" class="admin-dashboard-input admin-dashboard-section-select">
+                                @foreach($pageSections ?? [] as $sec)
+                                    <option value="{{ $sec->slug }}">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="admin-dashboard-page-sections">
+                            @foreach($pageSections ?? [] as $sec)
+                                <div class="admin-dashboard-section-card js-page-section-card" id="page-section-card-{{ $sec->slug }}" data-section-slug="{{ $sec->slug }}" style="display: none;">
+                                    <h3 class="admin-dashboard-section-card-title">{{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
+                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form">
+                                        @csrf
+                                        <input type="hidden" name="slug" value="{{ $sec->slug }}">
+
+                                        {{-- Image uploads commented out for now
+                                        <form ... enctype="multipart/form-data">
+                                        @if($sec->slug === 'hero')
+                                            <div class="admin-dashboard-form-group">
+                                                <label class="admin-dashboard-label">Hero slide image (homepage banner)</label>
+                                                @if($sec->getExtra('image'))
+                                                    <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('image')) }}" alt="Current" class="admin-dashboard-thumb"></div>
+                                                @endif
+                                                <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
+                                            </div>
+                                        @endif
+                                        @if($sec->slug === 'our_story')
+                                            <div class="admin-dashboard-form-row">
+                                                <div class="admin-dashboard-form-group">
+                                                    <label class="admin-dashboard-label">Groom photo</label>
+                                                    @if($sec->getExtra('groom_image'))
+                                                        <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('groom_image')) }}" alt="Groom" class="admin-dashboard-thumb"></div>
+                                                    @endif
+                                                    <input type="file" name="groom_image" class="admin-dashboard-input" accept="image/*">
+                                                </div>
+                                                <div class="admin-dashboard-form-group">
+                                                    <label class="admin-dashboard-label">Bride photo</label>
+                                                    @if($sec->getExtra('bride_image'))
+                                                        <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('bride_image')) }}" alt="Bride" class="admin-dashboard-thumb"></div>
+                                                    @endif
+                                                    <input type="file" name="bride_image" class="admin-dashboard-input" accept="image/*">
+                                                </div>
+                                            </div>
+                                        @endif
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh']))
+                                            <div class="admin-dashboard-form-group">
+                                                <label class="admin-dashboard-label">Section image (shown on homepage)</label>
+                                                @if($sec->getExtra('image'))
+                                                    <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('image')) }}" alt="Section" class="admin-dashboard-thumb"></div>
+                                                @endif
+                                                <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
+                                            </div>
+                                        @endif
+                                        --}}
+
+                                        <div class="admin-dashboard-form-row">
+                                            <div class="admin-dashboard-form-group">
+                                                <label for="title_{{ $sec->slug }}" class="admin-dashboard-label">Title</label>
+                                                <input type="text" id="title_{{ $sec->slug }}" name="title" class="admin-dashboard-input" value="{{ old('title', $sec->title) }}" placeholder="Section title">
+                                            </div>
+                                            <div class="admin-dashboard-form-group">
+                                                <label for="subtitle_{{ $sec->slug }}" class="admin-dashboard-label">Subtitle</label>
+                                                <input type="text" id="subtitle_{{ $sec->slug }}" name="subtitle" class="admin-dashboard-input" value="{{ old('subtitle', $sec->subtitle) }}" placeholder="Subtitle / tagline">
+                                            </div>
+                                        </div>
+
+                                        @if($sec->slug === 'wedding_day')
+                                            <div class="admin-dashboard-form-group">
+                                                <label for="event_date_{{ $sec->slug }}" class="admin-dashboard-label">Countdown / Event date <span class="admin-dashboard-required">*</span></label>
+                                                <input type="datetime-local" id="event_date_{{ $sec->slug }}" name="event_date" class="admin-dashboard-input" value="{{ old('event_date', $sec->event_date?->format('Y-m-d\TH:i')) }}">
+                                            </div>
+                                        @endif
+
+                                        <div class="admin-dashboard-form-group">
+                                            <label for="short_description_{{ $sec->slug }}" class="admin-dashboard-label">Short description</label>
+                                            <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input" rows="2" placeholder="Optional intro or tagline for this section">{{ old('short_description', $sec->short_description) }}</textarea>
+                                        </div>
+
+                                        @if($sec->slug === 'our_story')
+                                            <div class="admin-dashboard-form-row">
+                                                <div class="admin-dashboard-form-group">
+                                                    <label class="admin-dashboard-label">Groom name</label>
+                                                    <input type="text" name="extra[groom_name]" class="admin-dashboard-input" value="{{ old('extra.groom_name', $sec->getExtra('groom_name')) }}" placeholder="Groom name">
+                                                </div>
+                                                <div class="admin-dashboard-form-group">
+                                                    <label class="admin-dashboard-label">Bride name</label>
+                                                    <input type="text" name="extra[bride_name]" class="admin-dashboard-input" value="{{ old('extra.bride_name', $sec->getExtra('bride_name')) }}" placeholder="Bride name">
+                                                </div>
+                                            </div>
+                                            <div class="admin-dashboard-form-group">
+                                                <label class="admin-dashboard-label">Groom description</label>
+                                                <textarea name="extra[groom_description]" class="admin-dashboard-input" rows="2">{{ old('extra.groom_description', $sec->getExtra('groom_description')) }}</textarea>
+                                            </div>
+                                            <div class="admin-dashboard-form-group">
+                                                <label class="admin-dashboard-label">Bride description</label>
+                                                <textarea name="extra[bride_description]" class="admin-dashboard-input" rows="2">{{ old('extra.bride_description', $sec->getExtra('bride_description')) }}</textarea>
+                                            </div>
+                                        @endif
+
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh']))
+                                            <div class="admin-dashboard-extra-fields">
+                                                @if($sec->slug === 'fourth')
+                                                    <div class="admin-dashboard-form-row">
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}" placeholder="e.g. 2/21/2026"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}" placeholder="e.g. 9 am - 12 pm"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                    </div>
+                                                @endif
+                                                @if($sec->slug === 'fifth')
+                                                    <div class="admin-dashboard-form-row">
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date display (pinned note)</label><input type="text" name="extra[date_display]" class="admin-dashboard-input" value="{{ old('extra.date_display', $sec->getExtra('date_display')) }}" placeholder="e.g. 25 Feb 2026"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
+                                                    </div>
+                                                @endif
+                                                @if(in_array($sec->slug, ['sixth', 'seventh', 'ninth', 'eleventh']))
+                                                    <div class="admin-dashboard-form-row">
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}"></div>
+                                                    </div>
+                                                    @if($sec->slug === 'seventh')
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name frame)</label><input type="text" name="extra[entertainment_mc]" class="admin-dashboard-input" value="{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Jastej Sra') }}" placeholder="e.g. MC: Jastej Sra"></div>
+                                                    @endif
+                                                    @if($sec->slug === 'ninth')
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name plate)</label><input type="text" name="extra[entertainment_mc]" class="admin-dashboard-input" value="{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Herman Kahlon') }}" placeholder="e.g. MC: Herman Kahlon"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Performance (text on name plate)</label><input type="text" name="extra[performance_text]" class="admin-dashboard-input" value="{{ old('extra.performance_text', $sec->getExtra('performance_text') ?? 'Giddha by family members') }}" placeholder="e.g. Giddha by family members"></div>
+                                                    @endif
+                                                    @if($sec->slug === 'eleventh')
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code subtext</label><input type="text" name="extra[dress_code_subtext]" class="admin-dashboard-input" value="{{ old('extra.dress_code_subtext', $sec->getExtra('dress_code_subtext')) }}" placeholder="e.g. Men: Red Turbans..."></div>
+                                                    @endif
+                                                @endif
+                                                @if($sec->slug === 'tenth')
+                                                    <div class="admin-dashboard-form-row">
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Turban tying</label><input type="text" name="extra[turban_tying]" class="admin-dashboard-input" value="{{ old('extra.turban_tying', $sec->getExtra('turban_tying')) }}" placeholder="e.g. At 7 am"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Barat leaves</label><input type="text" name="extra[barat_leaves]" class="admin-dashboard-input" value="{{ old('extra.barat_leaves', $sec->getExtra('barat_leaves')) }}"></div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
+
+                                        <div class="admin-dashboard-form-group admin-dashboard-section-actions">
+                                            <button type="submit" class="admin-dashboard-action-btn approve-btn">Save {{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endforeach
+                        </div>
+                        @if(empty($pageSections) && !($pageSectionsError ?? null))
+                            <div class="admin-dashboard-empty-state">
+                                <p>Sections are created automatically on first visit. If you still see this, run: <code>php artisan migrate</code> then refresh this page.</p>
+                            </div>
+                        @endif
+                    </div>
                 @elseif(($activeTab ?? 'my-account') === 'media-files')
                     <!-- Media Files Tab Content -->
                     <div class="admin-dashboard-tab-content">
@@ -344,9 +537,10 @@
                                 <label for="userFilter" class="admin-dashboard-filter-label">Filter by User:</label>
                                 <select id="userFilter" class="admin-dashboard-filter-select" onchange="filterMedia()">
                                     <option value="all">All Users</option>
-                                    @foreach($usersWithMedia ?? [] as $user)
-                                        <option value="{{ $user->id }}" {{ (isset($selectedUserId) && $selectedUserId == $user->id) || (!isset($selectedUserId) && $user->id == Auth::id()) ? 'selected' : '' }}>
-                                            {{ $user->first_name }} {{ $user->last_name }} {{ $user->isAdmin() ? '(Admin)' : '' }}
+                                    @foreach($usersWithMedia ?? [] as $u)
+                                        @php $count = $userMediaCounts[$u->id] ?? 0; @endphp
+                                        <option value="{{ $u->id }}" {{ (isset($selectedUserId) && (string)$selectedUserId === (string)$u->id) ? 'selected' : '' }}>
+                                            {{ $u->first_name }} {{ $u->last_name }}{{ $u->isAdmin() ? ' (Admin)' : '' }} ({{ $count }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -354,9 +548,10 @@
                             <div class="admin-dashboard-filter-group">
                                 <label for="categoryFilter" class="admin-dashboard-filter-label">Filter by Category:</label>
                                 <select id="categoryFilter" class="admin-dashboard-filter-select" onchange="filterMedia()">
-                                    @foreach($categories ?? [] as $category)
-                                        <option value="{{ $category }}" {{ ($selectedCategory ?? ($categories->first() ?? 'all')) === $category ? 'selected' : '' }}>
-                                            {{ ucfirst($category) }}
+                                    <option value="all" {{ ($selectedCategory ?? 'all') === 'all' ? 'selected' : '' }}>All categories</option>
+                                    @foreach($categoriesWithCount ?? [] as $cat)
+                                        <option value="{{ $cat['value'] }}" {{ (isset($selectedCategory) && $selectedCategory === $cat['value']) ? 'selected' : '' }}>
+                                            {{ $cat['label'] }} ({{ $cat['count'] }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -707,6 +902,21 @@ document.addEventListener('DOMContentLoaded', function() {
         openAddUserModal();
     }
     @endif
+
+    // Page Sections: show only the section selected in the dropdown
+    var pageSectionSelect = document.getElementById('pageSectionSelect');
+    var pageSectionCards = document.querySelectorAll('.js-page-section-card');
+    function showPageSection(slug) {
+        pageSectionCards.forEach(function(card) {
+            card.style.display = (card.getAttribute('data-section-slug') === slug) ? 'block' : 'none';
+        });
+    }
+    if (pageSectionSelect && pageSectionCards.length) {
+        pageSectionSelect.addEventListener('change', function() {
+            showPageSection(this.value);
+        });
+        showPageSection(pageSectionSelect.value);
+    }
 });
 </script>
 @endpush

@@ -11,7 +11,8 @@
         <!-- Carousel Items -->
         <div class="carousel-inner wedding-mele-carousel-inner">
             <div class="carousel-item active wedding-mele-carousel-item">
-                <img src="{{ asset('Images/Home/First_slider_image.png') }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide 1">
+                @php $heroImage = ($sections['hero'] ?? null)?->getExtra('image'); @endphp
+                <img src="{{ $heroImage ? asset('storage/' . $heroImage) : asset('Images/Home/First_slider_image.png') }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide 1">
                 
                 <!-- Animated Heart Overlay -->
                 <div class="wedding-mele-heart-overlay">

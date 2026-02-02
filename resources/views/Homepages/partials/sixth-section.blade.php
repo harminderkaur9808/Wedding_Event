@@ -11,11 +11,12 @@
         <div class="wedding-mele-sixth-content">
             <!-- Header -->
             <div class="wedding-mele-sixth-header">
-                <h3 class="wedding-mele-colorful-vibes-text">Colorful Vibes</h3>
+                @php $sixth = $sections['sixth'] ?? null; @endphp
+                <h3 class="wedding-mele-colorful-vibes-text">{{ $sixth?->subtitle ?? 'Colorful Vibes' }}</h3>
                 <div class="wedding-mele-sixth-between">
                     <img src="{{ asset('Images/Home/sixthSec/betweebtxt_img_0.svg') }}" alt="Decorative Element" class="wedding-mele-sixth-between-img">
                 </div>
-                <h2 class="wedding-mele-mehndi-text">Mehndi</h2>
+                <h2 class="wedding-mele-mehndi-text">{{ $sixth?->title ?? 'Mehndi' }}</h2>
             </div>
 
             <!-- Main box -->
@@ -25,35 +26,49 @@
                     <div class="wedding-mele-sixth-details">
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Date: 2-25-2026</span>
+                            <span class="wedding-mele-sixth-detail-text">Date: {{ $sixth?->getExtra('date') ?? '2-25-2026' }}</span>
                         </div>
 
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Time: 4 - 7 pm</span>
+                            <span class="wedding-mele-sixth-detail-text">Time: {{ $sixth?->getExtra('time') ?? '4 - 7 pm' }}</span>
                         </div>
 
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Venue: Ramit and Maninder Residence</span>
+                            <span class="wedding-mele-sixth-detail-text">Venue: {{ $sixth?->getExtra('venue') ?? 'Ramit and Maninder Residence' }}</span>
                         </div>
 
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Dress Code: Casual Indian Orange Yellow, Green Colors</span>
+                            <span class="wedding-mele-sixth-detail-text">Dress Code: {{ $sixth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span>
                         </div>
 
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Address: 20865 N. 109th Place, Scottsdale AZ</span>
+                            <span class="wedding-mele-sixth-detail-text">Address: {{ $sixth?->getExtra('address') ?? '20865 N. 109th Place, Scottsdale AZ' }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Image -->
+                <!-- Right: Image with board on it -->
                 <div class="wedding-mele-sixth-right">
                     <div class="wedding-mele-sixth-image-wrapper">
-                        <img src="{{ asset('Images/Home/sixthSec/Sixth-section-img-frame-right.png') }}" alt="Mehndi" class="wedding-mele-sixth-image">
+                        @php $sixthImg = $sixth?->getExtra('image'); @endphp
+                        <img src="{{ $sixthImg ? asset('storage/' . $sixthImg) : asset('Images/Home/sixthSec/Sixth-section-img-frame-right.png') }}" alt="Mehndi" class="wedding-mele-sixth-image">
+                        <!-- Board on image + date text (same as Vatna / Sangeet) -->
+                        <div class="wedding-mele-sixth-board-on-image">
+                            <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-sixth-dynamic-board">
+                            <div class="wedding-mele-sixth-board-date-text" aria-label="Event date">
+                                @php
+                                    $boardDate = $sixth?->getBoardDateFormatted();
+                                @endphp
+                                <span class="wedding-mele-sixth-board-line1">
+                                    <span class="wedding-mele-sixth-board-day">{{ ($boardDate ?? [])['day'] ?? '25' }}</span> <span class="wedding-mele-sixth-board-month">{{ ($boardDate ?? [])['month'] ?? 'Feb' }}</span>
+                                </span>
+                                <span class="wedding-mele-sixth-board-year">{{ ($boardDate ?? [])['year'] ?? '2026' }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

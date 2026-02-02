@@ -7,9 +7,10 @@
 (function() {
     'use strict';
 
-    // Wedding date: December 31, 2026 at 12:00 PM (noon) in user's local timezone
-    // You can modify this date as needed
-    const weddingDate = new Date('2026-12-31T12:00:00');
+    // Wedding date: from backend (data-wedding-date on #wedding-countdown) or fallback
+    const countdownEl = document.getElementById('wedding-countdown');
+    const dateStr = countdownEl && countdownEl.getAttribute('data-wedding-date');
+    const weddingDate = dateStr ? new Date(dateStr) : new Date('2026-12-31T12:00:00');
     
     // Get user's timezone
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserMedia;
+use App\Models\PageSection;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +39,26 @@ class AdminDashboardController extends Controller
                 'user' => $user,
                 'users' => $users,
                 'activeTab' => 'all-users'
+            ]);
+        }
+
+        if ($tab === 'page-sections') {
+            $pageSectionsError = null;
+            try {
+                $this->ensurePageSectionsExist();
+                $pageSections = PageSection::orderBy('sort_order')->get();
+            } catch (\Throwable $e) {
+                \Log::error('Page sections load failed: ' . $e->getMessage());
+                $pageSections = collect();
+                $pageSectionsError = 'Database table may be missing. Run: php artisan migrate';
+            }
+            // First section (Hero) commented out for now – exclude from dropdown and forms
+            $pageSections = $pageSections->filter(fn ($s) => $s->slug !== 'hero')->values();
+            return view('AdminArea.AdminDashboard', [
+                'user' => $user,
+                'pageSections' => $pageSections,
+                'pageSectionsError' => $pageSectionsError,
+                'activeTab' => 'page-sections',
             ]);
         }
 
@@ -167,6 +189,24 @@ class AdminDashboardController extends Controller
     }
 
     /**
+     * All gallery categories (same as gallery-section / Pictures and Videos)
+     */
+    private static function getAllCategories(): array
+    {
+        return [
+            'roka' => 'Roka',
+            'shagun' => 'Shagun',
+            'vatna' => 'Vatna',
+            'sangeet' => 'Sangeet',
+            'mehndi' => 'Mehndi',
+            'jaggo' => 'Jaggo and Giddha',
+            'sehra' => 'Sehra Bandhi and Surma',
+            'barat' => 'Barat and Milni',
+            'wedding' => 'Wedding',
+        ];
+    }
+
+    /**
      * Show all media files
      */
     public function mediaFiles(Request $request)
@@ -177,51 +217,72 @@ class AdminDashboardController extends Controller
             return redirect()->route('login')->with('error', 'Access denied. Admin privileges required.');
         }
 
-        // Get filter parameters - default to admin's own profile
-        $requestUserId = $request->get('user_id');
-        $selectedUserId = $requestUserId !== null ? $requestUserId : $admin->id;
-        
-        // Get all categories for dropdown (filter by selected user)
-        $categoryQuery = UserMedia::query();
-        if ($selectedUserId !== 'all') {
-            $categoryQuery->where('user_id', $selectedUserId);
-        }
-        $categories = $categoryQuery->distinct()->pluck('category')->filter()->sort()->values();
-        
-        // Set default category to first category if available
-        $defaultCategory = $categories->isNotEmpty() ? $categories->first() : 'all';
-        $selectedCategory = $request->get('category', $defaultCategory);
+        $allCategories = self::getAllCategories();
 
-        // Get all media files grouped by user and category
+        // Get filter parameters
+        $selectedUserId = $request->get('user_id', 'all');
+        $selectedCategory = $request->get('category', 'all');
+
+        // Get all media files
         $allMedia = UserMedia::with('user')->orderBy('created_at', 'desc')->get();
-        
-        // Get all users who have uploaded media for dropdown
+
+        // Count media per user (total images + videos, all categories)
+        $userMediaCounts = [];
+        foreach ($allMedia as $media) {
+            $uid = $media->user_id;
+            if (!isset($userMediaCounts[$uid])) {
+                $userMediaCounts[$uid] = 0;
+            }
+            $userMediaCounts[$uid] += count($media->images ?? []) + count($media->videos ?? []);
+        }
+
+        // Count media per category (optionally filtered by selected user)
+        $categoryCounts = array_fill_keys(array_keys($allCategories), 0);
+        foreach ($allMedia as $media) {
+            if ($selectedUserId !== 'all' && (string) $media->user_id !== (string) $selectedUserId) {
+                continue;
+            }
+            $cat = $media->category;
+            if (isset($categoryCounts[$cat])) {
+                $categoryCounts[$cat] += count($media->images ?? []) + count($media->videos ?? []);
+            }
+        }
+
+        // Build categories with count for dropdown (all categories, show count)
+        $categoriesWithCount = [];
+        foreach ($allCategories as $slug => $label) {
+            $categoriesWithCount[] = [
+                'value' => $slug,
+                'label' => $label,
+                'count' => $categoryCounts[$slug] ?? 0,
+            ];
+        }
+
+        // Users who have uploaded media (for dropdown)
         $userIds = $allMedia->pluck('user_id')->unique()->filter()->values();
-        $usersWithMedia = $userIds->isNotEmpty() 
+        $usersWithMedia = $userIds->isNotEmpty()
             ? User::whereIn('id', $userIds)
                 ->orderBy('is_admin', 'desc')
                 ->orderBy('first_name')
                 ->get()
             : collect();
-        
-        // Organize media by user
+
+        // Organize media by user (filter by selected user and category)
         $mediaByUser = [];
         foreach ($allMedia as $media) {
             $userId = $media->user_id;
-            
-            // Filter by user if selected (default is admin's own profile)
-            if ($selectedUserId !== 'all' && $userId != $selectedUserId) {
+
+            if ($selectedUserId !== 'all' && (string) $userId !== (string) $selectedUserId) {
                 continue;
             }
-            
-            $userName = $media->user ? $media->user->first_name . ' ' . $media->user->last_name : 'Unknown User';
-            $userEmail = $media->email;
-            
-            // Filter by category if selected (default is first category)
+
             if ($selectedCategory !== 'all' && $media->category !== $selectedCategory) {
                 continue;
             }
-            
+
+            $userName = $media->user ? $media->user->first_name . ' ' . $media->user->last_name : 'Unknown User';
+            $userEmail = $media->email;
+
             if (!isset($mediaByUser[$userId])) {
                 $mediaByUser[$userId] = [
                     'user_id' => $userId,
@@ -231,30 +292,30 @@ class AdminDashboardController extends Controller
                     'categories' => []
                 ];
             }
-            
-            // Add images
+
             if ($media->images && is_array($media->images)) {
                 foreach ($media->images as $index => $imagePath) {
-                    if (Storage::disk('public')->exists('user_media/' . $imagePath)) {
+                    $path = is_string($imagePath) ? $imagePath : ($imagePath['path'] ?? $imagePath);
+                    if (Storage::disk('public')->exists('user_media/' . $path)) {
                         $mediaByUser[$userId]['categories'][$media->category]['images'][] = [
                             'id' => $media->id,
-                            'path' => $imagePath,
-                            'url' => asset('storage/user_media/' . $imagePath),
+                            'path' => $path,
+                            'url' => asset('storage/user_media/' . $path),
                             'category' => $media->category,
                             'uploaded_at' => $media->created_at
                         ];
                     }
                 }
             }
-            
-            // Add videos
+
             if ($media->videos && is_array($media->videos)) {
                 foreach ($media->videos as $index => $videoPath) {
-                    if (Storage::disk('public')->exists('user_media/' . $videoPath)) {
+                    $path = is_string($videoPath) ? $videoPath : ($videoPath['path'] ?? $videoPath);
+                    if (Storage::disk('public')->exists('user_media/' . $path)) {
                         $mediaByUser[$userId]['categories'][$media->category]['videos'][] = [
                             'id' => $media->id,
-                            'path' => $videoPath,
-                            'url' => asset('storage/user_media/' . $videoPath),
+                            'path' => $path,
+                            'url' => asset('storage/user_media/' . $path),
                             'category' => $media->category,
                             'uploaded_at' => $media->created_at
                         ];
@@ -263,15 +324,10 @@ class AdminDashboardController extends Controller
             }
         }
 
-        // Sort: Admin users first, then regular users
-        uasort($mediaByUser, function($a, $b) {
-            if ($a['is_admin'] && !$b['is_admin']) {
-                return -1; // Admin comes first
-            }
-            if (!$a['is_admin'] && $b['is_admin']) {
-                return 1; // Regular user comes after
-            }
-            return strcmp($a['user_name'], $b['user_name']); // Alphabetical for same type
+        uasort($mediaByUser, function ($a, $b) {
+            if ($a['is_admin'] && !$b['is_admin']) return -1;
+            if (!$a['is_admin'] && $b['is_admin']) return 1;
+            return strcmp($a['user_name'], $b['user_name']);
         });
 
         return view('AdminArea.AdminDashboard', [
@@ -279,7 +335,8 @@ class AdminDashboardController extends Controller
             'activeTab' => 'media-files',
             'mediaByUser' => $mediaByUser,
             'usersWithMedia' => $usersWithMedia,
-            'categories' => $categories,
+            'userMediaCounts' => $userMediaCounts,
+            'categoriesWithCount' => $categoriesWithCount,
             'selectedUserId' => $selectedUserId,
             'selectedCategory' => $selectedCategory
         ]);
@@ -388,5 +445,102 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.dashboard', ['tab' => 'media-files'])
             ->with('success', 'Media file deleted successfully!');
+    }
+
+    /**
+     * Update a page section (homepage content)
+     */
+    public function updatePageSection(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied. Admin privileges required.');
+        }
+
+        $request->validate([
+            'slug' => 'required|string|exists:page_sections,slug',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'short_description' => 'nullable|string',
+            'event_date' => 'nullable|date',
+            // Image uploads commented out for now
+            // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            // 'groom_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            // 'bride_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ]);
+
+        $section = PageSection::where('slug', $request->slug)->firstOrFail();
+        $section->title = $request->input('title') ?: null;
+        $section->subtitle = $request->input('subtitle') ?: null;
+        $section->short_description = $request->input('short_description') ?: null;
+        $section->event_date = $request->filled('event_date') ? \Carbon\Carbon::parse($request->event_date) : null;
+
+        $extra = $section->extra ?? [];
+        if ($request->has('extra') && is_array($request->extra)) {
+            foreach ($request->extra as $key => $value) {
+                // Keep image keys when image upload is commented out (don't overwrite with form data)
+                if (!in_array($key, ['image', 'groom_image', 'bride_image'], true)) {
+                    $extra[$key] = $value === null || $value === '' ? null : $value;
+                }
+            }
+        }
+
+        // Image uploads commented out for now
+        // $storageDir = 'page_sections';
+        // if ($request->hasFile('image')) {
+        //     if (!empty($extra['image']) && Storage::disk('public')->exists($extra['image'])) {
+        //         Storage::disk('public')->delete($extra['image']);
+        //     }
+        //     $path = $request->file('image')->store($storageDir, 'public');
+        //     $extra['image'] = $path;
+        // }
+        // if ($request->hasFile('groom_image')) {
+        //     if (!empty($extra['groom_image']) && Storage::disk('public')->exists($extra['groom_image'])) {
+        //         Storage::disk('public')->delete($extra['groom_image']);
+        //     }
+        //     $path = $request->file('groom_image')->store($storageDir, 'public');
+        //     $extra['groom_image'] = $path;
+        // }
+        // if ($request->hasFile('bride_image')) {
+        //     if (!empty($extra['bride_image']) && Storage::disk('public')->exists($extra['bride_image'])) {
+        //         Storage::disk('public')->delete($extra['bride_image']);
+        //     }
+        //     $path = $request->file('bride_image')->store($storageDir, 'public');
+        //     $extra['bride_image'] = $path;
+        // }
+
+        $section->extra = array_filter($extra, fn ($v) => $v !== null && $v !== '');
+        $section->save();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'page-sections'])
+            ->with('success', 'Section "' . str_replace('_', ' ', $section->slug) . '" updated successfully!');
+    }
+
+    /**
+     * Ensure page_sections table has default sections (so admin form always shows).
+     * Creates them in DB when empty; safe to call every time.
+     */
+    private function ensurePageSectionsExist(): void
+    {
+        if (PageSection::count() > 0) {
+            return;
+        }
+
+        $sections = [
+            ['slug' => 'hero', 'title' => null, 'subtitle' => null, 'short_description' => null, 'event_date' => null, 'extra' => null, 'sort_order' => 1],
+            ['slug' => 'our_story', 'title' => 'Our Story', 'subtitle' => 'Bride & Groom', 'short_description' => null, 'event_date' => null, 'extra' => ['groom_name' => 'Vickram', 'groom_description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.', 'bride_name' => 'Nisha', 'bride_description' => 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.'], 'sort_order' => 2],
+            ['slug' => 'wedding_day', 'title' => 'Date We Getting Married', 'subtitle' => 'Wedding Day', 'short_description' => null, 'event_date' => Carbon::parse('2026-12-31 12:00:00'), 'extra' => null, 'sort_order' => 3],
+            ['slug' => 'fourth', 'title' => 'Shagun', 'subtitle' => 'With Blessings', 'short_description' => 'We inviting you and your family on', 'event_date' => null, 'extra' => ['dress_code' => 'Traditional Outfits', 'date' => '2/21/2026', 'time' => '9 am - 12 pm', 'venue' => 'Phoenix AZ'], 'sort_order' => 4],
+            ['slug' => 'fifth', 'title' => 'Vatna', 'subtitle' => 'Sacred Ritual', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '2/25/2026', 'date_display' => '25 Feb 2026', 'time' => '9 am - 12 pm', 'venue' => 'Phoenix AZ', 'dress_code' => 'Casual Indian Orange Yellow, Green Colors'], 'sort_order' => 5],
+            ['slug' => 'sixth', 'title' => 'Mehndi', 'subtitle' => 'Colorful Vibes', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '2-25-2026', 'time' => '4 - 7 pm', 'venue' => 'Ramit and Maninder Residence', 'dress_code' => 'Casual Indian Orange Yellow, Green Colors', 'address' => '20865 N. 109th Place, Scottsdale AZ'], 'sort_order' => 6],
+            ['slug' => 'seventh', 'title' => 'Sangeet Night', 'subtitle' => 'Musical Vibes', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '2-26-2026', 'time' => '6pm - midnight', 'venue' => 'Jasmine and Mannttej Residence', 'dress_code' => 'Indian. Outside venue. Be warm and comfortable', 'address' => '4608 W El Cortez Pl, Phoenix AZ 85083', 'entertainment_mc' => 'MC: Jastej Sra'], 'sort_order' => 7],
+            ['slug' => 'ninth', 'title' => "Jaggo, Gidha and\nBhangra Night", 'subtitle' => 'Full Magic', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '2-31-2026', 'time' => '6 pm to midnight', 'venue' => 'Park Hyatt Aviara Resort-760-448-1234', 'dress_code' => 'Indian Traditional Outfits', 'address' => '7100 Aviara Resort Drive, Carlsbad CA 92011', 'entertainment_mc' => 'MC: Herman Kahlon', 'performance_text' => 'Giddha by family members'], 'sort_order' => 8],
+            ['slug' => 'tenth', 'title' => 'Sehra & Surma Ceremony', 'subtitle' => 'Cultural Elegance', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '12-31-2026', 'turban_tying' => 'At 7 am', 'venue' => 'Hopitality Room', 'barat_leaves' => 'Indian Traditional Outfits'], 'sort_order' => 9],
+            ['slug' => 'eleventh', 'title' => 'Wedding', 'subtitle' => 'Sacred Union', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '12-31-2026', 'time' => '9 am-12 pm', 'venue' => 'Ramit and Maninder Residence', 'dress_code' => 'Indian Traditional Outfits', 'dress_code_subtext' => 'Men: Red Turbans Head Covers  Women: Any Color', 'address' => '20865 N 109th Place Scottsdale AZ'], 'sort_order' => 10],
+        ];
+
+        foreach ($sections as $data) {
+            PageSection::updateOrCreate(['slug' => $data['slug']], $data);
+        }
     }
 }

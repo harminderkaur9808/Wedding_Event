@@ -95,10 +95,75 @@
 }
 
 .wedding-mele-tenth-image-wrapper {
+    position: relative;
     width: 100%;
     max-width: 460px;
+    overflow: visible;
     border: 0;
     outline: 0;
+}
+
+/* Board / clip on image + date text (top-left, like shared design) */
+.wedding-mele-tenth-board-on-image {
+    position: absolute;
+    top: -10px;
+    left: 9%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.wedding-mele-tenth-dynamic-board {
+    width: auto;
+    min-width: 100px;
+    max-width: 140px;
+    height: auto;
+    min-height: 80px;
+    object-fit: contain;
+    display: block !important;
+    margin: 0 0 2px 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+.wedding-mele-tenth-board-date-text {
+    position: absolute;
+    top: 81px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    color: #ffffff !important;
+    font-family: 'Volkhov', serif;
+    text-align: center;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    transform: rotate(5deg);
+}
+
+.wedding-mele-tenth-board-line1 {
+    display: block;
+}
+
+.wedding-mele-tenth-board-day {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.wedding-mele-tenth-board-month {
+    font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif !important;
+    font-size: 30px;
+}
+
+.wedding-mele-tenth-board-year {
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .wedding-mele-tenth-image {
@@ -199,6 +264,19 @@
 
     .wedding-mele-tenth-detail-text {
         font-size: 15px;
+    }
+}
+
+/* Mobile: board / clip and date text on image */
+@media only screen and (max-width: 767px) {
+    .wedding-mele-tenth-board-date-text {
+        top: 56px;
+    }
+
+    .wedding-mele-tenth-dynamic-board {
+        width: auto;
+        min-width: 86px;
+        max-width: 107px;
     }
 }
 

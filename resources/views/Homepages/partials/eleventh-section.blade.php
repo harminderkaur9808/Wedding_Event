@@ -7,11 +7,12 @@
         <div class="wedding-mele-eleventh-content">
             <!-- Header -->
             <div class="wedding-mele-eleventh-header">
-                <h3 class="wedding-mele-eleventh-subtitle">Sacred Union</h3>
+                @php $eleventh = $sections['eleventh'] ?? null; @endphp
+                <h3 class="wedding-mele-eleventh-subtitle">{{ $eleventh?->subtitle ?? 'Sacred Union' }}</h3>
                 <div class="wedding-mele-eleventh-between">
                     <img src="{{ asset('Images/Home/eleventhsecimg/between_txtframe.png') }}" alt="Decorative Element" class="wedding-mele-eleventh-between-img">
                 </div>
-                <h2 class="wedding-mele-eleventh-title">Wedding</h2>
+                <h2 class="wedding-mele-eleventh-title">{{ $eleventh?->title ?? 'Wedding' }}</h2>
             </div>
 
             <!-- Main -->
@@ -21,38 +22,56 @@
                     <div class="wedding-mele-eleventh-details">
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Date: 12-31-2026</span>
+                            <span class="wedding-mele-eleventh-detail-text">Date: {{ $eleventh?->getExtra('date') ?? '12-31-2026' }}</span>
                         </div>
 
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Time: 9 am-12 pm</span>
+                            <span class="wedding-mele-eleventh-detail-text">Time: {{ $eleventh?->getExtra('time') ?? '9 am-12 pm' }}</span>
                         </div>
 
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Venue: Ramit and Maninder Residence</span>
+                            <span class="wedding-mele-eleventh-detail-text">Venue: {{ $eleventh?->getExtra('venue') ?? 'Ramit and Maninder Residence' }}</span>
                         </div>
 
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">
-                                Dress Code: Indian Traditional Outfits
+                                Dress Code: {{ $eleventh?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}
+                                @if($eleventh?->getExtra('dress_code_subtext'))
+                                <span class="wedding-mele-eleventh-detail-subtext">{{ $eleventh->getExtra('dress_code_subtext') }}</span>
+                                @else
                                 <span class="wedding-mele-eleventh-detail-subtext">Men: Red Turbans Head Covers&nbsp;&nbsp;Women: Any Color</span>
+                                @endif
                             </span>
                         </div>
 
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Address: 20865 N 109th Place Scottsdale AZ</span>
+                            <span class="wedding-mele-eleventh-detail-text">Address: {{ $eleventh?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ' }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Image -->
+                <!-- Right: Image with board on it (top-right as indicated) -->
                 <div class="wedding-mele-eleventh-right">
                     <div class="wedding-mele-eleventh-image-wrapper">
-                        <img src="{{ asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Wedding" class="wedding-mele-eleventh-image">
+                        @php $eleventhImg = $eleventh?->getExtra('image'); @endphp
+                        <img src="{{ $eleventhImg ? asset('storage/' . $eleventhImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Wedding" class="wedding-mele-eleventh-image">
+                        <!-- Board on image + date text (top-right corner) -->
+                        <div class="wedding-mele-eleventh-board-on-image">
+                            <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-eleventh-dynamic-board">
+                            <div class="wedding-mele-eleventh-board-date-text" aria-label="Event date">
+                                @php
+                                    $boardDate = $eleventh?->getBoardDateFormatted();
+                                @endphp
+                                <span class="wedding-mele-eleventh-board-line1">
+                                    <span class="wedding-mele-eleventh-board-day">{{ ($boardDate ?? [])['day'] ?? '31' }}</span> <span class="wedding-mele-eleventh-board-month">{{ ($boardDate ?? [])['month'] ?? 'Dec' }}</span>
+                                </span>
+                                <span class="wedding-mele-eleventh-board-year">{{ ($boardDate ?? [])['year'] ?? '2026' }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

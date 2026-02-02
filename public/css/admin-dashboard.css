@@ -456,14 +456,14 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 }
 
 .admin-dashboard-btn-primary {
-    background-color: #2F4F75;
+    background-color: #A3A5C7;
     color: #ffffff;
 }
 
 .admin-dashboard-btn-primary:hover {
-    background-color: #0055A5;
+    background-color: #8B8DA8;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+    box-shadow: 0 4px 12px rgba(163, 165, 199, 0.4);
 }
 
 .admin-dashboard-btn-secondary {
@@ -793,12 +793,12 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 }
 
 .admin-dashboard-action-btn.approve-btn {
-    background-color: #28a745;
+    background-color: #A3A5C7;
     color: #ffffff;
 }
 
 .admin-dashboard-action-btn.approve-btn:hover {
-    background-color: #218838;
+    background-color: #8B8DA8;
     transform: translateY(-1px);
 }
 
@@ -1528,4 +1528,90 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
         gap: 10px;
         align-items: center;
     }
+}
+
+/* Page Sections tab */
+.admin-dashboard-subtitle {
+    color: #5a6c7d;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.admin-dashboard-section-select-wrap {
+    margin-bottom: 24px;
+    max-width: 400px;
+}
+
+.admin-dashboard-section-select-wrap .admin-dashboard-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2F4F75;
+}
+
+.admin-dashboard-section-select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+}
+
+.admin-dashboard-page-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.admin-dashboard-section-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+}
+
+.admin-dashboard-section-card-title {
+    font-size: 18px;
+    color: #2F4F75;
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-dashboard-section-form .admin-dashboard-form-group {
+    margin-bottom: 16px;
+}
+
+.admin-dashboard-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.admin-dashboard-extra-fields {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.admin-dashboard-section-actions {
+    margin-top: 20px;
+    margin-bottom: 0;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.admin-dashboard-image-preview {
+    margin-bottom: 10px;
+}
+
+.admin-dashboard-image-preview .admin-dashboard-thumb {
+    max-width: 180px;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
 }

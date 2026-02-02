@@ -7,7 +7,7 @@
                     <span class="save-date-text">Save The Date</span>
                     <div class="date-section">
                         <img src="{{ asset('Images/Header/Calender_imghader.png') }}" alt="Calendar" class="calendar-icon">
-                        <span class="wedding-date">12-31-2026</span>
+                        <span class="wedding-date">{{ $headerWeddingDate ?? '12-31-2026' }}</span>
                     </div>
                 </div>
                 <div class="top-header-right">
@@ -62,8 +62,8 @@
                         <nav class="main-nav d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                             <a href="{{ route('pictures_videos') }}" class="nav-link {{ request()->routeIs('pictures_videos') ? 'active' : '' }}">Pictures and Videos</a>
                             <a href="{{ route('ask.the.host') }}" class="nav-link {{ request()->routeIs('ask.the.host') ? 'active' : '' }}">Ask the Host</a>
-                            <a href="#" class="nav-link">Updates by family</a>
-                            <a href="#" class="nav-link">Lets Plan Our Outfits</a>
+                            <a href="{{ route('updates.by.family') }}" class="nav-link {{ request()->routeIs('updates.by.family') ? 'active' : '' }}">Updates by family</a>
+                            <a href="#" class="nav-link">Local Attractions</a>
                         </nav>
                         <a href="{{ route('book.appointments') }}" 
                            class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3"
