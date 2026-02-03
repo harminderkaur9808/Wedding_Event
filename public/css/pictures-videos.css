@@ -845,6 +845,65 @@ a.wm-pv-category-tab.active {
     transform: translateY(-2px);
 }
 
+/* Index page: login gate (guests see lock + message) */
+.wm-pv-login-gate {
+    padding: 60px 24px 80px;
+    background: #f8fafc;
+}
+
+.wm-pv-login-required {
+    text-align: center;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(47, 79, 117, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.wm-pv-login-icon {
+    color: #2F4F75;
+    margin-bottom: 24px;
+}
+
+.wm-pv-login-icon svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.wm-pv-login-title {
+    font-family: 'Volkhov', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2F4F75;
+    margin: 0 0 12px;
+}
+
+.wm-pv-login-message {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #64748b;
+    margin: 0 0 24px;
+}
+
+.wm-pv-login-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #2F4F75;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.wm-pv-login-btn:hover {
+    background: #1e3a52;
+    color: #fff;
+}
+
 @media (max-width: 768px) {
     .wm-pv-category-lock-container {
         min-height: 300px;

@@ -2,6 +2,10 @@
 
 @section('title', $categoryName . ' - Pictures and Videos - Wedding Event')
 
+@push('meta')
+    <meta name="robots" content="noindex, nofollow">
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/pictures-videos.css') }}">
 @endpush

@@ -86,6 +86,8 @@ Route::middleware(['auth'])->group(function () {
     
     // Media upload route
     Route::post('/pictures-videos/{category}/upload', [PicturesVideosController::class, 'uploadMedia'])->name('pictures_videos.upload');
+    // Serve image/video inline (auth required – used for gallery display so URLs require login)
+    Route::get('/pictures-videos/serve/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'serveMedia'])->name('pictures_videos.serve');
     // Download image/video (auth required)
     Route::get('/pictures-videos/download/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'downloadMedia'])->name('pictures_videos.download');
 });

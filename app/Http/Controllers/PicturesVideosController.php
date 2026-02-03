@@ -41,7 +41,7 @@ class PicturesVideosController extends Controller
                         if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_img_' . $index,
-                                'url' => Storage::disk('public')->url($path),
+                                'url' => route('pictures_videos.serve', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
                                 'title' => 'Uploaded Image',
                                 'is_user_media' => true,
                                 'user_id' => $userMedia->user_id,
@@ -58,7 +58,7 @@ class PicturesVideosController extends Controller
                         if (Storage::disk('public')->exists($path)) {
                             $items[] = [
                                 'id' => 'media_' . $userMedia->id . '_vid_' . $index,
-                                'url' => Storage::disk('public')->url($path),
+                                'url' => route('pictures_videos.serve', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
                                 'title' => 'Uploaded Video',
                                 'is_user_media' => true,
                                 'is_video' => true,
@@ -174,6 +174,43 @@ class PicturesVideosController extends Controller
         $type = $request->get('type', 'images');
         return redirect()->route('pictures_videos.category', ['category' => $category, 'type' => $type])
             ->with('success', 'Media uploaded successfully!');
+    }
+
+    /**
+     * Serve a single image or video inline (auth required via route middleware).
+     * Used for gallery display so image/video URLs cannot be viewed without login.
+     */
+    public function serveMedia($mediaId, $type, $index)
+    {
+        $userMedia = UserMedia::findOrFail($mediaId);
+        $index = (int) $index;
+
+        if ($type === 'image') {
+            $files = $userMedia->images ?? [];
+            if (!isset($files[$index])) {
+                abort(404);
+            }
+            $path = 'user_media/' . ltrim($files[$index], '/\\');
+        } else {
+            $files = $userMedia->videos ?? [];
+            if (!isset($files[$index])) {
+                abort(404);
+            }
+            $path = 'user_media/' . ltrim($files[$index], '/\\');
+        }
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        $fullPath = Storage::disk('public')->path($path);
+        $mime = \Illuminate\Support\Facades\File::mimeType($fullPath);
+        $filename = basename($path);
+
+        return response()->file($fullPath, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="' . $filename . '"',
+        ]);
     }
 
     /**

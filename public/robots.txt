@@ -1,2 +1,3 @@
 User-agent: *
-Disallow:
+Disallow: /pictures-videos
+Disallow: /pictures-videos/

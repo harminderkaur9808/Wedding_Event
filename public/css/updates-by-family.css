@@ -353,6 +353,65 @@
     color: #fff;
 }
 
+/* Login gate: lock + message when not logged in (default view for guests) */
+.updates-by-family-login-gate {
+    padding: 60px 24px 80px;
+    background: #f8fafc;
+}
+
+.updates-by-family-login-required {
+    text-align: center;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(5, 76, 130, 0.08);
+    border: 1px solid #e2e8f0;
+}
+
+.updates-by-family-login-icon {
+    color: #054C82;
+    margin-bottom: 24px;
+}
+
+.updates-by-family-login-icon svg {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.updates-by-family-login-title {
+    font-family: 'Volkhov', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #054C82;
+    margin: 0 0 12px;
+}
+
+.updates-by-family-login-message {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #64748b;
+    margin: 0 0 24px;
+}
+
+.updates-by-family-login-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #054C82;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.updates-by-family-login-btn:hover {
+    background: #043a66;
+    color: #fff;
+}
+
 /* Empty state (no updates yet) */
 .updates-by-family-empty {
     text-align: center;
