@@ -108,4 +108,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(AskTheHostReply::class);
     }
+
+    /**
+     * Family updates posted by the user (admin).
+     */
+    public function familyUpdates()
+    {
+        return $this->hasMany(FamilyUpdate::class);
+    }
 }

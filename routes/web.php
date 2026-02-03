@@ -50,10 +50,13 @@ Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.t
 Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store')->middleware('auth');
 Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store')->middleware('auth');
 
-// Updates by Family Route
-Route::get('/updates-by-family', function () {
-    return view('pages.updates_by_family');
-})->name('updates.by.family');
+// Updates by Family
+use App\Http\Controllers\UpdatesByFamilyController;
+
+Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
+Route::post('/updates-by-family', [UpdatesByFamilyController::class, 'store'])->name('updates.by.family.store')->middleware('auth');
+Route::patch('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'update'])->name('updates.by.family.update')->middleware('auth');
+Route::delete('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'destroy'])->name('updates.by.family.destroy')->middleware('auth');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

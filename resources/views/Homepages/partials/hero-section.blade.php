@@ -1,7 +1,19 @@
+@php
+    $hero = $sections['hero'] ?? null;
+    $defaultImage = asset('Images/Home/First_slider_image.png');
+    $sliderImages = [];
+    for ($i = 1; $i <= 3; $i++) {
+        $path = $hero?->getExtra('slider_' . $i);
+        if ($path && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            $sliderImages[] = asset('storage/' . $path);
+        } else {
+            $sliderImages[] = $defaultImage;
+        }
+    }
+@endphp
 <section class="wedding-mele-hero-section">
     <div id="wedding-mele-hero-carousel" class="carousel slide wedding-mele-carousel" data-bs-ride="carousel" data-bs-interval="5000">
         <!-- Carousel Indicators -->
-         
         <div class="carousel-indicators wedding-mele-carousel-indicators">
             <button type="button" data-bs-target="#wedding-mele-hero-carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#wedding-mele-hero-carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -10,13 +22,12 @@
 
         <!-- Carousel Items -->
         <div class="carousel-inner wedding-mele-carousel-inner">
-            <div class="carousel-item active wedding-mele-carousel-item">
-                @php $heroImage = ($sections['hero'] ?? null)?->getExtra('image'); @endphp
-                <img src="{{ $heroImage ? asset('storage/' . $heroImage) : asset('Images/Home/First_slider_image.png') }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide 1">
-                
+            @foreach($sliderImages as $index => $imageUrl)
+            <div class="carousel-item {{ $index === 0 ? 'active' : '' }} wedding-mele-carousel-item">
+                <img src="{{ $imageUrl }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide {{ $index + 1 }}">
+
                 <!-- Animated Heart Overlay -->
                 <div class="wedding-mele-heart-overlay">
-                    <!-- White Particles Animation -->
                     <div class="wedding-mele-particles">
                         <span class="wedding-mele-particle"></span>
                         <span class="wedding-mele-particle"></span>
@@ -34,64 +45,18 @@
                         <span class="wedding-mele-particle"></span>
                         <span class="wedding-mele-particle"></span>
                     </div>
-                    
-                    <!-- Heart Shape Container -->
                     <div class="wedding-mele-heart-container">
-                        <!-- Heart Shape with White Outline -->
                         <div class="wedding-mele-heart-shape">
-                            <!-- SVG Heart Removed - Only keeping sparkles and text -->
-                            
-                            <!-- Sparkling Outline Dots -->
                             <div class="wedding-mele-heart-sparkles">
+                                @for($s = 0; $s < 40; $s++)
                                 <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
-                                <span class="wedding-mele-sparkle"></span>
+                                @endfor
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <div class="carousel-item wedding-mele-carousel-item">
-                <img src="{{ asset('Images/Home/Heri-sec-slide-1st.png') }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide 2">
-            </div>
-            <div class="carousel-item wedding-mele-carousel-item">
-                <img src="{{ asset('Images/Home/Heri-sec-slide-1st.png') }}" class="d-block w-100 wedding-mele-slide-image" alt="Wedding Slide 3">
-            </div> -->
+            @endforeach
         </div>
 
         <!-- Carousel Controls -->

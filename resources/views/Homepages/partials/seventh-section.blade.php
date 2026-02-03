@@ -1,4 +1,4 @@
-<section class="wedding-mele-seventh-section">
+    <section class="wedding-mele-seventh-section">
     <!-- Background Image - Full Width -->
     <div class="wedding-mele-seventh-bg" aria-hidden="true">
         <img src="{{ asset('Images/Home/Seven_sec_img/Sangeet_seven_bg.png') }}" alt="" class="wedding-mele-seventh-bg-image">

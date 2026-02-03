@@ -365,21 +365,40 @@
                             @foreach($pageSections ?? [] as $sec)
                                 <div class="admin-dashboard-section-card js-page-section-card" id="page-section-card-{{ $sec->slug }}" data-section-slug="{{ $sec->slug }}" style="display: none;">
                                     <h3 class="admin-dashboard-section-card-title">{{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
-                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form">
+                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero') enctype="multipart/form-data" @endif>
                                         @csrf
                                         <input type="hidden" name="slug" value="{{ $sec->slug }}">
 
-                                        {{-- Image uploads commented out for now
-                                        <form ... enctype="multipart/form-data">
                                         @if($sec->slug === 'hero')
                                             <div class="admin-dashboard-form-group">
-                                                <label class="admin-dashboard-label">Hero slide image (homepage banner)</label>
-                                                @if($sec->getExtra('image'))
-                                                    <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('image')) }}" alt="Current" class="admin-dashboard-thumb"></div>
-                                                @endif
-                                                <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
+                                                <label class="admin-dashboard-label">Hero slider images (3 slides)</label>
+                                                <p class="admin-dashboard-hint">Upload up to 3 images for the homepage hero carousel. Leave empty to keep current image.</p>
+                                                <div class="admin-dashboard-hero-slider-row">
+                                                    @foreach([1 => 'Slide 1', 2 => 'Slide 2', 3 => 'Slide 3'] as $num => $label)
+                                                        @php $sliderPath = $sec->getExtra('slider_' . $num); $hasImage = $sliderPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($sliderPath); @endphp
+                                                        <div class="admin-dashboard-hero-slider-box {{ $hasImage ? 'has-image' : '' }}" data-slide="{{ $num }}">
+                                                            <input type="file" name="hero_slider_{{ $num }}" id="hero_slider_input_{{ $num }}" class="admin-dashboard-hero-slider-input" accept="image/*" data-slide="{{ $num }}">
+                                                            <input type="hidden" name="hero_remove_slider_{{ $num }}" id="hero_remove_slider_{{ $num }}" value="">
+                                                            <button type="button" class="admin-dashboard-hero-slider-remove" aria-label="Remove image" title="Remove image" data-slide="{{ $num }}" style="{{ $hasImage ? '' : 'display: none;' }}">
+                                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                                            </button>
+                                                            <label for="hero_slider_input_{{ $num }}" class="admin-dashboard-hero-slider-box-inner">
+                                                                <span class="admin-dashboard-hero-slider-box-preview">
+                                                                    @if($hasImage)
+                                                                        <img src="{{ asset('storage/' . $sliderPath) }}" alt="{{ $label }}">
+                                                                    @endif
+                                                                </span>
+                                                                <span class="admin-dashboard-hero-slider-box-plus" aria-hidden="true">
+                                                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                                                </span>
+                                                                <span class="admin-dashboard-hero-slider-box-label">{{ $label }}</span>
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         @endif
+                                        {{-- Other section image uploads commented out for now
                                         @if($sec->slug === 'our_story')
                                             <div class="admin-dashboard-form-row">
                                                 <div class="admin-dashboard-form-group">
@@ -409,6 +428,8 @@
                                         @endif
                                         --}}
 
+                                        {{-- Title, Subtitle, Short description: commented out for Hero section (hero only has slider images) --}}
+                                        @if($sec->slug !== 'hero')
                                         <div class="admin-dashboard-form-row">
                                             <div class="admin-dashboard-form-group">
                                                 <label for="title_{{ $sec->slug }}" class="admin-dashboard-label">Title</label>
@@ -431,6 +452,7 @@
                                             <label for="short_description_{{ $sec->slug }}" class="admin-dashboard-label">Short description</label>
                                             <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input" rows="2" placeholder="Optional intro or tagline for this section">{{ old('short_description', $sec->short_description) }}</textarea>
                                         </div>
+                                        @endif
 
                                         @if($sec->slug === 'our_story')
                                             <div class="admin-dashboard-form-row">
@@ -944,6 +966,60 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         showPageSection(pageSectionSelect.value);
     }
+
+    // Hero slider: live preview when user selects a new image
+    document.querySelectorAll('.admin-dashboard-hero-slider-input').forEach(function(input) {
+        input.addEventListener('change', function() {
+            var box = this.closest('.admin-dashboard-hero-slider-box');
+            var previewSpan = box && box.querySelector('.admin-dashboard-hero-slider-box-preview');
+            var removeBtn = box && box.querySelector('.admin-dashboard-hero-slider-remove');
+            if (!box || !previewSpan) return;
+            var file = this.files && this.files[0];
+            if (file && file.type.indexOf('image/') === 0) {
+                var removeInput = document.getElementById('hero_remove_slider_' + this.getAttribute('data-slide'));
+                if (removeInput) removeInput.value = '';
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = previewSpan.querySelector('img');
+                    if (!img) {
+                        img = document.createElement('img');
+                        img.alt = 'Preview';
+                        previewSpan.appendChild(img);
+                    }
+                    img.src = e.target.result;
+                    box.classList.add('has-image');
+                    if (removeBtn) removeBtn.style.display = '';
+                };
+                reader.readAsDataURL(file);
+            } else if (!file) {
+                var img = previewSpan.querySelector('img');
+                if (img && !img.src.match(/^data:/)) return;
+                if (img) img.remove();
+                box.classList.remove('has-image');
+                if (removeBtn) removeBtn.style.display = 'none';
+            }
+        });
+    });
+
+    // Hero slider: remove/delete image (clears preview and marks for removal on save)
+    document.querySelectorAll('.admin-dashboard-hero-slider-remove').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var slide = this.getAttribute('data-slide');
+            var box = this.closest('.admin-dashboard-hero-slider-box');
+            var previewSpan = box && box.querySelector('.admin-dashboard-hero-slider-box-preview');
+            var fileInput = document.getElementById('hero_slider_input_' + slide);
+            var removeInput = document.getElementById('hero_remove_slider_' + slide);
+            if (!box || !previewSpan) return;
+            var img = previewSpan.querySelector('img');
+            if (img) img.remove();
+            box.classList.remove('has-image');
+            this.style.display = 'none';
+            if (fileInput) fileInput.value = '';
+            if (removeInput) removeInput.value = '1';
+        });
+    });
 
     // Admin Media View Modal (open image/video on current page)
     window.openAdminMediaViewModal = function(btn) {

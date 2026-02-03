@@ -131,8 +131,8 @@ class PicturesVideosController extends Controller
         $user = Auth::user();
         
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
-            'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv,flv,webm|max:51200', // 50MB max
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240', // 10MB max
+            'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv,flv,webm|max:204800', // 200MB max
         ]);
 
         // Get or create user media record for this category

@@ -52,8 +52,6 @@ class AdminDashboardController extends Controller
                 $pageSections = collect();
                 $pageSectionsError = 'Database table may be missing. Run: php artisan migrate';
             }
-            // First section (Hero) commented out for now – exclude from dropdown and forms
-            $pageSections = $pageSections->filter(fn ($s) => $s->slug !== 'hero')->values();
             return view('AdminArea.AdminDashboard', [
                 'user' => $user,
                 'pageSections' => $pageSections,
@@ -489,17 +487,19 @@ class AdminDashboardController extends Controller
             return redirect()->route('login')->with('error', 'Access denied. Admin privileges required.');
         }
 
-        $request->validate([
+        $rules = [
             'slug' => 'required|string|exists:page_sections,slug',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'short_description' => 'nullable|string',
             'event_date' => 'nullable|date',
-            // Image uploads commented out for now
-            // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            // 'groom_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-            // 'bride_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
-        ]);
+        ];
+        if ($request->slug === 'hero') {
+            $rules['hero_slider_1'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+            $rules['hero_slider_2'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+            $rules['hero_slider_3'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+        }
+        $request->validate($rules);
 
         $section = PageSection::where('slug', $request->slug)->firstOrFail();
         $section->title = $request->input('title') ?: null;
@@ -510,36 +510,33 @@ class AdminDashboardController extends Controller
         $extra = $section->extra ?? [];
         if ($request->has('extra') && is_array($request->extra)) {
             foreach ($request->extra as $key => $value) {
-                // Keep image keys when image upload is commented out (don't overwrite with form data)
-                if (!in_array($key, ['image', 'groom_image', 'bride_image'], true)) {
+                if (!in_array($key, ['image', 'groom_image', 'bride_image', 'slider_1', 'slider_2', 'slider_3'], true)) {
                     $extra[$key] = $value === null || $value === '' ? null : $value;
                 }
             }
         }
 
-        // Image uploads commented out for now
-        // $storageDir = 'page_sections';
-        // if ($request->hasFile('image')) {
-        //     if (!empty($extra['image']) && Storage::disk('public')->exists($extra['image'])) {
-        //         Storage::disk('public')->delete($extra['image']);
-        //     }
-        //     $path = $request->file('image')->store($storageDir, 'public');
-        //     $extra['image'] = $path;
-        // }
-        // if ($request->hasFile('groom_image')) {
-        //     if (!empty($extra['groom_image']) && Storage::disk('public')->exists($extra['groom_image'])) {
-        //         Storage::disk('public')->delete($extra['groom_image']);
-        //     }
-        //     $path = $request->file('groom_image')->store($storageDir, 'public');
-        //     $extra['groom_image'] = $path;
-        // }
-        // if ($request->hasFile('bride_image')) {
-        //     if (!empty($extra['bride_image']) && Storage::disk('public')->exists($extra['bride_image'])) {
-        //         Storage::disk('public')->delete($extra['bride_image']);
-        //     }
-        //     $path = $request->file('bride_image')->store($storageDir, 'public');
-        //     $extra['bride_image'] = $path;
-        // }
+        // Hero section: three slider images + optional remove
+        if ($section->slug === 'hero') {
+            $storageDir = 'page_sections/hero';
+            foreach ([1 => 'slider_1', 2 => 'slider_2', 3 => 'slider_3'] as $num => $extraKey) {
+                $removeKey = 'hero_remove_slider_' . $num;
+                $fileKey = 'hero_slider_' . $num;
+                if ($request->filled($removeKey)) {
+                    if (!empty($extra[$extraKey]) && Storage::disk('public')->exists($extra[$extraKey])) {
+                        Storage::disk('public')->delete($extra[$extraKey]);
+                    }
+                    $extra[$extraKey] = null;
+                }
+                if ($request->hasFile($fileKey)) {
+                    if (!empty($extra[$extraKey]) && Storage::disk('public')->exists($extra[$extraKey])) {
+                        Storage::disk('public')->delete($extra[$extraKey]);
+                    }
+                    $path = $request->file($fileKey)->store($storageDir, 'public');
+                    $extra[$extraKey] = $path;
+                }
+            }
+        }
 
         $section->extra = array_filter($extra, fn ($v) => $v !== null && $v !== '');
         $section->save();

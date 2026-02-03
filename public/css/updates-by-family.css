@@ -78,6 +78,294 @@
     margin: 0;
 }
 
+/* Add new update bar (admin only) */
+.updates-by-family-add-bar {
+    background: #fff;
+    padding: 20px 0;
+    border-bottom: 1px solid #e8eef3;
+    box-shadow: 0 2px 8px rgba(5, 76, 130, 0.06);
+}
+
+.updates-by-family-add-bar-inner {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.updates-by-family-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: #054C82;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 4px 14px rgba(5, 76, 130, 0.25);
+}
+
+.updates-by-family-add-btn:hover {
+    background: #043a66;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.updates-by-family-add-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(5, 76, 130, 0.35);
+}
+
+.updates-by-family-add-btn-icon {
+    flex-shrink: 0;
+}
+
+/* Toast notification: attractive, animated, auto-hide 4 sec */
+.updates-by-family-toast-wrap {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    animation: updates-by-family-toast-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.updates-by-family-toast-wrap--hiding {
+    animation: updates-by-family-toast-out 0.32s ease-out forwards;
+}
+
+@keyframes updates-by-family-toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes updates-by-family-toast-out {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-16px);
+    }
+}
+
+.updates-by-family-toast {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.updates-by-family-toast--success {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: rgba(34, 197, 94, 0.25);
+}
+
+.updates-by-family-toast--success .updates-by-family-toast-icon {
+    color: #16a34a;
+}
+
+.updates-by-family-toast--success .updates-by-family-toast-text {
+    color: #166534;
+}
+
+.updates-by-family-toast--error {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+.updates-by-family-toast--error .updates-by-family-toast-icon {
+    color: #dc2626;
+}
+
+.updates-by-family-toast--error .updates-by-family-toast-text {
+    color: #991b1b;
+}
+
+.updates-by-family-toast-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.updates-by-family-toast-text {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    min-width: 0;
+}
+
+.updates-by-family-toast-close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 8px;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.updates-by-family-toast-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #111;
+}
+
+.updates-by-family-toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: rgba(22, 163, 74, 0.35);
+    border-radius: 0 0 12px 12px;
+    transform-origin: left;
+    animation: updates-by-family-toast-progress 4s linear forwards;
+}
+
+.updates-by-family-toast-progress--error {
+    background: rgba(220, 38, 38, 0.35);
+    animation-name: updates-by-family-toast-progress;
+}
+
+@keyframes updates-by-family-toast-progress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Modal: Add new update */
+.updates-by-family-modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(5, 76, 130, 0.2);
+}
+
+.updates-by-family-modal-header {
+    background: #054C82;
+    color: #fff;
+    padding: 18px 24px;
+    border-bottom: none;
+}
+
+.updates-by-family-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.updates-by-family-modal-content .modal-body {
+    padding: 24px;
+}
+
+.updates-by-family-modal-textarea {
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    resize: vertical;
+    min-height: 120px;
+}
+
+.updates-by-family-modal-textarea:focus {
+    border-color: #054C82;
+    box-shadow: 0 0 0 3px rgba(5, 76, 130, 0.15);
+}
+
+.updates-by-family-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e8eef3;
+    gap: 12px;
+}
+
+.updates-by-family-modal-submit {
+    background: #054C82;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.updates-by-family-modal-submit:hover {
+    background: #043a66;
+    color: #fff;
+}
+
+/* Delete confirmation modal */
+.updates-by-family-modal-header--danger {
+    background: #c53030;
+}
+
+.updates-by-family-modal-content--delete .modal-body {
+    padding: 24px;
+}
+
+.updates-by-family-delete-confirm-text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #334155;
+}
+
+.updates-by-family-modal-btn-delete {
+    background: #c53030;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.updates-by-family-modal-btn-delete:hover {
+    background: #9b2226;
+    color: #fff;
+}
+
+/* Empty state (no updates yet) */
+.updates-by-family-empty {
+    text-align: center;
+    padding: 40px 24px;
+    margin-bottom: 24px;
+}
+
+.updates-by-family-empty p {
+    margin: 0;
+    font-size: 16px;
+    color: #6c757d;
+}
+
 /* Second Section: Timeline (same to same UI) */
 .updates-by-family-timeline {
     position: relative;
@@ -116,9 +404,11 @@
 .updates-by-family-timeline-inner {
     position: relative;
     z-index: 2;
+    width: 100%;
     max-width: 920px;
     margin: 0 auto;
     padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .updates-by-family-entry-node {
@@ -126,79 +416,183 @@
     z-index: 1;
 }
 
-/* Central timeline axis – runs behind content */
+/* Central timeline axis – aligned to content-area center so it matches avatar column */
 .updates-by-family-timeline-axis {
     position: absolute;
-    left: 50%;
+    left: calc(24px + (100% - 48px) / 2); /* same center as entry content (padding 24px each side) */
     top: 0;
     bottom: 0;
     width: 3px;
-    margin-left: -1.5px;
+    margin: 0;
+    padding: 0;
+    transform: translateX(-50%);
     background: #054C82;
     z-index: 0;
+    pointer-events: none;
 }
 
-/* Year marker at top – blue border, sits on timeline */
+/* Line above year: centered on timeline axis */
+.updates-by-family-timeline-line-above-year {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.updates-by-family-timeline-dot {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #054C82;
+    flex-shrink: 0;
+}
+
+/* White circle at top of timeline (empty, blue outline) */
+.updates-by-family-timeline-top-circle {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #054C82;
+    background: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(5, 76, 130, 0.15);
+}
+
+.updates-by-family-timeline-line-segment {
+    display: block;
+    width: 3px;
+    height: 28px;
+    margin-top: 4px;
+    background: #054C82;
+    flex-shrink: 0;
+}
+
+/* White circle at end of timeline – centered on axis */
+.updates-by-family-timeline-end-dot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+    width: 100%;
+}
+
+.updates-by-family-timeline-end-circle {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #054C82;
+    background: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(5, 76, 130, 0.15);
+}
+
+/* Year marker at top – centered on timeline axis */
 .updates-by-family-timeline-year {
     position: relative;
     z-index: 2;
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     margin: 0 auto 40px;
+    flex-shrink: 0;
     border: 3px solid #054C82;
     border-radius: 50%;
     background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 48px;
     font-weight: 700;
     color: #054C82;
     box-shadow: 0 2px 12px rgba(5, 76, 130, 0.2);
+    font-family: 'Britania Vintage', 'Volkhov', serif;
 }
 
-/* Timeline entry: 3-column layout – all items on same horizontal row as profile image */
+/* Timeline entry: must be 100% width so avatar stays on center line (96% or 103% breaks alignment) */
 .updates-by-family-entry {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 48px 1fr;
-    grid-template-rows: auto;
-    grid-auto-rows: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
-    gap: 12px 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    gap: 26px;
     margin-bottom: 48px;
+    box-sizing: border-box;
+}
+
+/* Alternating left position: 1st, 3rd, 5th, 7th = 16px; 2nd, 4th, 6th = -10px */
+.updates-by-family-entry--pos-1 {
+    left: -4px;
+}
+
+.updates-by-family-entry--pos-2 {
+    left: 5px;
 }
 
 .updates-by-family-entry:last-child {
     margin-bottom: 0;
 }
 
-/* Keep user, node, and message on same row – vertically centered with profile image */
-.updates-by-family-entry-user,
-.updates-by-family-entry-node,
-.updates-by-family-entry-msg {
-    align-self: center;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-/* Entry on right: user immediate left of profile, node center, message right */
+/* Right entry: [name+date] [avatar] [message] – separate design: name+date block stays next to avatar */
 .updates-by-family-entry--right .updates-by-family-entry-user {
-    grid-column: 1;
-    justify-self: end;
-    text-align: right;
-    padding-right: 12px;
+    order: 1;
+    flex: 1 1 0%;
     min-width: 0;
+    text-align: right;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .updates-by-family-entry--right .updates-by-family-entry-node {
-    grid-column: 2;
-    justify-self: center;
+    order: 2;
+    flex: 0 0 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .updates-by-family-entry--right .updates-by-family-entry-msg {
-    grid-column: 3;
-    margin-left: 0;
+    order: 3;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+/* Left entry: [message] [avatar] [name+date] – separate design: name+date block stays next to avatar */
+.updates-by-family-entry--left .updates-by-family-entry-msg {
+    order: 1;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.updates-by-family-entry--left .updates-by-family-entry-node {
+    order: 2;
+    flex: 0 0 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.updates-by-family-entry--left .updates-by-family-entry-user {
+    order: 3;
+    flex: 1 1 0%;
+    min-width: 0;
+    text-align: left;
+    padding-left: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 /* Right-side bubble: triangular tail on left, pointing left toward profile (same to same) */
@@ -209,9 +603,8 @@
     border-color: transparent;
 }
 
-/* Left-side bubble: triangular tail on right, pointing right toward profile (same to same) */
+/* Left-side bubble – order set above */
 .updates-by-family-entry--left .updates-by-family-entry-msg {
-    grid-column: 1;
     margin-right: 0;
 }
 
@@ -223,25 +616,18 @@
     border-color: transparent;
 }
 
-.updates-by-family-entry--left .updates-by-family-entry-node {
-    grid-column: 2;
-    justify-self: center;
-}
+/* Left node – order 2, flex set above */
 
-/* Entry on left: message left, node center, user immediate right of profile */
-.updates-by-family-entry--left .updates-by-family-entry-user {
-    grid-column: 3;
-    justify-self: start;
-    text-align: left;
-    padding-left: 12px;
-    min-width: 0;
-}
-
-/* Node (circle with avatar) */
+/* Node (circle with avatar) – sits on the one center line with the axis */
 .updates-by-family-entry-node {
     flex-shrink: 0;
     width: 48px;
     height: 48px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
 .updates-by-family-entry-avatar {
@@ -249,9 +635,12 @@
     height: 48px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid #054C82;
-    background: #e8eef3;
-    box-shadow: 0 2px 8px rgba(5, 76, 130, 0.15);
+    border: 3px solid #fff;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(5, 76, 130, 0.12), 0 2px 8px rgba(5, 76, 130, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .updates-by-family-entry-avatar img {
@@ -260,12 +649,27 @@
     object-fit: cover;
 }
 
-/* User info block (name + date/time) – always visible on both left and right */
+/* Initials when admin has no profile image (no default picture) – outer layout white */
+.updates-by-family-entry-avatar-initials {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    color: #054C82;
+    background: #fff;
+    letter-spacing: 0.02em;
+}
+
+/* User info: name on first line, date on second; vertically centred in row */
 .updates-by-family-entry-user {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    align-self: center;
+    justify-content: center;
+    margin: 0;
 }
 
 .updates-by-family-entry-name {
@@ -289,7 +693,8 @@
     vertical-align: middle;
 }
 
-/* Message bubble – speech-bubble style with tail toward profile; same row as avatar */
+
+/* Message bubble – aligned with avatar and user on same row */
 .updates-by-family-entry-msg {
     position: relative;
     padding: 16px 20px;
@@ -299,8 +704,6 @@
     line-height: 1.55;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     margin: 0;
-    align-self: center;
-    top: -95%;
 }
 
 .updates-by-family-entry-msg::before {
@@ -314,6 +717,82 @@
 
 .updates-by-family-entry-msg p {
     margin: 0;
+}
+
+/* Wrapper for message bubble + edit/delete actions (only when current user is author) */
+.updates-by-family-entry-msg-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.updates-by-family-entry--right .updates-by-family-entry-msg-wrap {
+    order: 3;
+}
+
+.updates-by-family-entry--left .updates-by-family-entry-msg-wrap {
+    order: 1;
+    flex-direction: row-reverse;
+}
+
+.updates-by-family-entry-msg-wrap .updates-by-family-entry-msg {
+    flex: 1 1 auto;
+    min-width: 0;
+    order: 0;
+}
+
+.updates-by-family-entry-msg-wrap .updates-by-family-entry-actions {
+    order: 1;
+}
+
+.updates-by-family-entry-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+
+.updates-by-family-action-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.updates-by-family-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #054C82;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.updates-by-family-action-btn:hover {
+    background: #054C82;
+    color: #fff;
+}
+
+.updates-by-family-action-btn--edit:hover {
+    background: #054C82;
+    color: #fff;
+}
+
+.updates-by-family-action-btn--delete:hover {
+    background: #c53030;
+    color: #fff;
+}
+
+.updates-by-family-action-btn svg {
+    flex-shrink: 0;
 }
 
 /* Message colors – arrow (tail) always matches bubble color for ALL messages */
@@ -393,37 +872,120 @@
     }
 }
 
+/* ========== Mobile & tablet: 767.98px and below ========== */
 @media (max-width: 767.98px) {
-    .updates-by-family-entry {
-        grid-template-columns: 1fr;
-        gap: 12px;
-        padding-left: 0;
-        text-align: center;
+    .updates-by-family-add-bar {
+        padding: 16px 0;
     }
+    .updates-by-family-add-bar-inner {
+        padding: 0 16px;
+    }
+    .updates-by-family-add-btn {
+        padding: 10px 20px;
+        font-size: 15px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .updates-by-family-timeline {
+        padding: 40px 0 56px;
+    }
+
+    .updates-by-family-timeline-inner {
+        padding: 0 16px;
+        overflow-x: hidden;
+    }
+
     .updates-by-family-timeline-axis {
-        left: 24px;
+        left: 50%;
+        transform: translateX(-50%);
         margin-left: 0;
     }
-    .updates-by-family-entry--right .updates-by-family-entry-user,
-    .updates-by-family-entry--left .updates-by-family-entry-user {
-        grid-column: 1;
+
+    .updates-by-family-entry {
+        flex-direction: column;
+        gap: 16px;
         text-align: center;
+        width: 100%;
+        max-width: 100%;
+        left: 0 !important;
         padding: 0;
+        margin-bottom: 32px;
     }
+
+    .updates-by-family-entry--pos-1,
+    .updates-by-family-entry--pos-2 {
+        left: 0 !important;
+    }
+
+    /* Mobile only: name+date align left or right to match bubble position */
+    .updates-by-family-entry--right .updates-by-family-entry-user {
+        order: 1;
+        text-align: right;
+        padding: 0;
+        align-items: start;
+        max-width: 100%;
+        position: relative;
+        left: 26%;
+        top: 58px;
+    }
+    .updates-by-family-entry--left .updates-by-family-entry-user {
+        order: 1;
+        text-align: left;
+        padding: 0;
+        align-items: flex-start;
+        max-width: 100%;
+        position: relative;
+        left: -25%;
+        top: 59px;
+    }
+
     .updates-by-family-entry--right .updates-by-family-entry-node,
     .updates-by-family-entry--left .updates-by-family-entry-node {
-        grid-column: 1;
-        justify-self: center;
+        order: 2;
     }
+
+    .updates-by-family-entry--right .updates-by-family-entry-msg-wrap,
+    .updates-by-family-entry--left .updates-by-family-entry-msg-wrap {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .updates-by-family-entry--left .updates-by-family-entry-msg-wrap {
+        flex-direction: column-reverse;
+    }
+
     .updates-by-family-entry--right .updates-by-family-entry-msg,
     .updates-by-family-entry--left .updates-by-family-entry-msg {
-        grid-column: 1;
+        width: 100%;
+        max-width: 100%;
     }
+
     .updates-by-family-entry-msg::before {
         display: none;
     }
+
+    .updates-by-family-entry-actions {
+        justify-content: center;
+        padding-top: 8px;
+    }
+
+    .updates-by-family-timeline-year {
+        width: 64px;
+        height: 64px;
+        font-size: 18px;
+        margin-bottom: 24px;
+    }
+
+    .updates-by-family-timeline-end-dot {
+        margin-top: 24px;
+    }
 }
 
+/* ========== Small mobile: 575.98px and below ========== */
 @media (max-width: 575.98px) {
     .updates-by-family-hero {
         height: 20vh;
@@ -440,5 +1002,22 @@
     }
     .updates-by-family-side-img-file {
         max-width: 80px;
+    }
+    .updates-by-family-timeline-inner {
+        padding: 0 12px;
+    }
+    .updates-by-family-entry {
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+    .updates-by-family-entry-msg {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    .updates-by-family-timeline-year {
+        width: 56px;
+        height: 56px;
+        font-size: 16px;
+        margin-bottom: 20px;
     }
 }

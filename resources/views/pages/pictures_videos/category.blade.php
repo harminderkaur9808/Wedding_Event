@@ -178,7 +178,7 @@
                     
                     <div class="wm-pv-upload-form-group">
                         <label class="wm-pv-upload-label">
-                            <span>Images (JPEG, PNG, JPG, GIF, WEBP - Max 5MB each)</span>
+                            <span>Images (JPEG, PNG, JPG, GIF, WEBP - Max 10MB each)</span>
                             <input type="file" name="images[]" accept="image/*" multiple class="wm-pv-upload-input" id="imagesInput">
                             <div class="wm-pv-upload-file-info" id="imagesInfo"></div>
                         </label>
@@ -186,7 +186,7 @@
                     
                     <div class="wm-pv-upload-form-group">
                         <label class="wm-pv-upload-label">
-                            <span>Videos (MP4, AVI, MOV, WMV, FLV, WEBM - Max 50MB each)</span>
+                            <span>Videos (MP4, AVI, MOV, WMV, FLV, WEBM - Max 200MB each)</span>
                             <input type="file" name="videos[]" accept="video/*" multiple class="wm-pv-upload-input" id="videosInput">
                             <div class="wm-pv-upload-file-info" id="videosInfo"></div>
                         </label>
