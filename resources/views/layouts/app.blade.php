@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('css/ninth-section.css') }}">
     <link rel="stylesheet" href="{{ asset('css/tenth-section.css') }}">
     <link rel="stylesheet" href="{{ asset('css/eleventh-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/twelfth-section.css') }}">
     @stack('styles')
 </head>
 <body>

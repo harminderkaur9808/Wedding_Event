@@ -268,19 +268,20 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 }
 
 .admin-dashboard-profile-circle {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     background: linear-gradient(135deg, #2F4F75 0%, #0055A5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+    overflow: hidden;
 }
 
 .admin-dashboard-profile-initials {
     font-family: 'Volkhov', serif;
-    font-size: 36px;
+    font-size: 52px;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: 2px;
@@ -289,8 +290,10 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 .admin-dashboard-profile-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
     border-radius: 50%;
+    display: block;
 }
 
 .admin-dashboard-upload-btn {
@@ -823,6 +826,78 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     padding: 40px;
     color: #6c757d;
     font-style: italic;
+}
+
+/* Book your appointments – entry cards */
+.admin-dashboard-book-entry-card {
+    background: linear-gradient(135deg, #fafbff 0%, #f0f2f8 100%);
+    border: 1px solid #e2e6f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(47, 79, 117, 0.06);
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.admin-dashboard-book-entry-card:hover {
+    box-shadow: 0 4px 20px rgba(47, 79, 117, 0.1);
+    border-color: #d0d5e8;
+}
+
+.admin-dashboard-book-entry-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #A3A5C7;
+    letter-spacing: 0.3px;
+}
+
+.admin-dashboard-book-entry-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e8eaf0;
+}
+
+.admin-dashboard-book-entry-actions .admin-dashboard-action-btn {
+    margin: 0;
+}
+
+.admin-dashboard-delete-entry-btn {
+    background-color: #c62828 !important;
+    color: #ffffff !important;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.admin-dashboard-delete-entry-btn:hover {
+    background-color: #b71c1c !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+.admin-dashboard-description {
+    color: #5a6578;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.admin-dashboard-note {
+    color: #6c757d;
+    font-size: 14px;
+    font-style: italic;
+    margin: 16px 0;
 }
 
 /* Pagination Styles */

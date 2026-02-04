@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\UserMedia;
 use App\Models\PageSection;
+use App\Models\BookAppointmentEntry;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +63,21 @@ class AdminDashboardController extends Controller
 
         if ($tab === 'media-files') {
             return $this->mediaFiles($request);
+        }
+
+        if ($tab === 'book-appointments') {
+            $section = $request->get('section', 'hair');
+            if (!array_key_exists($section, BookAppointmentEntry::SECTIONS)) {
+                $section = 'hair';
+            }
+            $entries = BookAppointmentEntry::where('section', $section)->orderBy('sort_order')->get();
+            return view('AdminArea.AdminDashboard', [
+                'user' => $user,
+                'activeTab' => 'book-appointments',
+                'bookAppointmentSection' => $section,
+                'bookAppointmentEntries' => $entries,
+                'bookAppointmentSections' => BookAppointmentEntry::SECTIONS,
+            ]);
         }
 
         return view('AdminArea.AdminDashboard', [
@@ -499,6 +515,9 @@ class AdminDashboardController extends Controller
             $rules['hero_slider_2'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
             $rules['hero_slider_3'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         }
+        if (in_array($request->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'], true)) {
+            $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+        }
         $request->validate($rules);
 
         $section = PageSection::where('slug', $request->slug)->firstOrFail();
@@ -538,6 +557,15 @@ class AdminDashboardController extends Controller
             }
         }
 
+        // Section image for fourth, fifth, sixth, seventh, ninth, tenth, eleventh, twelfth
+        if (in_array($section->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'], true) && $request->hasFile('image')) {
+            $storageDir = 'page_sections/' . $section->slug;
+            if (!empty($extra['image']) && Storage::disk('public')->exists($extra['image'])) {
+                Storage::disk('public')->delete($extra['image']);
+            }
+            $extra['image'] = $request->file('image')->store($storageDir, 'public');
+        }
+
         $section->extra = array_filter($extra, fn ($v) => $v !== null && $v !== '');
         $section->save();
 
@@ -566,10 +594,80 @@ class AdminDashboardController extends Controller
             ['slug' => 'ninth', 'title' => "Jaggo, Gidha and\nBhangra Night", 'subtitle' => 'Full Magic', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '2-31-2026', 'time' => '6 pm to midnight', 'venue' => 'Park Hyatt Aviara Resort-760-448-1234', 'dress_code' => 'Indian Traditional Outfits', 'address' => '7100 Aviara Resort Drive, Carlsbad CA 92011', 'entertainment_mc' => 'MC: Herman Kahlon', 'performance_text' => 'Giddha by family members'], 'sort_order' => 8],
             ['slug' => 'tenth', 'title' => 'Sehra & Surma Ceremony', 'subtitle' => 'Cultural Elegance', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '12-31-2026', 'turban_tying' => 'At 7 am', 'venue' => 'Hopitality Room', 'barat_leaves' => 'Indian Traditional Outfits'], 'sort_order' => 9],
             ['slug' => 'eleventh', 'title' => 'Wedding', 'subtitle' => 'Sacred Union', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '12-31-2026', 'time' => '9 am-12 pm', 'venue' => 'Ramit and Maninder Residence', 'dress_code' => 'Indian Traditional Outfits', 'dress_code_subtext' => 'Men: Red Turbans Head Covers  Women: Any Color', 'address' => '20865 N 109th Place Scottsdale AZ'], 'sort_order' => 10],
+            ['slug' => 'twelfth', 'title' => 'Reception', 'subtitle' => 'Celebration', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '1/2/2027', 'venue' => 'Park Hyatt Aviara Resort-760-448-1234', 'address' => '7100 Aviara Resort Drive, Carlsbad CA 92011', 'time' => '6 pm onwards', 'dress_code' => 'Indian traditional outfits', 'dress_code_subtext' => 'Men: Formals. Women: any color'], 'sort_order' => 11],
         ];
 
         foreach ($sections as $data) {
             PageSection::updateOrCreate(['slug' => $data['slug']], $data);
         }
+    }
+
+    /**
+     * Store a new Book Appointment entry (up to 6 per section).
+     */
+    public function storeBookAppointmentEntry(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $request->validate([
+            'section' => 'required|string|in:hair,makeup,nails,spa',
+        ]);
+        $count = BookAppointmentEntry::where('section', $request->section)->count();
+        if ($count >= 6) {
+            return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $request->section])
+                ->with('error', 'Maximum 6 entries per section.');
+        }
+        $maxOrder = BookAppointmentEntry::where('section', $request->section)->max('sort_order') ?? -1;
+        BookAppointmentEntry::create([
+            'section' => $request->section,
+            'sort_order' => $maxOrder + 1,
+            'store_name' => '',
+            'instruction' => 'Call at least one month ahead and book your appointments.',
+            'address' => '',
+            'distance' => '',
+            'services' => '',
+        ]);
+        return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $request->section])
+            ->with('success', 'Entry added. You can now edit and save.');
+    }
+
+    /**
+     * Update a Book Appointment entry.
+     */
+    public function updateBookAppointmentEntry(Request $request, $id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $entry = BookAppointmentEntry::findOrFail($id);
+        $request->validate([
+            'store_name' => 'nullable|string|max:255',
+            'instruction' => 'nullable|string',
+            'address' => 'nullable|string|max:500',
+            'distance' => 'nullable|string|max:500',
+            'services' => 'nullable|string|max:500',
+        ]);
+        $entry->update($request->only(['store_name', 'instruction', 'address', 'distance', 'services']));
+        return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $entry->section])
+            ->with('success', 'Entry updated.');
+    }
+
+    /**
+     * Delete a Book Appointment entry.
+     */
+    public function destroyBookAppointmentEntry($id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $entry = BookAppointmentEntry::findOrFail($id);
+        $section = $entry->section;
+        $entry->delete();
+        return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $section])
+            ->with('success', 'Entry deleted.');
     }
 }

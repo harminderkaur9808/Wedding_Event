@@ -79,7 +79,7 @@
     position: relative;
     width: 100%;
     padding: 30px 0;
-    background-color: #ffffff;
+    background-color: #D2DFF11F;
     overflow: hidden;
     min-height: 600px;
 }
@@ -164,13 +164,11 @@
 .book-appointments-second-content {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 50px;
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
-    justify-content: center;
-    align-items: center;
 }
 
 .book-appointments-main-image {
@@ -179,16 +177,96 @@
     max-width: 500px;
     position: relative;
     z-index: 2;
+    display: flex;
+    align-items: stretch;
 }
 
 .book-appointments-main-img {
     width: 100%;
-    height: auto;
-    border-radius: 12px;
-    /* border: 2px solid #B8A9D9; */
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+    border: 2px solid #B8A9D9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: block;
-    border-radius: 42px;
+}
+
+/* Detail blocks (store/location cards) - shared across Hair, Makeup, Nails, Spa */
+.book-appointments-detail-blocks {
+    flex: 0 1 45%;
+    min-width: 300px;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.book-appointments-detail-blocks-left {
+    order: 1;
+}
+
+.book-appointments-detail-block {
+    background: #D2DFF11F;
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.book-appointments-detail-block-header {
+    background: #054C82;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    text-transform: uppercase;
+    margin: 16px 0 0 0;
+    border-radius: 0;
+    display: inline-block;
+    width: fit-content;
+}
+
+.book-appointments-detail-instruction {
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+    padding: 14px 16px 8px;
+}
+
+.book-appointments-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 4px 16px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.book-appointments-detail-row:last-child {
+    padding-bottom: 16px;
+}
+
+.book-appointments-detail-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    object-fit: contain;
+    margin-top: 2px;
+}
+
+.book-appointments-no-entries {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    color: #666;
+    font-style: italic;
+    margin: 20px 0;
 }
 
 .book-appointments-second-text-content {
@@ -245,6 +323,7 @@
     position: relative;
     width: 100%;
     padding: 34px 0;
+    background-color: #D2DFF11F;
     overflow: hidden;
     min-height: 600px;
 }
@@ -317,7 +396,7 @@
 .book-appointments-third-content {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     gap: 50px;
     flex-wrap: wrap;
     max-width: 1200px;
@@ -341,12 +420,17 @@
     position: relative;
     z-index: 2;
     order: 2;
+    display: flex;
+    align-items: stretch;
 }
 
 .book-appointments-third-main-img {
     width: 100%;
-    height: auto;
-    border-radius: 42px;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
     border: 2px solid #B8A9D9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: block;
@@ -357,7 +441,7 @@
     position: relative;
     width: 100%;
     padding: 30px 0;
-    background-color: #ffffff;
+    background-color: #D2DFF11F;
     overflow: hidden;
     min-height: 600px;
 }
@@ -442,7 +526,7 @@
 .book-appointments-fourth-content {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     gap: 50px;
     flex-wrap: wrap;
     max-width: 1200px;
@@ -455,12 +539,17 @@
     max-width: 500px;
     position: relative;
     z-index: 2;
+    display: flex;
+    align-items: stretch;
 }
 
 .book-appointments-fourth-main-img {
     width: 100%;
-    height: auto;
-    border-radius: 42px;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
     border: 2px solid #B8A9D9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: block;
@@ -480,6 +569,7 @@
     position: relative;
     width: 100%;
     padding: 34px 0;
+    background-color: #D2DFF11F;
     overflow: hidden;
     min-height: 600px;
 }
@@ -552,7 +642,7 @@
 .book-appointments-fifth-content {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch;
     gap: 50px;
     flex-wrap: wrap;
     max-width: 1200px;
@@ -576,12 +666,17 @@
     position: relative;
     z-index: 2;
     order: 2;
+    display: flex;
+    align-items: stretch;
 }
 
 .book-appointments-fifth-main-img {
     width: 100%;
-    height: auto;
-    border-radius: 42px;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
     border: 2px solid #B8A9D9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: block;
@@ -671,12 +766,19 @@
         flex: 0 1 100%;
     }
 
+    .book-appointments-main-img {
+        min-height: 0;
+        height: auto;
+    }
+
     .book-appointments-second-content {
         flex-direction: column;
+        align-items: center;
         gap: 30px;
     }
 
-    .book-appointments-second-text-content {
+    .book-appointments-second-text-content,
+    .book-appointments-detail-blocks {
         flex: 0 1 100%;
         max-width: 100%;
     }
@@ -711,7 +813,7 @@
     }
 
     .book-appointments-main-img {
-        border-radius: 8px;
+        border-radius: 0;
     }
 }
 
@@ -764,12 +866,19 @@
         order: 1;
     }
 
+    .book-appointments-third-main-img {
+        min-height: 0;
+        height: auto;
+    }
+
     .book-appointments-third-content {
         flex-direction: column;
+        align-items: center;
         gap: 30px;
     }
 
-    .book-appointments-third-text-content {
+    .book-appointments-third-text-content,
+    .book-appointments-detail-blocks-left {
         flex: 0 1 100%;
         max-width: 100%;
         order: 2;
@@ -805,7 +914,7 @@
     }
 
     .book-appointments-third-main-img {
-        border-radius: 32px;
+        border-radius: 0;
     }
 }
 
@@ -869,10 +978,12 @@
 
     .book-appointments-fourth-content {
         flex-direction: column;
+        align-items: center;
         gap: 30px;
     }
 
-    .book-appointments-fourth-text-content {
+    .book-appointments-fourth-text-content,
+    .book-appointments-fourth-content .book-appointments-detail-blocks {
         flex: 0 1 100%;
         max-width: 100%;
     }
@@ -907,7 +1018,9 @@
     }
 
     .book-appointments-fourth-main-img {
-        border-radius: 32px;
+        border-radius: 0;
+        min-height: 0;
+        height: auto;
     }
 }
 
@@ -962,10 +1075,12 @@
 
     .book-appointments-fifth-content {
         flex-direction: column;
+        align-items: center;
         gap: 30px;
     }
 
-    .book-appointments-fifth-text-content {
+    .book-appointments-fifth-text-content,
+    .book-appointments-fifth-content .book-appointments-detail-blocks-left {
         flex: 0 1 100%;
         max-width: 100%;
         order: 2;
@@ -1001,6 +1116,8 @@
     }
 
     .book-appointments-fifth-main-img {
-        border-radius: 32px;
+        border-radius: 0;
+        min-height: 0;
+        height: auto;
     }
 }

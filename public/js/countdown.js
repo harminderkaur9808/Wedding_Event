@@ -23,6 +23,7 @@
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
 
     /**
      * Calculate time difference and update countdown
@@ -36,18 +37,21 @@
             daysElement.textContent = '0';
             hoursElement.textContent = '0';
             minutesElement.textContent = '0';
+            if (secondsElement) secondsElement.textContent = '0';
             return;
         }
 
-        // Calculate days, hours, and minutes
+        // Calculate days, hours, minutes, and seconds
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
         // Update DOM elements
         daysElement.textContent = days.toString();
         hoursElement.textContent = hours.toString().padStart(2, '0');
         minutesElement.textContent = minutes.toString().padStart(2, '0');
+        if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
     }
 
     /**
@@ -66,6 +70,7 @@
             console.error('Countdown elements not found');
             return;
         }
+        // secondsElement is optional for backward compatibility
 
         // Initial update
         updateCountdown();

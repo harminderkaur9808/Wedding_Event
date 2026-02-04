@@ -29,6 +29,10 @@
                     <div class="wedding-mele-countdown-number" id="minutes">0</div>
                     <div class="wedding-mele-countdown-label">Minutes</div>
                 </div>
+                <div class="wedding-mele-countdown-box">
+                    <div class="wedding-mele-countdown-number" id="seconds">0</div>
+                    <div class="wedding-mele-countdown-label">Seconds</div>
+                </div>
             </div>
         </div>
     </div>

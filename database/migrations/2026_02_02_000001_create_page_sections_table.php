@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('page_sections', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 64)->unique()->comment('hero, our_story, wedding_day, fourth, fifth, sixth, seventh, ninth, tenth, eleventh');
+            $table->string('slug', 64)->unique()->comment('hero, our_story, wedding_day, fourth, fifth, sixth, seventh, ninth, tenth, eleventh, twelfth');
             $table->string('title')->nullable();
             $table->string('subtitle')->nullable();
             $table->text('short_description')->nullable();

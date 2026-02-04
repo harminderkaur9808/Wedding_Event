@@ -68,6 +68,13 @@
                         </svg>
                         <span>Home Page Sections</span>
                     </a>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $bookAppointmentSection ?? 'hair']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'book-appointments' ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Book your appointments</span>
+                    </a>
                     <a href="{{ route('admin.dashboard', ['tab' => 'media-files']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'media-files' ? 'active' : '' }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 16L8.586 11.414C9.367 10.633 10.633 10.633 11.414 11.414L16 16M14 14L15.586 12.414C16.367 11.633 17.633 11.633 18.414 12.414L22 16M2 20H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -365,7 +372,7 @@
                             @foreach($pageSections ?? [] as $sec)
                                 <div class="admin-dashboard-section-card js-page-section-card" id="page-section-card-{{ $sec->slug }}" data-section-slug="{{ $sec->slug }}" style="display: none;">
                                     <h3 class="admin-dashboard-section-card-title">{{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
-                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero') enctype="multipart/form-data" @endif>
+                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero' || in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'])) enctype="multipart/form-data" @endif>
                                         @csrf
                                         <input type="hidden" name="slug" value="{{ $sec->slug }}">
 
@@ -398,7 +405,7 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        {{-- Other section image uploads commented out for now
+                                        {{-- Our Story groom/bride photos (optional, commented out for now)
                                         @if($sec->slug === 'our_story')
                                             <div class="admin-dashboard-form-row">
                                                 <div class="admin-dashboard-form-group">
@@ -417,7 +424,8 @@
                                                 </div>
                                             </div>
                                         @endif
-                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh']))
+                                        --}}
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth']))
                                             <div class="admin-dashboard-form-group">
                                                 <label class="admin-dashboard-label">Section image (shown on homepage)</label>
                                                 @if($sec->getExtra('image'))
@@ -426,7 +434,6 @@
                                                 <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
                                             </div>
                                         @endif
-                                        --}}
 
                                         {{-- Title, Subtitle, Short description: commented out for Hero section (hero only has slider images) --}}
                                         @if($sec->slug !== 'hero')
@@ -475,7 +482,7 @@
                                             </div>
                                         @endif
 
-                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh']))
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth']))
                                             <div class="admin-dashboard-extra-fields">
                                                 @if($sec->slug === 'fourth')
                                                     <div class="admin-dashboard-form-row">
@@ -521,6 +528,16 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Barat leaves</label><input type="text" name="extra[barat_leaves]" class="admin-dashboard-input" value="{{ old('extra.barat_leaves', $sec->getExtra('barat_leaves')) }}"></div>
                                                     </div>
                                                 @endif
+                                                @if($sec->slug === 'twelfth')
+                                                    <div class="admin-dashboard-form-row">
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Reception (date)</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}" placeholder="e.g. 1/2/2027"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}" placeholder="e.g. 6 pm onwards"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}" placeholder="e.g. Indian traditional outfits"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code subtext</label><input type="text" name="extra[dress_code_subtext]" class="admin-dashboard-input" value="{{ old('extra.dress_code_subtext', $sec->getExtra('dress_code_subtext')) }}" placeholder="e.g. Men: Formals. Women: any color"></div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endif
 
@@ -535,6 +552,90 @@
                             <div class="admin-dashboard-empty-state">
                                 <p>Sections are created automatically on first visit. If you still see this, run: <code>php artisan migrate</code> then refresh this page.</p>
                             </div>
+                        @endif
+                    </div>
+                @elseif(($activeTab ?? 'my-account') === 'book-appointments')
+                    <!-- Book your appointments Tab Content -->
+                    <div class="admin-dashboard-tab-content">
+                        <div class="admin-dashboard-title-section">
+                            <div class="admin-dashboard-decorative-top">
+                                <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="admin-dashboard-decorative-svg">
+                                <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
+                            </div>
+                            <h1 class="admin-dashboard-title">Book your appointments</h1>
+                        </div>
+                        <p class="admin-dashboard-description">Manage store/location entries for Hair, Makeup, Nails, and Spa. Select a section below and add up to 6 entries per section.</p>
+
+                        <div class="admin-dashboard-form-group">
+                            <label for="book_appointment_section" class="admin-dashboard-label">Select section</label>
+                            <select id="book_appointment_section" class="admin-dashboard-input" onchange="window.location.href='{{ route('admin.dashboard') }}?tab=book-appointments&section='+this.value">
+                                @foreach($bookAppointmentSections ?? [] as $slug => $label)
+                                    <option value="{{ $slug }}" {{ ($bookAppointmentSection ?? 'hair') === $slug ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        @php $entries = $bookAppointmentEntries ?? collect(); $canAdd = $entries->count() < 6; @endphp
+
+                        @foreach($entries as $entry)
+                            <div class="admin-dashboard-book-entry-card">
+                                <h3 class="admin-dashboard-book-entry-title">Entry {{ $loop->iteration }}</h3>
+                                <form method="POST" action="{{ route('admin.book-appointments.entries.update', $entry->id) }}" class="admin-dashboard-form">
+                                    @csrf
+                                    <div class="admin-dashboard-form-row">
+                                        <div class="admin-dashboard-form-group">
+                                            <label class="admin-dashboard-label">Store / Location name</label>
+                                            <input type="text" name="store_name" class="admin-dashboard-input" value="{{ old('store_name', $entry->store_name) }}" placeholder="e.g. ULTA BEAUTY STORE">
+                                        </div>
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Instruction</label>
+                                        <input type="text" name="instruction" class="admin-dashboard-input" value="{{ old('instruction', $entry->instruction) }}" placeholder="e.g. Call at least one month ahead and book your appointments.">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Address</label>
+                                        <input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="e.g. 1905 Calle Barcelona, Carlsbad, CA 92009">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Distance</label>
+                                        <input type="text" name="distance" class="admin-dashboard-input" value="{{ old('distance', $entry->distance) }}" placeholder="e.g. Approximately 2-3 miles from Park Hyatt Aviara.">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Services</label>
+                                        <input type="text" name="services" class="admin-dashboard-input" value="{{ old('services', $entry->services) }}" placeholder="e.g. Hair salon, makeup, and skincare.">
+                                    </div>
+                                    <div class="admin-dashboard-form-group admin-dashboard-book-entry-actions">
+                                        <button type="submit" class="admin-dashboard-action-btn approve-btn">Save</button>
+                                        <a href="#" onclick="if(confirm('Delete this entry?')){ document.getElementById('delete-form-{{ $entry->id }}').submit(); } return false;" class="admin-dashboard-action-btn admin-dashboard-delete-entry-btn">Delete</a>
+                                    </div>
+                                </form>
+                                <form id="delete-form-{{ $entry->id }}" method="POST" action="{{ route('admin.book-appointments.entries.destroy', $entry->id) }}" style="display:none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        @endforeach
+
+                        @if($canAdd)
+                            <div class="admin-dashboard-form-group">
+                                <form method="POST" action="{{ route('admin.book-appointments.entries.store') }}">
+                                    @csrf
+                                    <input type="hidden" name="section" value="{{ $bookAppointmentSection ?? 'hair' }}">
+                                    <button type="submit" class="admin-dashboard-action-btn approve-btn" style="display:inline-flex;align-items:center;gap:8px;">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                        Add entry ({{ $entries->count() }}/6)
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <p class="admin-dashboard-note">Maximum 6 entries for this section. Delete one to add another.</p>
+                        @endif
+
+                        @if($entries->isEmpty())
+                            <p class="admin-dashboard-note">No entries yet for {{ $bookAppointmentSections[$bookAppointmentSection ?? 'hair'] ?? 'this section' }}. Click "Add entry" above to add one.</p>
                         @endif
                     </div>
                 @elseif(($activeTab ?? 'my-account') === 'media-files')

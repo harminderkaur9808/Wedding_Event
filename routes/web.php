@@ -39,9 +39,8 @@ Route::get('/pictures-videos', [PicturesVideosController::class, 'index'])->name
 Route::get('/pictures-videos/{category}', [PicturesVideosController::class, 'showCategory'])->name('pictures_videos.category');
 
 // Book Appointments Route
-Route::get('/book-appointments', function () {
-    return view('pages.book_appointments');
-})->name('book.appointments');
+use App\Http\Controllers\BookAppointmentsController;
+Route::get('/book-appointments', [BookAppointmentsController::class, 'index'])->name('book.appointments');
 
 // Ask the Host (public page; post actions require auth)
 use App\Http\Controllers\AskTheHostController;
@@ -80,7 +79,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
     Route::get('/admin/media/download', [AdminDashboardController::class, 'downloadMedia'])->name('admin.media.download');
     Route::post('/admin/page-sections/update', [AdminDashboardController::class, 'updatePageSection'])->name('admin.page-sections.update');
-    
+    Route::post('/admin/book-appointments/entries', [AdminDashboardController::class, 'storeBookAppointmentEntry'])->name('admin.book-appointments.entries.store');
+    Route::post('/admin/book-appointments/entries/{id}', [AdminDashboardController::class, 'updateBookAppointmentEntry'])->name('admin.book-appointments.entries.update');
+    Route::post('/admin/book-appointments/entries/{id}/delete', [AdminDashboardController::class, 'destroyBookAppointmentEntry'])->name('admin.book-appointments.entries.destroy');
+
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::post('/user/profile/update', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
     

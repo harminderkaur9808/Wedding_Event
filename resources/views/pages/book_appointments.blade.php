@@ -50,20 +50,17 @@
                 <h2 class="book-appointments-second-title">Hair</h2>
             </div>
 
-            <!-- Main Content with Images -->
+            <!-- Main Content: Image Left, Detail Blocks Right -->
             <div class="book-appointments-second-content">
-                <!-- Left: Main Image -->
                 <div class="book-appointments-main-image">
                     <img src="{{ asset('Images/Book-your-appointments/sec-sec/Hair_sec_main.png') }}" alt="Hair Styling Service" class="book-appointments-main-img">
                 </div>
-
-                <!-- Right: Text Content -->
-                <div class="book-appointments-second-text-content">
-                    <h3 class="book-appointments-stylist-name">Jasmine Sra</h3>
-                    <p class="book-appointments-description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when.
-                    </p>
-                    <button class="book-appointments-book-btn">Book early to secure your spot</button>
+                <div class="book-appointments-detail-blocks">
+                    @forelse(($entriesBySection['hair'] ?? []) as $entry)
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                    @empty
+                        <p class="book-appointments-no-entries">No locations added yet for Hair. Add entries from the admin panel.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -90,18 +87,15 @@
                 <h2 class="book-appointments-third-title">Makeup</h2>
             </div>
 
-            <!-- Main Content - Text Left, Image Right -->
+            <!-- Main Content - Detail Blocks Left, Image Right -->
             <div class="book-appointments-third-content">
-                <!-- Left: Text Content -->
-                <div class="book-appointments-third-text-content">
-                    <h3 class="book-appointments-stylist-name">Jasmine Sra</h3>
-                    <p class="book-appointments-description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when.
-                    </p>
-                    <button class="book-appointments-book-btn">Book Now</button>
+                <div class="book-appointments-detail-blocks book-appointments-detail-blocks-left">
+                    @forelse(($entriesBySection['makeup'] ?? []) as $entry)
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                    @empty
+                        <p class="book-appointments-no-entries">No locations added yet for Makeup. Add entries from the admin panel.</p>
+                    @endforelse
                 </div>
-
-                <!-- Right: Main Image -->
                 <div class="book-appointments-third-main-image">
                     <img src="{{ asset('Images/Book-your-appointments/third_sec/Third_sec_mainimg.png') }}" alt="Makeup Service" class="book-appointments-third-main-img">
                 </div>
@@ -131,20 +125,17 @@
                 <h2 class="book-appointments-fourth-title">Nails</h2>
             </div>
 
-            <!-- Main Content with Images -->
+            <!-- Main Content: Image Left, Detail Blocks Right -->
             <div class="book-appointments-fourth-content">
-                <!-- Left: Main Image -->
                 <div class="book-appointments-fourth-main-image">
                     <img src="{{ asset('Images/Book-your-appointments/forth_sec/nails_sec_main_img.png') }}" alt="Nails Service" class="book-appointments-fourth-main-img">
                 </div>
-
-                <!-- Right: Text Content -->
-                <div class="book-appointments-fourth-text-content">
-                    <h3 class="book-appointments-stylist-name">Lorem Ipsum</h3>
-                    <p class="book-appointments-description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when.
-                    </p>
-                    <button class="book-appointments-book-btn">Book Now</button>
+                <div class="book-appointments-detail-blocks">
+                    @forelse(($entriesBySection['nails'] ?? []) as $entry)
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                    @empty
+                        <p class="book-appointments-no-entries">No locations added yet for Nails. Add entries from the admin panel.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -171,18 +162,15 @@
                 <h2 class="book-appointments-fifth-title">Spa</h2>
             </div>
 
-            <!-- Main Content - Text Left, Image Right -->
+            <!-- Main Content - Detail Blocks Left, Image Right -->
             <div class="book-appointments-fifth-content">
-                <!-- Left: Text Content -->
-                <div class="book-appointments-fifth-text-content">
-                    <h3 class="book-appointments-stylist-name">Lorem Ipsum</h3>
-                    <p class="book-appointments-description">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when.
-                    </p>
-                    <button class="book-appointments-book-btn">Book Now</button>
+                <div class="book-appointments-detail-blocks book-appointments-detail-blocks-left">
+                    @forelse(($entriesBySection['spa'] ?? []) as $entry)
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                    @empty
+                        <p class="book-appointments-no-entries">No locations added yet for Spa. Add entries from the admin panel.</p>
+                    @endforelse
                 </div>
-
-                <!-- Right: Main Image -->
                 <div class="book-appointments-fifth-main-image">
                     <img src="{{ asset('Images/Book-your-appointments/fifthsec/Spa_img_main.png') }}" alt="Spa Service" class="book-appointments-fifth-main-img">
                 </div>
@@ -190,10 +178,4 @@
         </div>
     </section>
 
-    <!-- Content Section (Add more sections here as needed) -->
-    <section class="book-appointments-content">
-        <div class="container">
-            <!-- Add your appointment booking content here -->
-        </div>
-    </section>
 @endsection

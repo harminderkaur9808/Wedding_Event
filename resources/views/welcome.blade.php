@@ -13,6 +13,7 @@
     @include('Homepages.partials.ninth-section')
     @include('Homepages.partials.tenth-section')
     @include('Homepages.partials.eleventh-section')
+    @include('Homepages.partials.twelfth-section')
 
     <!-- <div class="wedding-mele-welcome-content">
         <div class="container">
