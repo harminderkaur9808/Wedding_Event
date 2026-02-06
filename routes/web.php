@@ -49,6 +49,11 @@ Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.t
 Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store')->middleware('auth');
 Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store')->middleware('auth');
 
+// Local Attractions
+use App\Http\Controllers\LocalAttractionsController;
+
+Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
+
 // Updates by Family
 use App\Http\Controllers\UpdatesByFamilyController;
 
@@ -73,18 +78,30 @@ use App\Http\Controllers\UserDashboardController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::post('/admin/profile/image', [AdminDashboardController::class, 'updateProfileImage'])->name('admin.profile.image');
     Route::post('/admin/users/create', [AdminDashboardController::class, 'createUser'])->name('admin.users.create');
     Route::post('/admin/users/{id}/approve', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
     Route::post('/admin/users/{id}/reject', [AdminDashboardController::class, 'rejectUser'])->name('admin.users.reject');
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
     Route::get('/admin/media/download', [AdminDashboardController::class, 'downloadMedia'])->name('admin.media.download');
     Route::post('/admin/page-sections/update', [AdminDashboardController::class, 'updatePageSection'])->name('admin.page-sections.update');
+
+    // Local Attractions (admin)
+    Route::post('/admin/local-attractions', [AdminDashboardController::class, 'storeLocalAttraction'])->name('admin.local-attractions.store');
+    Route::post('/admin/local-attractions/{id}', [AdminDashboardController::class, 'updateLocalAttraction'])->name('admin.local-attractions.update');
+    Route::post('/admin/local-attractions/{id}/delete', [AdminDashboardController::class, 'destroyLocalAttraction'])->name('admin.local-attractions.destroy');
+
+    Route::post('/admin/notes', [AdminDashboardController::class, 'storeNote'])->name('admin.notes.store');
+    Route::post('/admin/notes/{id}', [AdminDashboardController::class, 'updateNote'])->name('admin.notes.update');
+    Route::post('/admin/notes/{id}/delete', [AdminDashboardController::class, 'destroyNote'])->name('admin.notes.destroy');
+
     Route::post('/admin/book-appointments/entries', [AdminDashboardController::class, 'storeBookAppointmentEntry'])->name('admin.book-appointments.entries.store');
     Route::post('/admin/book-appointments/entries/{id}', [AdminDashboardController::class, 'updateBookAppointmentEntry'])->name('admin.book-appointments.entries.update');
     Route::post('/admin/book-appointments/entries/{id}/delete', [AdminDashboardController::class, 'destroyBookAppointmentEntry'])->name('admin.book-appointments.entries.destroy');
 
     Route::get('/user/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::post('/user/profile/update', [UserDashboardController::class, 'updateProfile'])->name('user.profile.update');
+    Route::post('/user/profile/image', [UserDashboardController::class, 'updateProfileImage'])->name('user.profile.image');
     
     // Media upload route
     Route::post('/pictures-videos/{category}/upload', [PicturesVideosController::class, 'uploadMedia'])->name('pictures_videos.upload');

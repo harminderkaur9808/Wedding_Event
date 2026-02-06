@@ -58,7 +58,6 @@
 .admin-dashboard-sidebar {
     flex: 0 0 250px;
     background-color: #ffffff;
-    border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px 0;
     position: -webkit-sticky; /* Safari support */
@@ -370,6 +369,18 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     box-shadow: 0 0 0 3px rgba(47, 79, 117, 0.1);
 }
 
+/* Book appointments: section dropdown width to fit content, not full width */
+.admin-dashboard-input--section-select {
+    width: auto;
+    min-width: 160px;
+    max-width: 260px;
+}
+
+/* Book appointments: gap between "Select section" and first Entry card */
+.admin-dashboard-book-section-select-wrap {
+    margin-bottom: 28px;
+}
+
 .admin-dashboard-input-error {
     border-color: #dc3545 !important;
     background-color: #fff5f5;
@@ -596,9 +607,9 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     overflow: hidden;
 }
 
-/* Hint shown only on mobile when table scrolls horizontally */
+/* Hint: scroll horizontally to see all columns (desktop + mobile) */
 .admin-dashboard-table-scroll-hint {
-    display: none;
+    display: block;
     font-size: 12px;
     color: #2F4F75;
     text-align: center;
@@ -617,9 +628,12 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 .admin-dashboard-table-scroll {
     max-width: 100%;
     overflow-x: auto;
-    overflow-y: auto;
-    max-height: calc(100vh - 300px);
+    overflow-y: visible;
+    max-height: none;
     -webkit-overflow-scrolling: touch;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    background: #fff;
 }
 
 /* Custom scrollbar for table scroll */
@@ -664,7 +678,7 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 
 .admin-dashboard-users-table {
     width: 100%;
-    min-width: 1000px;
+    min-width: 1100px;
     border-collapse: collapse;
     font-family: 'Nunito', sans-serif;
 }
@@ -677,30 +691,56 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 }
 
 .admin-dashboard-users-table th {
-    padding: 15px;
+    padding: 12px 16px;
     text-align: left;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     color: #2F4F75;
     border-bottom: 2px solid #e0e0e0;
     background-color: #f8f9fa;
+    white-space: nowrap;
 }
 
 .admin-dashboard-users-table td {
-    padding: 15px;
+    padding: 12px 16px;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 14px;
+    font-size: 13px;
     color: #333333;
+    white-space: nowrap;
 }
+
+/* Column min-widths: single row per record, horizontal scroll on desktop */
+.admin-dashboard-users-table th:nth-child(1),
+.admin-dashboard-users-table td:nth-child(1) { min-width: 56px; width: 56px; }   /* S.No */
+.admin-dashboard-users-table th:nth-child(2),
+.admin-dashboard-users-table td:nth-child(2) { min-width: 200px; }               /* Name */
+.admin-dashboard-users-table th:nth-child(3),
+.admin-dashboard-users-table td:nth-child(3) { min-width: 220px; }               /* Email */
+.admin-dashboard-users-table th:nth-child(4),
+.admin-dashboard-users-table td:nth-child(4) { min-width: 88px; }                /* Role */
+.admin-dashboard-users-table th:nth-child(5),
+.admin-dashboard-users-table td:nth-child(5) { min-width: 120px; }               /* Family Relation */
+.admin-dashboard-users-table th:nth-child(6),
+.admin-dashboard-users-table td:nth-child(6) { min-width: 88px; }                /* Status */
+.admin-dashboard-users-table th:nth-child(7),
+.admin-dashboard-users-table td:nth-child(7) { min-width: 120px; }               /* Approval */
+.admin-dashboard-users-table th:nth-child(8),
+.admin-dashboard-users-table td:nth-child(8) { min-width: 100px; }               /* Actions */
 
 .admin-dashboard-users-table tbody tr:hover {
     background-color: #f8f9fa;
 }
 
 .admin-dashboard-user-info {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 12px;
+    white-space: nowrap;
+    max-width: 100%;
+}
+.admin-dashboard-user-info span {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .admin-dashboard-user-avatar {
@@ -1911,4 +1951,249 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 .admin-dashboard-hero-slider-remove:hover {
     background: #c53030;
     color: #fff;
+}
+
+/* Notes tab */
+.admin-dashboard-notes-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+@media (min-width: 900px) {
+    .admin-dashboard-notes-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+.admin-dashboard-note-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 2px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.admin-dashboard-note-card-header {
+    margin-bottom: 0.75rem;
+}
+.admin-dashboard-note-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+}
+.admin-dashboard-note-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    color: #64748b;
+}
+.admin-dashboard-note-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+.admin-dashboard-note-badge-owner {
+    background: #dbeafe;
+    color: #1e40af;
+}
+.admin-dashboard-note-badge-shared {
+    background: #dcfce7;
+    color: #166534;
+}
+.admin-dashboard-note-author,
+.admin-dashboard-note-date {
+    color: #64748b;
+}
+.admin-dashboard-note-card-body {
+    margin-bottom: 1rem;
+}
+.admin-dashboard-note-content-wrap {
+    position: relative;
+}
+.admin-dashboard-note-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0 0 0.25rem 0;
+    color: #334155;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.admin-dashboard-note-content-wrap.expanded .admin-dashboard-note-content {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    overflow: visible;
+}
+.admin-dashboard-note-view-more-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8125rem;
+    color: #2F4F75;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+}
+.admin-dashboard-note-view-more-btn:hover {
+    text-decoration: underline;
+}
+.admin-dashboard-note-view-more-btn.hidden {
+    display: none;
+}
+.admin-dashboard-note-shared-with {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Note card: shared-with avatar circles (overlapping, fancy) */
+.admin-dashboard-note-shared-avatars {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 0.75rem;
+}
+.admin-dashboard-note-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: -10px;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.admin-dashboard-note-avatar:first-child {
+    margin-left: 0;
+}
+.admin-dashboard-note-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.admin-dashboard-note-avatar-initials {
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: #475569;
+    line-height: 1;
+}
+.admin-dashboard-note-avatar-more {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f1f5f9;
+}
+.admin-dashboard-note-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    
+}
+.admin-dashboard-btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+}
+.admin-dashboard-btn-danger {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+}
+.admin-dashboard-btn-danger:hover {
+    background: #b91c1c;
+    color: #fff;
+}
+.admin-dashboard-note-delete-form {
+    display: inline;
+}
+.admin-dashboard-note-view-only {
+    font-size: 0.8125rem;
+    color: #64748b;
+    font-style: italic;
+}
+/* Notes share dropdown with checkboxes */
+.admin-dashboard-notes-dropdown-wrap {
+    position: relative;
+    width: 100%;
+}
+.admin-dashboard-notes-dropdown-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    text-align: left;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9375rem;
+    color: #334155;
+}
+.admin-dashboard-notes-dropdown-trigger:hover {
+    border-color: #94a3b8;
+}
+.admin-dashboard-notes-dropdown-trigger:focus {
+    outline: none;
+    border-color: #2F4F75;
+    box-shadow: 0 0 0 2px rgba(47, 79, 117, 0.2);
+}
+.admin-dashboard-notes-dropdown-arrow {
+    flex-shrink: 0;
+    transition: transform 0.2s;
+}
+.admin-dashboard-notes-dropdown-wrap.open .admin-dashboard-notes-dropdown-arrow {
+    transform: rotate(180deg);
+}
+.admin-dashboard-notes-dropdown-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+}
+.admin-dashboard-notes-dropdown-panel.open {
+    display: block;
+}
+.admin-dashboard-notes-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+.admin-dashboard-notes-dropdown-item:last-child {
+    border-bottom: none;
+}
+.admin-dashboard-notes-dropdown-item:hover {
+    background: #f8fafc;
+}
+.admin-dashboard-notes-dropdown-item input {
+    width: auto;
+    margin: 0;
+    flex-shrink: 0;
 }

@@ -10,7 +10,7 @@
 
     <div class="wm-pv-hero-overlay" aria-hidden="true"></div>
 
-    <div class="container wm-pv-hero-content">
+    <div class="container wm-pv-hero-content wm-pv-reveal">
         <div class="wm-pv-hero-text">
             <div class="wm-pv-hero-eyebrow">Wedding Gallery</div>
             <div class="wm-pv-hero-decorative">

@@ -17,7 +17,7 @@
             >
         </div>
         <div class="book-appointments-hero-overlay" aria-hidden="true"></div>
-        <div class="container book-appointments-hero-content">
+        <div class="container book-appointments-hero-content book-appointments-reveal">
             <div class="book-appointments-hero-text">
                 <div class="book-appointments-hero-eyebrow">Confirm Time</div>
                 <div class="book-appointments-hero-decorative">
@@ -29,7 +29,7 @@
     </section>
 
     <!-- Second Section - Hair Styling -->
-    <section class="book-appointments-second-section">
+    <section class="book-appointments-second-section book-appointments-section-with-skeleton">
         <!-- Left Decorative Frame -->
         <div class="book-appointments-left-frame">
             <img src="{{ asset('Images/Book-your-appointments/sec-sec/hair_sec_left_frame.png') }}" alt="Left Frame" class="book-appointments-frame-img">
@@ -40,7 +40,23 @@
             <img src="{{ asset('Images/Book-your-appointments/sec-sec/hair_sec_right_frame.png') }}" alt="Right Frame" class="book-appointments-frame-img">
         </div>
 
-        <div class="container book-appointments-second-wrapper">
+        <div class="book-appointments-skeleton container" aria-hidden="true">
+            <div class="book-appointments-skeleton-title-wrap">
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-eyebrow"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-deco"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-title"></span>
+            </div>
+            <div class="book-appointments-skeleton-content">
+                <div class="book-appointments-skeleton-image"></div>
+                <div class="book-appointments-skeleton-blocks">
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line book-appointments-skeleton-line-short"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container book-appointments-second-wrapper book-appointments-animate">
             <!-- Title Section -->
             <div class="book-appointments-second-title-section">
                 <div class="book-appointments-second-eyebrow">Hair Styling</div>
@@ -67,7 +83,7 @@
     </section>
 
     <!-- Third Section - Makeup -->
-    <section class="book-appointments-third-section">
+    <section class="book-appointments-third-section book-appointments-section-with-skeleton">
         <!-- Full Width Background Image -->
         <div class="book-appointments-third-bg" aria-hidden="true">
             <img
@@ -77,7 +93,23 @@
             >
         </div>
 
-        <div class="container book-appointments-third-wrapper">
+        <div class="book-appointments-skeleton container" aria-hidden="true">
+            <div class="book-appointments-skeleton-title-wrap">
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-eyebrow"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-deco"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-title"></span>
+            </div>
+            <div class="book-appointments-skeleton-content book-appointments-skeleton-content-reverse">
+                <div class="book-appointments-skeleton-blocks">
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line book-appointments-skeleton-line-short"></span>
+                </div>
+                <div class="book-appointments-skeleton-image"></div>
+            </div>
+        </div>
+
+        <div class="container book-appointments-third-wrapper book-appointments-animate">
             <!-- Title Section -->
             <div class="book-appointments-third-title-section">
                 <div class="book-appointments-third-eyebrow">Special Event Makeup</div>
@@ -104,7 +136,7 @@
     </section>
 
     <!-- Fourth Section - Nails -->
-    <section class="book-appointments-fourth-section">
+    <section class="book-appointments-fourth-section book-appointments-section-with-skeleton">
         <!-- Left Decorative Frame -->
         <div class="book-appointments-fourth-left-frame">
             <img src="{{ asset('Images/Book-your-appointments/forth_sec/Forth_sec_img_left.png') }}" alt="Left Frame" class="book-appointments-fourth-frame-img">
@@ -115,7 +147,23 @@
             <img src="{{ asset('Images/Book-your-appointments/forth_sec/Forth_sec_img_right.png') }}" alt="Right Frame" class="book-appointments-fourth-frame-img">
         </div>
 
-        <div class="container book-appointments-fourth-wrapper">
+        <div class="book-appointments-skeleton container" aria-hidden="true">
+            <div class="book-appointments-skeleton-title-wrap">
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-eyebrow"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-deco"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-title"></span>
+            </div>
+            <div class="book-appointments-skeleton-content">
+                <div class="book-appointments-skeleton-image"></div>
+                <div class="book-appointments-skeleton-blocks">
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line book-appointments-skeleton-line-short"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container book-appointments-fourth-wrapper book-appointments-animate">
             <!-- Title Section -->
             <div class="book-appointments-fourth-title-section">
                 <div class="book-appointments-fourth-eyebrow">Special Event Makeup</div>
@@ -142,7 +190,7 @@
     </section>
 
     <!-- Fifth Section - Spa -->
-    <section class="book-appointments-fifth-section">
+    <section class="book-appointments-fifth-section book-appointments-section-with-skeleton">
         <!-- Full Width Background Image -->
         <div class="book-appointments-fifth-bg" aria-hidden="true">
             <img
@@ -152,7 +200,23 @@
             >
         </div>
 
-        <div class="container book-appointments-fifth-wrapper">
+        <div class="book-appointments-skeleton container" aria-hidden="true">
+            <div class="book-appointments-skeleton-title-wrap">
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-eyebrow"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-deco"></span>
+                <span class="book-appointments-skeleton-line book-appointments-skeleton-title"></span>
+            </div>
+            <div class="book-appointments-skeleton-content book-appointments-skeleton-content-reverse">
+                <div class="book-appointments-skeleton-blocks">
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line"></span>
+                    <span class="book-appointments-skeleton-line book-appointments-skeleton-line-short"></span>
+                </div>
+                <div class="book-appointments-skeleton-image"></div>
+            </div>
+        </div>
+
+        <div class="container book-appointments-fifth-wrapper book-appointments-animate">
             <!-- Title Section -->
             <div class="book-appointments-fifth-title-section">
                 <div class="book-appointments-fifth-eyebrow">Professional Spa Care</div>
@@ -179,3 +243,31 @@
     </section>
 
 @endsection
+
+@push('scripts')
+<script>
+(function() {
+    function initBookAppointmentsReveal() {
+        var hero = document.querySelector('.book-appointments-reveal');
+        if (hero) hero.classList.add('book-appointments-in-view');
+        var sections = document.querySelectorAll('.book-appointments-animate');
+        if (!sections.length) return;
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('book-appointments-in-view');
+                    var section = entry.target.closest('.book-appointments-section-with-skeleton');
+                    if (section) section.classList.add('book-appointments-loaded');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        sections.forEach(function(el) { observer.observe(el); });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBookAppointmentsReveal);
+    } else {
+        initBookAppointmentsReveal();
+    }
+})();
+</script>
+@endpush

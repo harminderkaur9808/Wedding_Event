@@ -1,8 +1,8 @@
-<section class="wm-pv-gallery-section">
+<section class="wm-pv-gallery-section wm-pv-animate">
     <div class="container">
         <div class="wm-pv-gallery-grid">
             <!-- Card 1: Roka -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Roka_image.png') }}" alt="Roka" class="wm-pv-gallery-card-img">
                 </div>
@@ -14,7 +14,7 @@
             </div>
 
             <!-- Card 2: Shagun -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Shagun_image.png') }}" alt="Shagun" class="wm-pv-gallery-card-img">
                 </div>
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Card 3: Vatna -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Vatna_images.png') }}" alt="Vatna" class="wm-pv-gallery-card-img">
                 </div>
@@ -38,7 +38,7 @@
             </div>
 
             <!-- Card 4: Sangeet -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Sangeet_in_Phoenix.png') }}" alt="Sangeet" class="wm-pv-gallery-card-img">
                 </div>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Card 5: Mehndi -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Mehndi_wedding.png') }}" alt="Mehndi" class="wm-pv-gallery-card-img">
                 </div>
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Card 6: Jaggo and Giddha -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Jaggo_and_Giddha.png') }}" alt="Jaggo and Giddha" class="wm-pv-gallery-card-img">
                 </div>
@@ -74,7 +74,7 @@
             </div>
 
             <!-- Card 7: Sehra Bandhi and Surma -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Sehra_bandhi_and_Surma.png') }}" alt="Sehra Bandhi and Surma" class="wm-pv-gallery-card-img">
                 </div>
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Card 8: Barat and Milni -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Barat_and_Milni.png') }}" alt="Barat and Milni" class="wm-pv-gallery-card-img">
                 </div>
@@ -98,7 +98,7 @@
             </div>
 
             <!-- Card 9: Wedding -->
-            <div class="wm-pv-gallery-card">
+            <div class="wm-pv-gallery-card wm-pv-animate-entry">
                 <div class="wm-pv-gallery-card-bg">
                     <img src="{{ asset('Images/picturesandvideos/thisimages/Wedding_img.png') }}" alt="Wedding" class="wm-pv-gallery-card-img">
                 </div>

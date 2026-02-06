@@ -66,10 +66,19 @@ body {
     color: #333;
 }
 
-/* Header Styles */
+/* Header Styles – sticky/fixed, hide on scroll down, show on scroll up */
 .wedding-header {
     width: 100%;
     font-family: 'Volkhov', serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10002;
+    transition: transform 0.3s ease;
+}
+.wedding-header.header-hidden {
+    transform: translateY(-100%);
 }
 
 /* Top Header - Dark Blue */
@@ -492,9 +501,10 @@ a.book-appointment-btn:focus {
 }
 */
 
-/* Main Content */
+/* Main Content - top spacing matches fixed header height (set by header.js, fallback 120px) */
 main {
     min-height: calc(100vh - 200px);
+    padding-top: var(--header-height, 120px);
 }
 
 .wedding-mele-welcome-content {

@@ -168,4 +168,41 @@ class UserDashboardController extends Controller
 
         return redirect()->route('user.dashboard')->with('success', 'Profile updated successfully!');
     }
+
+    /**
+     * Update only the profile image (used when cropping in modal – direct save).
+     */
+    public function updateProfileImage(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Please login.'], 403);
+            }
+            return redirect()->route('login')->with('error', 'Please login.');
+        }
+
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($user->profile_image && Storage::disk('public')->exists('profile_images/' . $user->profile_image)) {
+            Storage::disk('public')->delete('profile_images/' . $user->profile_image);
+        }
+
+        $image = $request->file('profile_image');
+        $imageName = time() . '_' . $user->id . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('profile_images', $imageName, 'public');
+        $user->profile_image = $imageName;
+        $user->save();
+
+        $url = asset('storage/profile_images/' . $imageName);
+
+        return response()->json([
+            'success' => true,
+            'profile_image' => $imageName,
+            'url' => $url,
+        ]);
+    }
 }

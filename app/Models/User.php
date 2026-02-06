@@ -116,4 +116,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(FamilyUpdate::class);
     }
+
+    /**
+     * Notes created by the user (admin).
+     */
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
+
+    /**
+     * Notes shared with this user (admin) by other admins.
+     */
+    public function sharedNotes()
+    {
+        return $this->belongsToMany(Note::class, 'note_user')->withTimestamps();
+    }
 }

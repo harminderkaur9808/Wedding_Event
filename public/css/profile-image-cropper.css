@@ -1,0 +1,170 @@
+/* Profile image crop modal (admin + user dashboards) */
+
+.wm-crop-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.wm-crop-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+.wm-crop-modal .admin-dashboard-modal-overlay,
+.wm-crop-modal .user-dashboard-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+.wm-crop-modal .admin-dashboard-modal-container,
+.wm-crop-modal .user-dashboard-modal-container {
+    position: relative;
+    background: #fff;
+    max-width: 920px;
+    width: min(920px, 92vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+}
+.wm-crop-modal .admin-dashboard-modal-header,
+.wm-crop-modal .user-dashboard-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.wm-crop-modal .admin-dashboard-modal-title,
+.wm-crop-modal .user-dashboard-modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+.wm-crop-modal .admin-dashboard-modal-close,
+.wm-crop-modal .user-dashboard-modal-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #64748b;
+}
+.wm-crop-modal .admin-dashboard-modal-close:hover,
+.wm-crop-modal .user-dashboard-modal-close:hover {
+    color: #1e293b;
+}
+
+.wm-crop-modal-body {
+    padding: 22px 22px 18px;
+}
+
+.wm-crop-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.wm-crop-stage {
+    background: #0b1220;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(226, 232, 240, 0.25);
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wm-crop-stage img {
+    max-width: 100%;
+    display: block;
+}
+
+.wm-crop-side {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 14px 14px 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.wm-crop-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 0 10px;
+    color: #2F4F75;
+}
+
+.wm-crop-hint {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #64748b;
+    margin: 0 0 14px;
+}
+
+.wm-crop-preview-wrap {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 8px 0 6px;
+}
+
+.wm-crop-preview-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 3px solid #2F4F75;
+    box-shadow: 0 6px 18px rgba(47, 79, 117, 0.18);
+    background: #f1f5f9;
+}
+
+.wm-crop-preview-circle .wm-crop-preview {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.wm-crop-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding: 0 22px 20px;
+}
+
+.wm-crop-actions .admin-dashboard-btn,
+.wm-crop-actions .user-dashboard-btn {
+    min-width: 140px;
+}
+
+@media (max-width: 768px) {
+    .wm-crop-grid {
+        grid-template-columns: 1fr;
+    }
+    .wm-crop-stage {
+        min-height: 280px;
+    }
+    .wm-crop-actions {
+        flex-direction: column;
+    }
+    .wm-crop-actions .admin-dashboard-btn,
+    .wm-crop-actions .user-dashboard-btn {
+        width: 100%;
+    }
+}
+

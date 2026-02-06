@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/updates-by-family.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login-gate.css') }}">
 @endpush
 
 @section('content')
@@ -17,7 +18,7 @@
             >
         </div>
         <div class="updates-by-family-hero-overlay" aria-hidden="true"></div>
-        <div class="container updates-by-family-hero-content">
+        <div class="container updates-by-family-hero-content ubf-reveal">
             <div class="updates-by-family-hero-text">
                 <div class="updates-by-family-hero-eyebrow">Family Updates</div>
                 <div class="updates-by-family-hero-decorative">
@@ -31,7 +32,7 @@
     @auth
     <!-- Admin: Add new update bar (only visible to admin) -->
         @if(Auth::user()->isAdmin())
-            <div class="updates-by-family-add-bar">
+            <div class="updates-by-family-add-bar ubf-animate">
                 <div class="container updates-by-family-add-bar-inner">
                     <button type="button" class="updates-by-family-add-btn" data-bs-toggle="modal" data-bs-target="#addUpdateModal" aria-label="Add new update">
                         <svg class="updates-by-family-add-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -81,7 +82,7 @@
             <img src="{{ asset('Images/updates_by_family/right_side_image_ico.png') }}" alt="" class="updates-by-family-side-img-file">
         </div>
 
-        <div class="updates-by-family-timeline-inner">
+        <div class="updates-by-family-timeline-inner ubf-animate">
             <!-- Central timeline axis -->
             <div class="updates-by-family-timeline-axis"></div>
 
@@ -119,7 +120,7 @@
                     }
                     $dateTime = $update->created_at->format('d M Y, h:i a');
                 @endphp
-                <article class="updates-by-family-entry updates-by-family-entry--{{ $side }} updates-by-family-entry--{{ $posClass }}">
+                <article class="updates-by-family-entry updates-by-family-entry--{{ $side }} updates-by-family-entry--{{ $posClass }} ubf-animate-entry">
                     <div class="updates-by-family-entry-node">
                         <div class="updates-by-family-entry-avatar">
                             @if($hasImage)
@@ -168,20 +169,7 @@
     </section>
 
     @else
-    <!-- Guest: show lock + login message (default view when not logged in) -->
-    <section class="updates-by-family-login-gate">
-        <div class="updates-by-family-login-required">
-            <div class="updates-by-family-login-icon" aria-hidden="true">
-                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h2 class="updates-by-family-login-title">Login required</h2>
-            <p class="updates-by-family-login-message">Please log in to view updates by family.</p>
-            <a href="{{ route('login', ['intended' => url()->current()]) }}" class="updates-by-family-login-btn">Go to Login</a>
-        </div>
-    </section>
+    @include('partials.login-required-card', ['message' => 'Please log in to view updates by family.'])
     @endauth
 
     <!-- Content Section -->
@@ -276,6 +264,27 @@
 @endsection
 
 @push('scripts')
+    <script>
+    (function() {
+        function initUpdatesByFamilyReveal() {
+            var hero = document.querySelector('.ubf-reveal');
+            if (hero) hero.classList.add('ubf-in-view');
+            var sections = document.querySelectorAll('.ubf-animate');
+            if (!sections.length) return;
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) entry.target.classList.add('ubf-in-view');
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+            sections.forEach(function(el) { observer.observe(el); });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initUpdatesByFamilyReveal);
+        } else {
+            initUpdatesByFamilyReveal();
+        }
+    })();
+    </script>
     @if(session('success') || session('error'))
         <script>
             (function() {

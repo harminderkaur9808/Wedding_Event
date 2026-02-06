@@ -1,0 +1,280 @@
+/* Local Attractions Page - Hero Section */
+
+.wm-la-hero {
+    position: relative;
+    width: 100%;
+    height: 33vh;
+    min-height: 260px;
+    overflow: hidden;
+    background: #054C82;
+}
+
+.wm-la-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.wm-la-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.wm-la-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(5, 76, 130, 0.65);
+}
+
+.wm-la-hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.wm-la-hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.wm-la-hero-eyebrow {
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.wm-la-hero-decorative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.wm-la-hero-decorative-img {
+    width: auto;
+    height: 44px;
+    max-width: 220px;
+    object-fit: contain;
+    display: block;
+}
+
+.wm-la-hero-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 991.98px) {
+    .wm-la-hero {
+        height: 30vh;
+        min-height: 230px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .wm-la-hero {
+        height: 26vh;
+        min-height: 200px;
+    }
+    .wm-la-hero-eyebrow {
+        font-size: 24px;
+    }
+    .wm-la-hero-decorative-img {
+        height: 36px;
+    }
+    .wm-la-hero-title {
+        font-size: clamp(28px, 8vw, 40px);
+    }
+}
+
+/* Local Attractions - Listing */
+.wm-la-list {
+    padding: 70px 0 90px;
+    background: #f8fafc;
+}
+
+.wm-la-list-container {
+    max-width: 1200px;
+}
+
+.wm-la-item {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 42px;
+}
+
+.wm-la-item--right {
+    grid-template-columns: 1.05fr 1fr;
+}
+
+.wm-la-item--right .wm-la-item-media {
+    order: 2;
+}
+
+.wm-la-item--right .wm-la-item-card {
+    order: 1;
+}
+
+.wm-la-item-media {
+    width: 100%;
+}
+
+.wm-la-item-img {
+    width: 100%;
+    height: 340px;
+    border-radius: 33px;
+    background: #e2e8f0;
+    display: block;
+}
+
+.wm-la-item-img--placeholder {
+    background: linear-gradient(135deg, #e8eef6 0%, #dbe7f6 100%);
+}
+
+.wm-la-item-card {
+    font-family: nunito;
+    background: #D2DFF11F;
+    border-radius: 12px;
+    padding: 20px 22px;
+    /* border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06); */
+}
+
+.wm-la-item-title {
+    display: inline-block;
+    background: #2F4F75;
+    color: #ffffff;
+    padding: 6px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    letter-spacing: 0.3px;
+}
+
+.wm-la-item-desc {
+    margin: 0 0 14px;
+    color: #334155;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.wm-la-item-meta {
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.wm-la-item-meta-row {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #2F4F75;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.wm-la-item-meta-row strong {
+    font-weight: 700;
+}
+
+.wm-la-item-meta-ico {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-top: 2px;
+    flex: 0 0 16px;
+}
+
+.wm-la-item-map-link {
+    color: #2F4F75;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+.wm-la-item-map-link:hover {
+    color: #054C82;
+}
+
+.wm-la-empty {
+    text-align: center;
+    color: #64748b;
+    padding: 40px 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+@media (max-width: 991.98px) {
+    .wm-la-item,
+    .wm-la-item--right {
+        grid-template-columns: 1fr;
+    }
+    .wm-la-item--right .wm-la-item-media,
+    .wm-la-item--right .wm-la-item-card {
+        order: initial;
+    }
+    .wm-la-item-img {
+        height: 220px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .wm-la-list {
+        padding: 50px 0 70px;
+    }
+    .wm-la-item-img {
+        height: 200px;
+        border-radius: 14px;
+    }
+}
+
+/* Scroll-triggered animations (smooth, subtle) */
+.wm-la-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+}
+.wm-la-reveal.wm-la-in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.wm-la-animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.wm-la-animate.wm-la-in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger list items slightly for a softer look */
+.wm-la-animate.wm-la-in-view:nth-child(1) { transition-delay: 0s; }
+.wm-la-animate.wm-la-in-view:nth-child(2) { transition-delay: 0.08s; }
+.wm-la-animate.wm-la-in-view:nth-child(3) { transition-delay: 0.16s; }
+.wm-la-animate.wm-la-in-view:nth-child(4) { transition-delay: 0.24s; }
+.wm-la-animate.wm-la-in-view:nth-child(5) { transition-delay: 0.32s; }
+.wm-la-animate.wm-la-in-view:nth-child(6) { transition-delay: 0.4s; }
+.wm-la-animate.wm-la-in-view:nth-child(n+7) { transition-delay: 0.48s; }

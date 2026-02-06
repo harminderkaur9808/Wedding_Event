@@ -63,7 +63,7 @@
                             <a href="{{ route('pictures_videos') }}" class="nav-link {{ request()->routeIs('pictures_videos') ? 'active' : '' }}">Pictures and Videos</a>
                             <a href="{{ route('ask.the.host') }}" class="nav-link {{ request()->routeIs('ask.the.host') ? 'active' : '' }}">Ask the Host</a>
                             <a href="{{ route('updates.by.family') }}" class="nav-link {{ request()->routeIs('updates.by.family') ? 'active' : '' }}">Updates by family</a>
-                            <a href="#" class="nav-link">Local Attractions</a>
+                            <a href="{{ route('local.attractions') }}" class="nav-link {{ request()->routeIs('local.attractions') ? 'active' : '' }}">Local Attractions</a>
                         </nav>
                         <a href="{{ route('book.appointments') }}" 
                            class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3"

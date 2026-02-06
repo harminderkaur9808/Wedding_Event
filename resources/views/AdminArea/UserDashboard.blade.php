@@ -4,6 +4,8 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/user-dashboard.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ asset('css/profile-image-cropper.css') }}">
 @endpush
 
 @section('content')
@@ -102,7 +104,7 @@
                         <div class="user-dashboard-form-section">
                             <form class="user-dashboard-form" method="POST" action="{{ route('user.profile.update') }}" enctype="multipart/form-data" id="profile-update-form">
                                 @csrf
-                                <input type="file" id="profile_image_form" name="profile_image" accept="image/*" style="display: none;" onchange="previewProfileImage(this)">
+                                <input type="file" id="profile_image_form" name="profile_image" accept="image/*" style="display: none;">
                                 @error('profile_image')
                                     <div class="user-dashboard-form-group">
                                         <span class="user-dashboard-error-message">{{ $message }}</span>
@@ -266,7 +268,44 @@
     </div>
 </div>
 
+<!-- Profile Image Crop Modal -->
+<div class="admin-dashboard-modal wm-crop-modal" id="profileImageCropModal" data-profile-image-url="{{ route('user.profile.image') }}">
+    <div class="admin-dashboard-modal-overlay"></div>
+    <div class="admin-dashboard-modal-container">
+        <div class="admin-dashboard-modal-header">
+            <h2 class="admin-dashboard-modal-title">Crop profile picture</h2>
+            <button type="button" class="admin-dashboard-modal-close" id="profileImageCropCloseX" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="wm-crop-modal-body">
+            <div class="wm-crop-grid">
+                <div class="wm-crop-stage">
+                    <img id="profileImageCropSource" src="" alt="Crop source">
+                </div>
+                <div class="wm-crop-side">
+                    <p class="wm-crop-title">Preview</p>
+                    <p class="wm-crop-hint">Drag to move. Zoom with mouse wheel / trackpad. We’ll upload the cropped image.</p>
+                    <div class="wm-crop-preview-wrap">
+                        <div class="wm-crop-preview-circle">
+                            <div class="wm-crop-preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wm-crop-actions">
+            <button type="button" class="user-dashboard-btn user-dashboard-btn-secondary" id="profileImageCropCancel">Cancel</button>
+            <button type="button" class="user-dashboard-btn user-dashboard-btn-primary" id="profileImageCropApply">Crop & Use</button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
+<script src="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.js"></script>
+<script src="{{ asset('js/profile-image-crop.js') }}"></script>
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
@@ -282,33 +321,6 @@ function togglePassword(inputId) {
         input.type = 'password';
         eyeOpen.style.display = 'block';
         eyeClosed.style.display = 'none';
-    }
-}
-
-function previewProfileImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        const profileCircle = document.querySelector('.user-dashboard-profile-circle');
-        
-        reader.onload = function(e) {
-            const initials = profileCircle.querySelector('.user-dashboard-profile-initials');
-            if (initials) {
-                initials.remove();
-            }
-            
-            const existingImg = profileCircle.querySelector('.user-dashboard-profile-img');
-            if (existingImg) {
-                existingImg.remove();
-            }
-            
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = 'Profile Picture';
-            img.className = 'user-dashboard-profile-img';
-            profileCircle.appendChild(img);
-        };
-        
-        reader.readAsDataURL(input.files[0]);
     }
 }
 

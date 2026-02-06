@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\UserMedia;
 use App\Models\PageSection;
 use App\Models\BookAppointmentEntry;
+use App\Models\LocalAttraction;
+use App\Models\Note;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,8 +63,44 @@ class AdminDashboardController extends Controller
             ]);
         }
 
+        if ($tab === 'local-attractions') {
+            $attractionsError = null;
+            try {
+                $attractions = LocalAttraction::orderBy('sort_order')->orderBy('id')->get();
+            } catch (\Throwable $e) {
+                \Log::error('Local attractions load failed: ' . $e->getMessage());
+                $attractions = collect();
+                $attractionsError = 'Database table may be missing. Run: php artisan migrate';
+            }
+            return view('AdminArea.AdminDashboard', [
+                'user' => $user,
+                'activeTab' => 'local-attractions',
+                'localAttractions' => $attractions,
+                'localAttractionsError' => $attractionsError,
+            ]);
+        }
+
         if ($tab === 'media-files') {
             return $this->mediaFiles($request);
+        }
+
+        if ($tab === 'notes') {
+            $notes = Note::where('user_id', $user->id)
+                ->orWhereHas('sharedWith', function ($q) use ($user) {
+                    $q->where('users.id', $user->id);
+                })
+                ->with(['user:id,first_name,last_name,email,profile_image', 'sharedWith:id,first_name,last_name,email,profile_image'])
+                ->orderBy('updated_at', 'desc')
+                ->get();
+            $adminUsers = User::where('id', '!=', $user->id)->where(function ($q) {
+                $q->where('is_admin', true)->orWhere('role', 'admin');
+            })->orderBy('first_name')->get(['id', 'first_name', 'last_name', 'email']);
+            return view('AdminArea.AdminDashboard', [
+                'user' => $user,
+                'activeTab' => 'notes',
+                'notes' => $notes,
+                'adminUsers' => $adminUsers,
+            ]);
         }
 
         if ($tab === 'book-appointments') {
@@ -84,6 +122,109 @@ class AdminDashboardController extends Controller
             'user' => $user,
             'activeTab' => 'my-account'
         ]);
+    }
+
+    /**
+     * Create a new Local Attraction entry (admin only).
+     */
+    public function storeLocalAttraction(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $maxOrder = LocalAttraction::max('sort_order') ?? -1;
+        LocalAttraction::create([
+            'sort_order' => (int) $maxOrder + 1,
+            'is_active' => true,
+            'title' => '',
+            'description' => '',
+            'address' => '',
+            'distance' => '',
+            'map_url' => '',
+            'image_path' => null,
+            'image_position' => ((($maxOrder + 1) % 2) === 0) ? 'left' : 'right',
+        ]);
+
+        return redirect()->route('admin.dashboard', ['tab' => 'local-attractions'])
+            ->with('success', 'Local attraction added. You can now edit and save.');
+    }
+
+    /**
+     * Update a Local Attraction entry (admin only).
+     */
+    public function updateLocalAttraction(Request $request, $id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $attraction = LocalAttraction::findOrFail($id);
+
+        $request->validate([
+            'sort_order' => 'nullable|integer|min:0|max:255',
+            'is_active' => 'nullable|in:0,1',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'address' => 'nullable|string|max:500',
+            'distance' => 'nullable|string|max:255',
+            'map_url' => 'nullable|string|max:2048',
+            'image_position' => 'required|in:left,right',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'remove_image' => 'nullable|in:1',
+        ]);
+
+        // Remove image if requested
+        if ($request->filled('remove_image') && $attraction->image_path) {
+            if (Storage::disk('public')->exists($attraction->image_path)) {
+                Storage::disk('public')->delete($attraction->image_path);
+            }
+            $attraction->image_path = null;
+        }
+
+        // Upload / replace image
+        if ($request->hasFile('image')) {
+            if ($attraction->image_path && Storage::disk('public')->exists($attraction->image_path)) {
+                Storage::disk('public')->delete($attraction->image_path);
+            }
+            $path = $request->file('image')->store('local_attractions', 'public');
+            $attraction->image_path = $path;
+        }
+
+        $attraction->sort_order = (int) ($request->input('sort_order', $attraction->sort_order ?? 0));
+        $attraction->is_active = (bool) $request->input('is_active', 0) ? true : false;
+        $attraction->title = $request->input('title') ?? '';
+        $attraction->description = $request->input('description') ?? '';
+        $attraction->address = $request->input('address') ?? '';
+        $attraction->distance = $request->input('distance') ?? '';
+        $attraction->map_url = $request->input('map_url') ?? '';
+        $attraction->image_position = $request->input('image_position', 'left');
+        $attraction->save();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'local-attractions'])
+            ->with('success', 'Local attraction updated.');
+    }
+
+    /**
+     * Delete a Local Attraction entry (admin only).
+     */
+    public function destroyLocalAttraction($id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $attraction = LocalAttraction::findOrFail($id);
+        if ($attraction->image_path && Storage::disk('public')->exists($attraction->image_path)) {
+            Storage::disk('public')->delete($attraction->image_path);
+        }
+        $attraction->delete();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'local-attractions'])
+            ->with('success', 'Local attraction deleted.');
     }
 
     /**
@@ -135,6 +276,124 @@ class AdminDashboardController extends Controller
         $user->save();
 
         return redirect()->route('admin.dashboard', ['tab' => 'my-account'])->with('success', 'Profile updated successfully!');
+    }
+
+    /**
+     * Update only the profile image (used when cropping in modal – direct save).
+     */
+    public function updateProfileImage(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user || !$user->isAdmin()) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Access denied.'], 403);
+            }
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($user->profile_image && Storage::disk('public')->exists('profile_images/' . $user->profile_image)) {
+            Storage::disk('public')->delete('profile_images/' . $user->profile_image);
+        }
+
+        $image = $request->file('profile_image');
+        $imageName = time() . '_' . $user->id . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('profile_images', $imageName, 'public');
+        $user->profile_image = $imageName;
+        $user->save();
+
+        $url = asset('storage/profile_images/' . $imageName);
+
+        return response()->json([
+            'success' => true,
+            'profile_image' => $imageName,
+            'url' => $url,
+        ]);
+    }
+
+    /**
+     * Store a new note (admin only). Optionally share with selected admins.
+     */
+    public function storeNote(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string|max:10000',
+            'share_with' => 'nullable|array',
+            'share_with.*' => 'integer|exists:users,id',
+        ]);
+        $note = Note::create([
+            'user_id' => $user->id,
+            'title' => $request->title,
+            'content' => $request->content ?? '',
+        ]);
+        $shareWith = $request->share_with ?? [];
+        $adminIds = User::whereIn('id', $shareWith)
+            ->where(function ($q) {
+                $q->where('is_admin', true)->orWhere('role', 'admin');
+            })
+            ->pluck('id')
+            ->toArray();
+        $note->sharedWith()->sync($adminIds);
+        return redirect()->route('admin.dashboard', ['tab' => 'notes'])->with('success', 'Note created successfully.');
+    }
+
+    /**
+     * Update a note (creator only). Optionally update shared-with admins.
+     */
+    public function updateNote(Request $request, $id)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $note = Note::findOrFail($id);
+        if ($note->user_id !== $user->id) {
+            return back()->with('error', 'You can only edit your own notes.');
+        }
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'nullable|string|max:10000',
+            'share_with' => 'nullable|array',
+            'share_with.*' => 'integer|exists:users,id',
+        ]);
+        $note->title = $request->title;
+        $note->content = $request->content ?? '';
+        $note->save();
+        $shareWith = $request->share_with ?? [];
+        $adminIds = User::whereIn('id', $shareWith)
+            ->where(function ($q) {
+                $q->where('is_admin', true)->orWhere('role', 'admin');
+            })
+            ->pluck('id')
+            ->toArray();
+        $note->sharedWith()->sync($adminIds);
+        return redirect()->route('admin.dashboard', ['tab' => 'notes'])->with('success', 'Note updated successfully.');
+    }
+
+    /**
+     * Delete a note (creator only).
+     */
+    public function destroyNote($id)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $note = Note::findOrFail($id);
+        if ($note->user_id !== $user->id) {
+            return back()->with('error', 'You can only delete your own notes.');
+        }
+        $note->delete();
+        return redirect()->route('admin.dashboard', ['tab' => 'notes'])->with('success', 'Note deleted.');
     }
 
     /**

@@ -4,6 +4,8 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/admin-dashboard.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.css">
+<link rel="stylesheet" href="{{ asset('css/profile-image-cropper.css') }}">
 @endpush
 
 @section('content')
@@ -68,6 +70,13 @@
                         </svg>
                         <span>Home Page Sections</span>
                     </a>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'local-attractions']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'local-attractions' ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Local Attractions</span>
+                    </a>
                     <a href="{{ route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $bookAppointmentSection ?? 'hair']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'book-appointments' ? 'active' : '' }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -81,6 +90,13 @@
                             <rect x="2" y="4" width="20" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
                         </svg>
                         <span>Media Files</span>
+                    </a>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'notes']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'notes' ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Notes</span>
                     </a>
                 </div>
             </div>
@@ -127,7 +143,7 @@
                         <div class="admin-dashboard-form-section">
                             <form class="admin-dashboard-form" method="POST" action="{{ route('admin.profile.update') }}" enctype="multipart/form-data" id="profile-update-form">
                                 @csrf
-                                <input type="file" id="profile_image_form" name="profile_image" accept="image/*" style="display: none;" onchange="previewProfileImage(this)">
+                                <input type="file" id="profile_image_form" name="profile_image" accept="image/*" style="display: none;">
                                 @error('profile_image')
                                     <div class="admin-dashboard-form-group">
                                         <span class="admin-dashboard-error-message">{{ $message }}</span>
@@ -554,6 +570,119 @@
                             </div>
                         @endif
                     </div>
+                @elseif(($activeTab ?? 'my-account') === 'local-attractions')
+                    <!-- Local Attractions Tab Content -->
+                    <div class="admin-dashboard-tab-content">
+                        <div class="admin-dashboard-title-section">
+                            <div class="admin-dashboard-decorative-top">
+                                <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="admin-dashboard-decorative-svg">
+                                <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
+                            </div>
+                            <div class="admin-dashboard-title-with-action">
+                                <h1 class="admin-dashboard-title">Local Attractions</h1>
+                                <form method="POST" action="{{ route('admin.local-attractions.store') }}">
+                                    @csrf
+                                    <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary" style="display:inline-flex;align-items:center;gap:8px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        Add Attraction
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <p class="admin-dashboard-description">Add, edit, and reorder Local Attractions. These entries will show on the public “Local Attractions” page.</p>
+
+                        @if($localAttractionsError ?? null)
+                            <div class="admin-dashboard-alert admin-dashboard-alert-error" style="margin-bottom: 20px;">
+                                <span>{{ $localAttractionsError }}</span>
+                            </div>
+                        @endif
+
+                        @forelse($localAttractions ?? [] as $attraction)
+                            <div class="admin-dashboard-book-entry-card">
+                                <h3 class="admin-dashboard-book-entry-title">Attraction {{ $loop->iteration }}</h3>
+
+                                <form method="POST" action="{{ route('admin.local-attractions.update', $attraction->id) }}" class="admin-dashboard-form" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <div class="admin-dashboard-form-row">
+                                        <div class="admin-dashboard-form-group">
+                                            <label class="admin-dashboard-label">Order</label>
+                                            <input type="number" name="sort_order" class="admin-dashboard-input" value="{{ old('sort_order', $attraction->sort_order) }}" min="0" max="255">
+                                        </div>
+                                        <div class="admin-dashboard-form-group">
+                                            <label class="admin-dashboard-label">Image position</label>
+                                            <select name="image_position" class="admin-dashboard-input">
+                                                <option value="left" {{ old('image_position', $attraction->image_position) === 'left' ? 'selected' : '' }}>Left</option>
+                                                <option value="right" {{ old('image_position', $attraction->image_position) === 'right' ? 'selected' : '' }}>Right</option>
+                                            </select>
+                                        </div>
+                                        <div class="admin-dashboard-form-group" style="display:flex;align-items:center;gap:10px;">
+                                            <input type="checkbox" id="is_active_{{ $attraction->id }}" name="is_active" value="1" {{ old('is_active', $attraction->is_active) ? 'checked' : '' }}>
+                                            <label for="is_active_{{ $attraction->id }}" class="admin-dashboard-label" style="margin:0;">Active</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Title</label>
+                                        <input type="text" name="title" class="admin-dashboard-input" value="{{ old('title', $attraction->title) }}" placeholder="e.g. LEGOLAND California">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Description</label>
+                                        <textarea name="description" class="admin-dashboard-input" rows="3" placeholder="Short description">{{ old('description', $attraction->description) }}</textarea>
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Address</label>
+                                        <input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $attraction->address) }}" placeholder="Address line">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Distance</label>
+                                        <input type="text" name="distance" class="admin-dashboard-input" value="{{ old('distance', $attraction->distance) }}" placeholder="e.g. 5-7 minutes">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Map URL</label>
+                                        <input type="text" name="map_url" class="admin-dashboard-input" value="{{ old('map_url', $attraction->map_url) }}" placeholder="Google Maps link">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Image</label>
+                                        @if($attraction->image_path)
+                                            <div class="admin-dashboard-image-preview">
+                                                <img src="{{ asset('storage/' . $attraction->image_path) }}" alt="Image" class="admin-dashboard-thumb">
+                                            </div>
+                                            <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                                                <input type="checkbox" name="remove_image" value="1">
+                                                <span class="admin-dashboard-hint" style="margin:0;">Remove current image</span>
+                                            </label>
+                                        @endif
+                                        <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
+                                        <p class="admin-dashboard-hint">Recommended: landscape image, max 5MB.</p>
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group admin-dashboard-book-entry-actions">
+                                        <button type="submit" class="admin-dashboard-action-btn approve-btn">Save</button>
+                                        <a href="#" onclick="if(confirm('Delete this attraction?')){ document.getElementById('delete-local-attraction-{{ $attraction->id }}').submit(); } return false;" class="admin-dashboard-action-btn admin-dashboard-delete-entry-btn">Delete</a>
+                                    </div>
+                                </form>
+
+                                <form id="delete-local-attraction-{{ $attraction->id }}" method="POST" action="{{ route('admin.local-attractions.destroy', $attraction->id) }}" style="display:none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        @empty
+                            <p class="admin-dashboard-note">No local attractions yet. Click “Add Attraction” to create your first one.</p>
+                        @endforelse
+                    </div>
                 @elseif(($activeTab ?? 'my-account') === 'book-appointments')
                     <!-- Book your appointments Tab Content -->
                     <div class="admin-dashboard-tab-content">
@@ -570,9 +699,9 @@
                         </div>
                         <p class="admin-dashboard-description">Manage store/location entries for Hair, Makeup, Nails, and Spa. Select a section below and add up to 6 entries per section.</p>
 
-                        <div class="admin-dashboard-form-group">
+                        <div class="admin-dashboard-form-group admin-dashboard-book-section-select-wrap">
                             <label for="book_appointment_section" class="admin-dashboard-label">Select section</label>
-                            <select id="book_appointment_section" class="admin-dashboard-input" onchange="window.location.href='{{ route('admin.dashboard') }}?tab=book-appointments&section='+this.value">
+                            <select id="book_appointment_section" class="admin-dashboard-input admin-dashboard-input--section-select" onchange="window.location.href='{{ route('admin.dashboard') }}?tab=book-appointments&section='+this.value">
                                 @foreach($bookAppointmentSections ?? [] as $slug => $label)
                                     <option value="{{ $slug }}" {{ ($bookAppointmentSection ?? 'hair') === $slug ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
@@ -779,8 +908,143 @@
                             @endforelse
                         </div>
                     </div>
+                @elseif(($activeTab ?? 'my-account') === 'notes')
+                    <!-- Notes Tab Content -->
+                    <div class="admin-dashboard-tab-content">
+                        <div class="admin-dashboard-title-section">
+                            <div class="admin-dashboard-decorative-top">
+                                <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="admin-dashboard-decorative-svg">
+                                <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
+                            </div>
+                            <div class="admin-dashboard-title-with-action">
+                                <h1 class="admin-dashboard-title">Notes</h1>
+                                <button type="button" class="admin-dashboard-btn admin-dashboard-btn-primary" onclick="openNotesModal()" style="display:inline-flex;align-items:center;gap:8px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Create Note
+                                </button>
+                            </div>
+                        </div>
+                        <p class="admin-dashboard-description">Create notes and share them with selected admins. Only you and the admins you choose can view each note.</p>
+
+                        <div class="admin-dashboard-notes-list">
+                            @forelse($notes ?? [] as $note)
+                                @php
+                                    $isOwner = $note->user_id === $user->id;
+                                @endphp
+                                <div class="admin-dashboard-note-card">
+                                    <div class="admin-dashboard-note-card-header">
+                                        <h3 class="admin-dashboard-note-card-title">{{ $note->title }}</h3>
+                                        <div class="admin-dashboard-note-card-meta">
+                                            <span class="admin-dashboard-note-badge {{ $isOwner ? 'admin-dashboard-note-badge-owner' : 'admin-dashboard-note-badge-shared' }}">
+                                                {{ $isOwner ? 'My note' : 'Shared with me' }}
+                                            </span>
+                                            <span class="admin-dashboard-note-author">By {{ $note->user->first_name }} {{ $note->user->last_name }}</span>
+                                            <span class="admin-dashboard-note-date">{{ $note->updated_at->format('M j, Y g:i A') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="admin-dashboard-note-card-body">
+                                        <div class="admin-dashboard-note-content-wrap">
+                                            <p class="admin-dashboard-note-content">{{ $note->content ?: '—' }}</p>
+                                            <button type="button" class="admin-dashboard-note-view-more-btn" onclick="toggleNoteContent(this)" aria-label="Toggle full content">View more</button>
+                                        </div>
+                                        @if($note->sharedWith->isNotEmpty())
+                                            <div class="admin-dashboard-note-shared-avatars" title="Shared with: {{ $note->sharedWith->map(fn($u) => $u->first_name . ' ' . $u->last_name)->join(', ') }}">
+                                                @foreach($note->sharedWith->take(3) as $sharedUser)
+                                                    <div class="admin-dashboard-note-avatar" title="{{ $sharedUser->first_name }} {{ $sharedUser->last_name }}">
+                                                        @if($sharedUser->profile_image)
+                                                            <img src="{{ asset('storage/profile_images/' . $sharedUser->profile_image) }}" alt="">
+                                                        @else
+                                                            <span class="admin-dashboard-note-avatar-initials">{{ strtoupper(substr($sharedUser->first_name, 0, 1) . substr($sharedUser->last_name, 0, 1)) }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endforeach
+                                                @if($note->sharedWith->count() > 3)
+                                                    <div class="admin-dashboard-note-avatar admin-dashboard-note-avatar-more">+{{ $note->sharedWith->count() - 3 }}</div>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="admin-dashboard-note-card-actions">
+                                        @if($isOwner)
+                                            <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary admin-dashboard-btn-sm" onclick="editNote({{ $note->id }}, {{ json_encode($note->title) }}, {{ json_encode($note->content) }}, {{ json_encode($note->sharedWith->pluck('id')->toArray()) }})">Edit</button>
+                                            <form method="POST" action="{{ route('admin.notes.destroy', $note->id) }}" class="admin-dashboard-note-delete-form" onsubmit="return confirm('Delete this note?');">
+                                                @csrf
+                                                <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-danger admin-dashboard-btn-sm">Delete</button>
+                                            </form>
+                                        @else
+                                            <span class="admin-dashboard-note-view-only">View only</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="admin-dashboard-note">No notes yet. Create a note or wait for another admin to share one with you.</p>
+                            @endforelse
+                        </div>
+                    </div>
                 @endif
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notes Create/Edit Modal -->
+<div class="admin-dashboard-modal" id="notesModal">
+    <div class="admin-dashboard-modal-overlay" onclick="closeNotesModal()"></div>
+    <div class="admin-dashboard-modal-container">
+        <div class="admin-dashboard-modal-header">
+            <h2 class="admin-dashboard-modal-title" id="notesModalTitle">Create Note</h2>
+            <button type="button" class="admin-dashboard-modal-close" onclick="closeNotesModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="admin-dashboard-modal-body">
+            <form method="POST" action="{{ route('admin.notes.store') }}" id="notesForm" data-store-url="{{ route('admin.notes.store') }}" data-update-url-base="{{ url('admin/notes') }}">
+                @csrf
+                <div class="admin-dashboard-form-group">
+                    <label for="note_title" class="admin-dashboard-label">Title <span class="admin-dashboard-required">*</span></label>
+                    <input type="text" id="note_title" name="title" class="admin-dashboard-input" value="{{ old('title') }}" required maxlength="255" placeholder="Note title">
+                </div>
+                <div class="admin-dashboard-form-group">
+                    <label for="note_content" class="admin-dashboard-label">Content</label>
+                    <textarea id="note_content" name="content" class="admin-dashboard-input" rows="5" placeholder="Write your note...">{{ old('content') }}</textarea>
+                </div>
+                <div class="admin-dashboard-form-group">
+                    <label class="admin-dashboard-label">Share with admins (optional)</label>
+                    <p class="admin-dashboard-hint">Click the box below to open the list and check the admins who can view this note. Only they and you will see it.</p>
+                    @if(!empty($adminUsers ?? []))
+                    <div class="admin-dashboard-notes-dropdown-wrap">
+                        <button type="button" class="admin-dashboard-notes-dropdown-trigger admin-dashboard-input" id="note_share_trigger" onclick="toggleNotesShareDropdown()" aria-haspopup="listbox" aria-expanded="false">
+                            <span id="note_share_trigger_text">Select admins...</span>
+                            <svg class="admin-dashboard-notes-dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <div class="admin-dashboard-notes-dropdown-panel" id="note_share_dropdown_panel" role="listbox">
+                            @foreach($adminUsers ?? [] as $admin)
+                            <label class="admin-dashboard-notes-dropdown-item">
+                                <input type="checkbox" name="share_with[]" value="{{ $admin->id }}" class="note_share_cb">
+                                <span>{{ $admin->first_name }} {{ $admin->last_name }} ({{ $admin->email }})</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
+                    @else
+                        <p class="admin-dashboard-note">No other admins to share with.</p>
+                    @endif
+                </div>
+                <div class="admin-dashboard-modal-actions">
+                    <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary" onclick="closeNotesModal()">Cancel</button>
+                    <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary" id="notesFormSubmit">Create Note</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -935,7 +1199,44 @@
     </div>
 </div>
 
+<!-- Profile Image Crop Modal -->
+<div class="admin-dashboard-modal wm-crop-modal" id="profileImageCropModal" data-profile-image-url="{{ route('admin.profile.image') }}">
+    <div class="admin-dashboard-modal-overlay"></div>
+    <div class="admin-dashboard-modal-container">
+        <div class="admin-dashboard-modal-header">
+            <h2 class="admin-dashboard-modal-title">Crop profile picture</h2>
+            <button type="button" class="admin-dashboard-modal-close" id="profileImageCropCloseX" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="wm-crop-modal-body">
+            <div class="wm-crop-grid">
+                <div class="wm-crop-stage">
+                    <img id="profileImageCropSource" src="" alt="Crop source">
+                </div>
+                <div class="wm-crop-side">
+                    <p class="wm-crop-title">Preview</p>
+                    <p class="wm-crop-hint">Drag to move. Zoom with mouse wheel / trackpad. We’ll upload the cropped image.</p>
+                    <div class="wm-crop-preview-wrap">
+                        <div class="wm-crop-preview-circle">
+                            <div class="wm-crop-preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wm-crop-actions">
+            <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary" id="profileImageCropCancel">Cancel</button>
+            <button type="button" class="admin-dashboard-btn admin-dashboard-btn-primary" id="profileImageCropApply">Crop & Use</button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
+<script src="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.js"></script>
+<script src="{{ asset('js/profile-image-crop.js') }}"></script>
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
@@ -951,36 +1252,6 @@ function togglePassword(inputId) {
         input.type = 'password';
         eyeOpen.style.display = 'block';
         eyeClosed.style.display = 'none';
-    }
-}
-
-function previewProfileImage(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        const profileCircle = document.querySelector('.admin-dashboard-profile-circle');
-        
-        reader.onload = function(e) {
-            // Remove initials if exists
-            const initials = profileCircle.querySelector('.admin-dashboard-profile-initials');
-            if (initials) {
-                initials.remove();
-            }
-            
-            // Remove existing image if exists
-            const existingImg = profileCircle.querySelector('.admin-dashboard-profile-img');
-            if (existingImg) {
-                existingImg.remove();
-            }
-            
-            // Create and add new image
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = 'Profile Picture';
-            img.className = 'admin-dashboard-profile-img';
-            profileCircle.appendChild(img);
-        };
-        
-        reader.readAsDataURL(input.files[0]);
     }
 }
 
@@ -1016,16 +1287,103 @@ function closeAddUserModal() {
     document.getElementById('addUserForm').reset();
 }
 
-// Close modal on Escape key
+// Notes Modal
+function openNotesModal() {
+    var form = document.getElementById('notesForm');
+    if (form) {
+        form.action = form.dataset.storeUrl || form.getAttribute('data-store-url');
+        document.getElementById('note_title').value = '';
+        document.getElementById('note_content').value = '';
+        var cbs = document.querySelectorAll('.note_share_cb');
+        if (cbs) cbs.forEach(function(cb) { cb.checked = false; });
+        updateNotesShareTriggerText();
+        closeNotesShareDropdown();
+    }
+    document.getElementById('notesModalTitle').textContent = 'Create Note';
+    document.getElementById('notesFormSubmit').textContent = 'Create Note';
+    document.getElementById('notesModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeNotesModal() {
+    document.getElementById('notesModal').classList.remove('active');
+    document.body.style.overflow = '';
+    closeNotesShareDropdown();
+}
+function toggleNotesShareDropdown() {
+    var panel = document.getElementById('note_share_dropdown_panel');
+    var trigger = document.getElementById('note_share_trigger');
+    if (!panel || !trigger) return;
+    var isOpen = panel.classList.toggle('open');
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+function closeNotesShareDropdown() {
+    var panel = document.getElementById('note_share_dropdown_panel');
+    var trigger = document.getElementById('note_share_trigger');
+    if (panel) panel.classList.remove('open');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+function updateNotesShareTriggerText() {
+    var triggerText = document.getElementById('note_share_trigger_text');
+    if (!triggerText) return;
+    var checked = document.querySelectorAll('.note_share_cb:checked');
+    if (checked.length === 0) triggerText.textContent = 'Select admins...';
+    else if (checked.length === 1) triggerText.textContent = '1 admin selected';
+    else triggerText.textContent = checked.length + ' admins selected';
+}
+function toggleNoteContent(btn) {
+    var wrap = btn.closest('.admin-dashboard-note-content-wrap');
+    if (!wrap) return;
+    var expanded = wrap.classList.toggle('expanded');
+    btn.textContent = expanded ? 'View less' : 'View more';
+}
+function initNoteViewMoreButtons() {
+    document.querySelectorAll('.admin-dashboard-note-content-wrap').forEach(function(wrap) {
+        var content = wrap.querySelector('.admin-dashboard-note-content');
+        var btn = wrap.querySelector('.admin-dashboard-note-view-more-btn');
+        if (!content || !btn) return;
+        if (content.scrollHeight <= content.clientHeight + 2) btn.classList.add('hidden');
+    });
+}
+function editNote(id, title, content, shareWithIds) {
+    var form = document.getElementById('notesForm');
+    var base = form.getAttribute('data-update-url-base');
+    form.action = (base ? base + '/' + id : '') || ('{{ url("admin/notes") }}/' + id);
+    document.getElementById('note_title').value = title || '';
+    document.getElementById('note_content').value = content || '';
+    shareWithIds = shareWithIds || [];
+    document.querySelectorAll('.note_share_cb').forEach(function(cb) {
+        cb.checked = shareWithIds.indexOf(parseInt(cb.value, 10)) !== -1;
+    });
+    updateNotesShareTriggerText();
+    closeNotesShareDropdown();
+    document.getElementById('notesModalTitle').textContent = 'Edit Note';
+    document.getElementById('notesFormSubmit').textContent = 'Update Note';
+    document.getElementById('notesModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        const modal = document.getElementById('addUserModal');
+        if (document.getElementById('notesModal') && document.getElementById('notesModal').classList.contains('active')) {
+            closeNotesModal();
+        }
+        var modal = document.getElementById('addUserModal');
         if (modal && modal.classList.contains('active')) {
             closeAddUserModal();
         }
     }
 });
 
+// Notes share dropdown: update label when checkboxes change, close when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.note_share_cb').forEach(function(cb) {
+        cb.addEventListener('change', updateNotesShareTriggerText);
+    });
+    document.addEventListener('click', function(e) {
+        var wrap = document.querySelector('.admin-dashboard-notes-dropdown-wrap');
+        if (wrap && !wrap.contains(e.target)) closeNotesShareDropdown();
+    });
+    initNoteViewMoreButtons();
+});
 // Connect upload button to file input
 document.addEventListener('DOMContentLoaded', function() {
     const uploadBtn = document.querySelector('.admin-dashboard-upload-btn');
