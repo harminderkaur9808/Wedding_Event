@@ -18,7 +18,7 @@
                     <div class="wedding-mele-ninth-details">
                         <div class="wedding-mele-ninth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-ninth-detail-icon">
-                            <span class="wedding-mele-ninth-detail-text">Date: <span>{{ $ninth?->getExtra('date') ?? '2-31-2026' }}</span></span>
+                            <span class="wedding-mele-ninth-detail-text">Date: <span>{{ $ninth?->getDateDisplayString() ?? '28 Feb 2026' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-ninth-detail-item">

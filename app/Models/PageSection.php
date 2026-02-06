@@ -56,26 +56,52 @@ class PageSection extends Model
     }
 
     /**
-     * Get date formatted for the board overlay: day, month, year (month gets special font).
-     * Parses extra['date'] or extra['date_display'] and always returns this format.
+     * Get date formatted for the board overlay: day, month, year (board format).
+     * Uses the same extra['date'] as the section's "Date: ..." detail so board and details always match.
      *
      * @return array{day: string, month: string, year: string}|null
      */
     public function getBoardDateFormatted(): ?array
     {
-        $raw = $this->getExtra('date_display') ?: $this->getExtra('date');
+        $raw = $this->getExtra('date');
         if (empty($raw) || ! is_string($raw)) {
             return null;
         }
-        try {
-            $date = Carbon::parse(trim($raw));
-            return [
-                'day'   => $date->format('j'),    // e.g. 25
-                'month' => $date->format('M'),    // e.g. Feb
-                'year'  => $date->format('Y'),    // e.g. 2026
-            ];
-        } catch (\Exception $e) {
-            return null;
+        $raw = trim($raw);
+        $date = null;
+        $formats = ['n/j/Y', 'm/d/Y', 'm-d-Y', 'n-j-Y', 'Y-m-d', 'd-m-Y', 'd/m/Y'];
+        foreach ($formats as $format) {
+            try {
+                $date = Carbon::createFromFormat($format, $raw);
+                break;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
+        if (! $date) {
+            try {
+                $date = Carbon::parse($raw);
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+        return [
+            'day'   => $date->format('j'),
+            'month' => $date->format('M'),
+            'year'  => $date->format('Y'),
+        ];
+    }
+
+    /**
+     * Get date as a single display string (e.g. "3 Mar 2026") so "Date: ..." and board always match.
+     * Uses the same parsing as getBoardDateFormatted().
+     */
+    public function getDateDisplayString(?string $fallback = null): ?string
+    {
+        $board = $this->getBoardDateFormatted();
+        if (! $board) {
+            return $fallback;
+        }
+        return $board['day'] . ' ' . $board['month'] . ' ' . $board['year'];
     }
 }

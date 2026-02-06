@@ -351,6 +351,7 @@ a.wm-pv-category-tab.active {
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    background-color: #e8e8e8;
 }
 
 .wm-pv-category-item:hover {
@@ -359,16 +360,32 @@ a.wm-pv-category-tab.active {
 }
 
 .wm-pv-category-item-image {
-    position: relative;
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
 }
 
 .wm-pv-category-item-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
+    min-width: 0;
+    min-height: 0;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.wm-pv-category-item-img.loaded {
+    opacity: 1;
+}
+
+.wm-pv-category-item video.wm-pv-category-item-img {
+    opacity: 1;
 }
 
 .wm-pv-category-item-overlay {

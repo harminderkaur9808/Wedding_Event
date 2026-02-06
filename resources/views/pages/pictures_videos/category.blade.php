@@ -72,7 +72,12 @@
                                 @if(isset($item['is_video']) && $item['is_video'])
                                     <video src="{{ $item['url'] }}" class="wm-pv-category-item-img" style="object-fit: cover;"></video>
                                 @else
-                                    <img src="{{ $item['url'] }}" alt="{{ $item['title'] }}" class="wm-pv-category-item-img">
+                                    <img src="{{ $item['url'] }}" alt="{{ $item['title'] }}" class="wm-pv-category-item-img"
+                                         loading="{{ $index < 6 ? 'eager' : 'lazy' }}"
+                                         {{ $index < 4 ? 'fetchpriority="high"' : '' }}
+                                         decoding="async"
+                                         onload="this.classList.add('loaded')"
+                                         onerror="this.style.opacity=1">
                                 @endif
                                 <div class="wm-pv-category-item-overlay">
                                     <img src="{{ asset('Images/picturesandvideos/Showfullviewicon.png') }}" alt="View Full" class="wm-pv-category-item-hover-icon">
@@ -386,6 +391,13 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// Mark image as loaded when already cached (e.g. complete)
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.wm-pv-category-item-img[src]').forEach(function(img) {
+        if (img.tagName.toLowerCase() === 'img' && img.complete) img.classList.add('loaded');
+    });
+});
+
 // View More: load next 12 items
 document.addEventListener('DOMContentLoaded', function() {
     const viewMoreBtn = document.getElementById('viewMoreBtn');
@@ -408,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (item.is_video) {
                 mediaHtml = '<video src="' + escapeHtml(item.url) + '" class="wm-pv-category-item-img" style="object-fit: cover;"></video>';
             } else {
-                mediaHtml = '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" class="wm-pv-category-item-img">';
+                mediaHtml = '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" class="wm-pv-category-item-img" loading="lazy" decoding="async" onload="this.classList.add(\'loaded\')" onerror="this.style.opacity=1">';
             }
             const badgeHtml = item.is_current_user ? '<div style="position: absolute; top: 8px; right: 8px; background: rgba(46, 125, 50, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">Your Upload</div>' : '';
             div.innerHTML = '<div class="wm-pv-category-item-image">' + mediaHtml +
