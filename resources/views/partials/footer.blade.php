@@ -26,10 +26,10 @@
             <div class="footer-column footer-links">
                 <h3 class="footer-heading">Quick Links</h3>
                 <ul class="footer-link-list">
-                    <li><a href="#" class="footer-link">Pictures And Videos</a></li>
-                    <li><a href="#" class="footer-link">Ask The Host</a></li>
-                    <li><a href="#" class="footer-link">Updates By Family</a></li>
-                    <li><a href="#" class="footer-link">Local Attractions</a></li>
+                    <li><a href="{{ route('pictures_videos') }}" class="footer-link">Pictures And Videos</a></li>
+                    <li><a href="{{ route('ask.the.host') }}" class="footer-link">Ask The Host</a></li>
+                    <li><a href="{{ route('updates.by.family') }}" class="footer-link">Updates By Family</a></li>
+                    <li><a href="{{ route('local.attractions') }}" class="footer-link">Local Attractions</a></li>
                     <li><a href="{{ route('book.appointments') }}" class="footer-link">Book Your Appointments</a></li>
                 </ul>
             </div>
