@@ -41,6 +41,7 @@
                             <span class="wedding-mele-twelfth-detail-text">Time: <span>{{ $twelfth?->getExtra('time') ?? '6 pm onwards' }}</span></span>
                         </div>
 
+                        {{-- Dress code and Dress code subtext removed for twelfth section
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-twelfth-detail-icon">
                             <span class="wedding-mele-twelfth-detail-text">
@@ -48,6 +49,7 @@
                                 <span class="wedding-mele-twelfth-detail-subtext">{{ $twelfth?->getExtra('dress_code_subtext') ?? 'Men: Formals. Women: any color' }}</span>
                             </span>
                         </div>
+                        --}}
                     </div>
                 </div>
 

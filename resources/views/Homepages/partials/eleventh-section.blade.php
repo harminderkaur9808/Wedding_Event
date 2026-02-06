@@ -38,11 +38,19 @@
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">
-                                Dress Code: <span>{{ $eleventh?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}
-                                @if($eleventh?->getExtra('dress_code_subtext'))</span>
-                                <span class="wedding-mele-eleventh-detail-subtext">{{ $eleventh->getExtra('dress_code_subtext') }}</span>
+                                Dress Code: <span>{{ $eleventh?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}</span>
+                                @php $menText = $eleventh?->getExtra('dress_code_men'); $womenText = $eleventh?->getExtra('dress_code_women'); @endphp
+                                @if($menText || $womenText)
+                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> {{ $menText ?? '—' }}&nbsp;&nbsp;&nbsp;<b>Women:</b> {{ $womenText ?? '—' }}</span>
+                                @elseif($eleventh?->getExtra('dress_code_subtext'))
+                                    @php
+                                        $sub = e($eleventh->getExtra('dress_code_subtext'));
+                                        $sub = preg_replace('/\bMen:\s*/', '<b>Men:</b> ', $sub);
+                                        $sub = preg_replace('/\bWomen:\s*/', '<b>Women:</b> ', $sub);
+                                    @endphp
+                                    <span class="wedding-mele-eleventh-detail-subtext">{!! $sub !!}</span>
                                 @else
-                                <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> Red Turbans Head Covers&nbsp;&nbsp;&nbsp;<b>Women:</b> Any Color</span>
+                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> Red Turbans Head Covers&nbsp;&nbsp;&nbsp;<b>Women:</b> Any Color</span>
                                 @endif
                             </span>
                         </div>

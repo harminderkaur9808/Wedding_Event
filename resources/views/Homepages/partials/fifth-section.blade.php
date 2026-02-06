@@ -62,6 +62,10 @@
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-fifth-detail-icon">
                             <span class="wedding-mele-fifth-detail-text">Dress Code: <span>{{ $fifth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span></span>
                         </div>
+                        <div class="wedding-mele-fifth-detail-item">
+                            <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-fifth-detail-icon">
+                            <span class="wedding-mele-fifth-detail-text">Address: <span>{{ $fifth?->getExtra('address') ?? 'Phoenix AZ' }}</span></span>
+                        </div>
                     </div>
                 </div>
             </div>

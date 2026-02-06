@@ -73,7 +73,7 @@
                 </div>
                 <div class="book-appointments-detail-blocks">
                     @forelse(($entriesBySection['hair'] ?? []) as $entry)
-                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry, 'section' => 'hair'])
                     @empty
                         <p class="book-appointments-no-entries">No locations added yet for Hair. Add entries from the admin panel.</p>
                     @endforelse
@@ -123,7 +123,7 @@
             <div class="book-appointments-third-content">
                 <div class="book-appointments-detail-blocks book-appointments-detail-blocks-left">
                     @forelse(($entriesBySection['makeup'] ?? []) as $entry)
-                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry, 'section' => 'makeup'])
                     @empty
                         <p class="book-appointments-no-entries">No locations added yet for Makeup. Add entries from the admin panel.</p>
                     @endforelse
@@ -180,7 +180,7 @@
                 </div>
                 <div class="book-appointments-detail-blocks">
                     @forelse(($entriesBySection['nails'] ?? []) as $entry)
-                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry, 'section' => 'nails'])
                     @empty
                         <p class="book-appointments-no-entries">No locations added yet for Nails. Add entries from the admin panel.</p>
                     @endforelse
@@ -230,7 +230,7 @@
             <div class="book-appointments-fifth-content">
                 <div class="book-appointments-detail-blocks book-appointments-detail-blocks-left">
                     @forelse(($entriesBySection['spa'] ?? []) as $entry)
-                        @include('pages.partials.book_appointment_entry', ['entry' => $entry])
+                        @include('pages.partials.book_appointment_entry', ['entry' => $entry, 'section' => 'spa'])
                     @empty
                         <p class="book-appointments-no-entries">No locations added yet for Spa. Add entries from the admin panel.</p>
                     @endforelse

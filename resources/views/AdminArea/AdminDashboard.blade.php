@@ -515,6 +515,7 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}" placeholder="e.g. 123 Main St, Phoenix AZ"></div>
                                                     </div>
                                                 @endif
                                                 @if(in_array($sec->slug, ['sixth', 'seventh', 'ninth', 'eleventh']))
@@ -533,7 +534,8 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Performance (text on name plate)</label><input type="text" name="extra[performance_text]" class="admin-dashboard-input" value="{{ old('extra.performance_text', $sec->getExtra('performance_text') ?? 'Giddha by family members') }}" placeholder="e.g. Giddha by family members"></div>
                                                     @endif
                                                     @if($sec->slug === 'eleventh')
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code subtext</label><input type="text" name="extra[dress_code_subtext]" class="admin-dashboard-input" value="{{ old('extra.dress_code_subtext', $sec->getExtra('dress_code_subtext')) }}" placeholder="e.g. Men: Red Turbans..."></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Men (dress code)</label><input type="text" name="extra[dress_code_men]" class="admin-dashboard-input" value="{{ old('extra.dress_code_men', $sec->getExtra('dress_code_men')) }}" placeholder="e.g. Red Turbans Head Covers"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Women (dress code)</label><input type="text" name="extra[dress_code_women]" class="admin-dashboard-input" value="{{ old('extra.dress_code_women', $sec->getExtra('dress_code_women')) }}" placeholder="e.g. Any Color"></div>
                                                     @endif
                                                 @endif
                                                 @if($sec->slug === 'tenth')
@@ -550,8 +552,10 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}" placeholder="e.g. 6 pm onwards"></div>
+                                                        {{-- Dress code and Dress code subtext removed for twelfth section
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}" placeholder="e.g. Indian traditional outfits"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code subtext</label><input type="text" name="extra[dress_code_subtext]" class="admin-dashboard-input" value="{{ old('extra.dress_code_subtext', $sec->getExtra('dress_code_subtext')) }}" placeholder="e.g. Men: Formals. Women: any color"></div>
+                                                        --}}
                                                     </div>
                                                 @endif
                                             </div>
@@ -721,10 +725,14 @@
                                             <input type="text" name="store_name" class="admin-dashboard-input" value="{{ old('store_name', $entry->store_name) }}" placeholder="e.g. ULTA BEAUTY STORE">
                                         </div>
                                     </div>
+                                    @if(($bookAppointmentSection ?? '') === 'hair')
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Instruction</label>
                                         <input type="text" name="instruction" class="admin-dashboard-input" value="{{ old('instruction', $entry->instruction) }}" placeholder="e.g. Call at least one month ahead and book your appointments.">
                                     </div>
+                                    @else
+                                    {{-- Instruction field only for Hair section; commented out for Makeup, Nails, Spa --}}
+                                    @endif
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Address</label>
                                         <input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="e.g. 1905 Calle Barcelona, Carlsbad, CA 92009">
