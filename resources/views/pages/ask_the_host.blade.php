@@ -168,11 +168,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.ask-the-host-see-replies').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var id = btn.getAttribute('data-query-id');
+            var count = btn.getAttribute('data-count');
             var repliesEl = document.getElementById('replies-' + id);
             if (!repliesEl) return;
             var isHidden = repliesEl.style.display === 'none';
             repliesEl.style.display = isHidden ? 'block' : 'none';
-            btn.textContent = isHidden ? 'Hide replies' : 'See ' + btn.getAttribute('data-count') + ' Reply(ies)';
+            btn.classList.toggle('replies-open', isHidden);
+            btn.textContent = isHidden ? 'Hide replies' : 'See ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies');
         });
     });
 
