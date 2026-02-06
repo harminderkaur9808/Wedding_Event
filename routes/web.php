@@ -71,6 +71,14 @@ Route::post('/signup', [AuthController::class, 'signup'])->name('signup.post');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Forgot password: show form (email input) and send link
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+
+// Reset password: from email link (token + email), show form and process
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
 // Dashboard Routes
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserDashboardController;

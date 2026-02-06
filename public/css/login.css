@@ -369,6 +369,21 @@
     text-decoration: underline;
 }
 
+/* Forgot / Reset password intro text */
+.login-wed-lex1-forgot-intro {
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Read-only email on reset page */
+.login-wed-lex1-input-readonly {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
 /* Submit Button */
 .login-wed-lex1-submit-btn {
     width: 100%;
