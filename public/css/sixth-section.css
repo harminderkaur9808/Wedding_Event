@@ -2,7 +2,7 @@
 .wedding-mele-sixth-section {
     width: 100%;
     position: relative;
-    padding: 70px 0;
+    padding: 50px 0;
     background-color: #ffffff;
     overflow: hidden;
 }
@@ -58,7 +58,7 @@
 
 .wedding-mele-colorful-vibes-text {
     font-family: 'Britania Vintage', 'Volkhov', serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -82,7 +82,7 @@
 
 .wedding-mele-mehndi-text {
     font-family: 'Volkhov', serif;
-    font-size: 42px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin-top: 0;
@@ -121,21 +121,24 @@
 
 .wedding-mele-sixth-detail-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 34px;
+    height: 34px;
     margin-top: 2px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-mele-sixth-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight: 600;
     color: #2F4F75;
     line-height: 1.7;
 }
-
+.wedding-mele-sixth-detail-text span{
+    font-size: 22px;
+    font-weight: 300;
+}
 /* Right: Image */
 .wedding-mele-sixth-right {
     flex: 0 0 44%;
@@ -147,7 +150,7 @@
 .wedding-mele-sixth-image-wrapper {
     position: relative;
     width: 100%;
-    max-width: 430px;
+    max-width: 550px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,8 +160,8 @@
 /* Board on image + date text (top-left, same as Vatna) */
 .wedding-mele-sixth-board-on-image {
     position: absolute;
-    top: 51px;
-    left: 10%;
+    top: 64px;
+    left: 13%;
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -203,7 +206,7 @@
 }
 
 .wedding-mele-sixth-board-day {
-    font-size: 23px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -213,7 +216,7 @@
 }
 
 .wedding-mele-sixth-board-year {
-    font-size: 21px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -256,7 +259,7 @@
     }
 
     .wedding-mele-sixth-image-wrapper {
-        max-width: 420px;
+        max-width: 100%;
     }
 }
 
@@ -272,6 +275,25 @@
     .wedding-mele-sixth-between-img {
         height: 30px;
     }
+    .wedding-mele-sixth-detail-text,
+    .wedding-mele-sixth-detail-text span{
+        font-size: 14px;
+    } 
+    .wedding-mele-sixth-detail-icon {
+    width: 28px;
+    height: 28px;
+}
+.wedding-mele-sixth-board-day {
+    font-size: 21px;
+}
+
+.wedding-mele-sixth-board-month {
+    font-size: 25px;
+}
+
+.wedding-mele-sixth-board-year {
+    font-size: 20px;
+}
 }
 
 @media (max-width: 576px) {
@@ -280,14 +302,14 @@
     }
 
     .wedding-mele-sixth-detail-text {
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
 /* Mobile: board and date text on image */
 @media only screen and (max-width: 767px) {
     .wedding-mele-sixth-board-date-text {
-        top: 56px;
+        top: 54px;
     }
 
     .wedding-mele-sixth-dynamic-board {

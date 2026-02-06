@@ -7,7 +7,7 @@
     <div class="container">
         <div class="wedding-mele-fifth-content">
             <!-- Header Section -->
-            <div class="wedding-mele-fifth-header">
+            <div class="wedding-mele-fifth-header wm-reveal" style="--reveal-delay: 0ms;">
                 @php $fifth = $sections['fifth'] ?? null; @endphp
                 <h3 class="wedding-mele-sacred-ritual-text">{{ $fifth?->subtitle ?? 'Sacred Ritual' }}</h3>
                 <div class="wedding-mele-fifth-decorative">
@@ -20,7 +20,7 @@
             <div class="wedding-mele-fifth-main-box">
 
                 <!-- Left Section - Main image with board attached -->
-                <div class="wedding-mele-fifth-left">
+                <div class="wedding-mele-fifth-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-vatna-image-wrapper">
                         @php $fifthImg = $fifth?->getExtra('image'); @endphp
                         <img src="{{ $fifthImg ? asset('storage/' . $fifthImg) : asset('Images/Home/fifthsec/Fifthsection_Vatna _framer.png') }}" alt="Vatna Ceremony" class="wedding-mele-vatna-image">
@@ -41,26 +41,26 @@
                 </div>
 
                 <!-- Right Section - Event Details -->
-                <div class="wedding-mele-fifth-right">
+                <div class="wedding-mele-fifth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-fifth-details">
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-fifth-detail-icon">
-                            <span class="wedding-mele-fifth-detail-text">Date: {{ $fifth?->getExtra('date') ?? '2/25/2026' }}</span>
+                            <span class="wedding-mele-fifth-detail-text">Date: <span>{{ $fifth?->getExtra('date') ?? '2/25/2026' }}</span></span>
                         </div>
                         
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-fifth-detail-icon">
-                            <span class="wedding-mele-fifth-detail-text">Time: {{ $fifth?->getExtra('time') ?? '9 am - 12 pm' }}</span>
+                            <span class="wedding-mele-fifth-detail-text">Time: <span>{{ $fifth?->getExtra('time') ?? '9 am - 12 pm' }}</span></span>
                         </div>
                         
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-fifth-detail-icon">
-                            <span class="wedding-mele-fifth-detail-text">Venue: {{ $fifth?->getExtra('venue') ?? 'Phoenix AZ' }}</span>
+                            <span class="wedding-mele-fifth-detail-text">Venue: <span>{{ $fifth?->getExtra('venue') ?? 'Phoenix AZ' }}</span></span>
                         </div>
                         
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-fifth-detail-icon">
-                            <span class="wedding-mele-fifth-detail-text">Dress Code: {{ $fifth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span>
+                            <span class="wedding-mele-fifth-detail-text">Dress Code: <span>{{ $fifth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span></span>
                         </div>
                     </div>
                 </div>

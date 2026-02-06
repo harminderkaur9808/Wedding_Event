@@ -3,8 +3,19 @@
         @forelse($attractions as $attraction)
             @php
                 $pos = $attraction->image_position === 'right' ? 'right' : 'left';
+                $showDecor = $loop->odd; /* 1st, 3rd, 5th, ... */
+                $showBg = $loop->even;   /* 2nd, 4th, 6th, ... full-width background */
             @endphp
-            <article class="wm-la-item wm-la-item--{{ $pos }} wm-la-animate">
+            @if($showBg)
+                <div class="wm-la-item-row wm-la-item-row--with-bg" style="background-image: url('{{ asset('Images/Local_attractions/Local_attractions_09.png') }}');">
+                    <div class="wm-la-list-container wm-la-list-container--inner">
+            @endif
+            @if($showDecor)
+                <div class="wm-la-item-row wm-la-item-row--with-decor">
+                    <img src="{{ asset('Images/Local_attractions/decor/Left_side_decor.png') }}" alt="" class="wm-la-decor wm-la-decor--left" aria-hidden="true">
+                    <img src="{{ asset('Images/Local_attractions/decor/right_side_decor.png') }}" alt="" class="wm-la-decor wm-la-decor--right" aria-hidden="true">
+            @endif
+            <article class="wm-la-item wm-la-item--{{ $pos }} wm-la-animate wm-la-item-index-{{ $loop->iteration }}">
                 <div class="wm-la-item-media" aria-hidden="true">
                     @if(!empty($attraction->image_path))
                         <img src="{{ asset('storage/' . ltrim($attraction->image_path, '/')) }}" alt="" class="wm-la-item-img">
@@ -41,6 +52,13 @@
                     </ul>
                 </div>
             </article>
+            @if($showDecor)
+                </div>
+            @endif
+            @if($showBg)
+                    </div>
+                </div>
+            @endif
         @empty
             <div class="wm-la-empty">
                 <p>No local attractions added yet.</p>

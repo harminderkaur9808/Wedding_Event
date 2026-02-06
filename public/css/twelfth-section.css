@@ -2,7 +2,7 @@
 .wedding-mele-twelfth-section {
     width: 100%;
     position: relative;
-    padding: 30px 0;
+    padding: 40px 0;
     overflow: hidden;
     background-color: #f6f6ff;
 }
@@ -40,7 +40,7 @@
 
 .wedding-mele-twelfth-subtitle {
     font-family: 'Britania Vintage', 'Volkhov', serif;
-    font-size: 26px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -64,7 +64,7 @@
 
 .wedding-mele-twelfth-title {
     font-family: 'Volkhov', serif;
-    font-size: 46px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin: 0;
@@ -107,7 +107,7 @@
 .wedding-mele-twelfth-board-on-image {
     position: absolute;
     top: -10px;
-    left: 9%;
+   right: -3%;
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -132,7 +132,7 @@
 
 .wedding-mele-twelfth-board-date-text {
     position: absolute;
-    top: 81px;
+    top: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -152,7 +152,7 @@
 }
 
 .wedding-mele-twelfth-board-day {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -162,7 +162,7 @@
 }
 
 .wedding-mele-twelfth-board-year {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -195,26 +195,30 @@
 
 .wedding-mele-twelfth-detail-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 34px;
+    height: 34px;
     margin-top: 2px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-mele-twelfth-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight:600;
     color: #2F4F75;
     line-height: 1.7;
 }
-
+.wedding-mele-twelfth-detail-text span{
+    font-size: 20px;
+    font-weight:400;
+}
 .wedding-mele-twelfth-detail-subtext {
     display: block;
     margin-top: 4px;
-    font-size: 14px;
+    font-size: 16px !important;
     opacity: 0.9;
+    font-weight: 300 !important;
 }
 
 /* Responsive */
@@ -239,6 +243,7 @@
         width: 100%;
         order: 2;
         align-items: center;
+        flex: 1;
     }
 
     .wedding-mele-twelfth-details {
@@ -258,6 +263,26 @@
     .wedding-mele-twelfth-between-img {
         height: 24px;
     }
+     .wedding-mele-twelfth-detail-text,
+     .wedding-mele-twelfth-detail-text span {
+        font-size: 14px!important;
+    }
+    .wedding-mele-twelfth-detail-icon {
+    width: 28px;
+    height: 28px;}
+
+
+    .wedding-mele-twelfth-board-day {
+    font-size: 21px;
+}
+
+.wedding-mele-twelfth-board-month {
+    font-size: 25px;
+}
+
+.wedding-mele-twelfth-board-year {
+    font-size: 20px;
+}
 }
 
 @media (max-width: 576px) {
@@ -274,7 +299,7 @@
     }
 
     .wedding-mele-twelfth-detail-subtext {
-        font-size: 13px;
+        font-size: 12px;
     }
 }
 

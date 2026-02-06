@@ -1,13 +1,13 @@
 <section class="wedding-mele-twelfth-section">
     <!-- Background Image - Full Width (same design as tenth) -->
     <div class="wedding-mele-twelfth-bg" aria-hidden="true">
-        <img src="{{ asset('Images/Home/tenthsecimg/Sehra%20%26%20Surma%20Ceremony_bg.png') }}" alt="" class="wedding-mele-twelfth-bg-image">
+        <img src="{{ asset('Images/Home/tenthsecimg/Sehra-Surma-Ceremony.png') }}" alt="" class="wedding-mele-twelfth-bg-image">
     </div>
 
     <div class="container">
         <div class="wedding-mele-twelfth-content">
             <!-- Header -->
-            <div class="wedding-mele-twelfth-header">
+            <div class="wedding-mele-twelfth-header wm-reveal" style="--reveal-delay: 0ms;">
                 @php $twelfth = $sections['twelfth'] ?? null; @endphp
                 <h3 class="wedding-mele-twelfth-subtitle">{{ $twelfth?->subtitle ?? 'Celebration' }}</h3>
                 <div class="wedding-mele-twelfth-between">
@@ -19,32 +19,32 @@
             <!-- Main -->
             <div class="wedding-mele-twelfth-main">
                 <!-- Left: Details -->
-                <div class="wedding-mele-twelfth-left">
+                <div class="wedding-mele-twelfth-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-twelfth-details">
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Reception: {{ $twelfth?->getExtra('date') ?? '1/2/2027' }}</span>
+                            <span class="wedding-mele-twelfth-detail-text">Reception: <span>{{ $twelfth?->getExtra('date') ?? '1/2/2027' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Venue: {{ $twelfth?->getExtra('venue') ?? 'Park Hyatt Aviara Resort-760-448-1234' }}</span>
+                            <span class="wedding-mele-twelfth-detail-text">Venue: <span>{{ $twelfth?->getExtra('venue') ?? 'Park Hyatt Aviara Resort-760-448-1234' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Address: {{ $twelfth?->getExtra('address') ?? '7100 Aviara Resort Drive, Carlsbad CA 92011' }}</span>
+                            <span class="wedding-mele-twelfth-detail-text">Address: <span>{{ $twelfth?->getExtra('address') ?? '7100 Aviara Resort Drive, Carlsbad CA 92011' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Time: {{ $twelfth?->getExtra('time') ?? '6 pm onwards' }}</span>
+                            <span class="wedding-mele-twelfth-detail-text">Time: <span>{{ $twelfth?->getExtra('time') ?? '6 pm onwards' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-twelfth-detail-icon">
                             <span class="wedding-mele-twelfth-detail-text">
-                                Dress Code: {{ $twelfth?->getExtra('dress_code') ?? 'Indian traditional outfits' }}
+                                Dress Code: <span>{{ $twelfth?->getExtra('dress_code') ?? 'Indian traditional outfits' }}</span>
                                 <span class="wedding-mele-twelfth-detail-subtext">{{ $twelfth?->getExtra('dress_code_subtext') ?? 'Men: Formals. Women: any color' }}</span>
                             </span>
                         </div>
@@ -52,10 +52,10 @@
                 </div>
 
                 <!-- Right: Image with board (clip) on it -->
-                <div class="wedding-mele-twelfth-right">
+                <div class="wedding-mele-twelfth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-twelfth-image-wrapper">
                         @php $twelfthImg = $twelfth?->getExtra('image'); @endphp
-                        <img src="{{ $twelfthImg ? asset('storage/' . $twelfthImg) : asset('Images/Home/tenthsecimg/Sehra%20%26%20Surma%20Ceremony.png') }}" alt="Reception" class="wedding-mele-twelfth-image">
+                        <img src="{{ $twelfthImg ? asset('storage/' . $twelfthImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Reception" class="wedding-mele-twelfth-image">
                         <!-- Board / clip on image + date text (same as tenth) -->
                         <div class="wedding-mele-twelfth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-twelfth-dynamic-board">

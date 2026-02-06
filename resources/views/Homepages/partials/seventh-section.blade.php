@@ -7,7 +7,7 @@
     <div class="container">
         <div class="wedding-mele-seventh-content">
             <!-- Header -->
-            <div class="wedding-mele-seventh-header">
+            <div class="wedding-mele-seventh-header wm-reveal" style="--reveal-delay: 0ms;">
                 @php $seventh = $sections['seventh'] ?? null; @endphp
                 <h3 class="wedding-mele-seventh-subtitle">{{ $seventh?->subtitle ?? 'Musical Vibes' }}</h3>
                 <div class="wedding-mele-seventh-between">
@@ -19,7 +19,7 @@
             <!-- Main -->
             <div class="wedding-mele-seventh-main">
                 <!-- Left: Image with board on it -->
-                <div class="wedding-mele-seventh-left">
+                <div class="wedding-mele-seventh-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-seventh-image-wrapper">
                         @php $seventhImg = $seventh?->getExtra('image'); @endphp
                         <img src="{{ $seventhImg ? asset('storage/' . $seventhImg) : asset('Images/Home/Seven_sec_img/Sangeet_seven_sec_img.png') }}" alt="Sangeet Night" class="wedding-mele-seventh-image">
@@ -40,31 +40,31 @@
                 </div>
 
                 <!-- Right: Details -->
-                <div class="wedding-mele-seventh-right">
+                <div class="wedding-mele-seventh-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-seventh-details">
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Date: {{ $seventh?->getExtra('date') ?? '2-26-2026' }}</span>
+                            <span class="wedding-mele-seventh-detail-text">Date: <span>{{ $seventh?->getExtra('date') ?? '2-26-2026' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Time: {{ $seventh?->getExtra('time') ?? '6pm - midnight' }}</span>
+                            <span class="wedding-mele-seventh-detail-text">Time: <span>{{ $seventh?->getExtra('time') ?? '6pm - midnight' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Venue: {{ $seventh?->getExtra('venue') ?? 'Jasmine and Mannttej Residence' }}</span>
+                            <span class="wedding-mele-seventh-detail-text">Venue: <span>{{ $seventh?->getExtra('venue') ?? 'Jasmine and Mannttej Residence' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Dress Code: {{ $seventh?->getExtra('dress_code') ?? 'Indian. Outside venue. Be warm and comfortable' }}</span>
+                            <span class="wedding-mele-seventh-detail-text">Dress Code: <span>{{ $seventh?->getExtra('dress_code') ?? 'Indian. Outside venue. Be warm and comfortable' }}</span></span>
                         </div>
 
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Address: {{ $seventh?->getExtra('address') ?? '4608 W El Cortez Pl, Phoenix AZ 85083' }}</span>
+                            <span class="wedding-mele-seventh-detail-text">Address: <span>{{ $seventh?->getExtra('address') ?? '4608 W El Cortez Pl, Phoenix AZ 85083' }}</span></span>
                         </div>
                     </div>
 

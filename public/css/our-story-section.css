@@ -1,13 +1,52 @@
 /* Our Story Section Styles - wedding-mele prefix */
 
 /* Font is registered globally in `public/css/style.css` */
+@media (max-width: 767px) {
+    .wedding-mele-heart-overlay {
+      position: absolute;
+      top: 0px;
+      left: -71px;
+      width: 100%;
+    }
+  }
+  
+  @media (min-width: 1024px) and (max-width: 1366px) {
+    .wedding-mele-heart-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 38%;
+    }
+  }
+  
+@media (max-width: 576px) {
+    .wedding-mele-timeline {
+        margin: 12px auto;
+        max-width: 220px;
+        display: none;
+    }
 
+    .wedding-mele-person-section.wedding-mele-vickram-section.wm-reveal.is-visible {
+        margin-bottom: 32px;
+        position: relative;
+        left: -40px;
+    }
+    .wedding-mele-person-section.wedding-mele-nisha-section.wm-reveal.is-visible {
+        right: -30px;
+    }
+
+    
+
+    
+}
 .wedding-mele-our-story-section {
     width: 100%;
+    min-width: 100%;
     background-color: #ffffff;
-    padding: 30px 0;
+    padding: 36px 0;
     position: relative;
     overflow: visible;
+    box-sizing: border-box;
 }
 
 /* Title Section */
@@ -20,7 +59,7 @@
 
 .wedding-mele-bride-groom-text {
     font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -44,7 +83,7 @@
 
 .wedding-mele-our-story-title {
     font-family: 'Volkhov', serif;
-    font-size: 48px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin-top: 0px;
@@ -143,12 +182,13 @@
     top: 0;
     left: 0;
     width: 104%;
-    height: 123%;
+    height: 140%;
     object-fit: contain;
     z-index: 1;
 }
+/* Desktop: hearts hidden; mobile will show them */
 .wedding-mele-heart-icon.wedding-mele-heart-right {
-    display: none !important;
+    display: none;
 }
 .wedding-mele-heart-icon.wedding-mele-heart-left {
     display: none;
@@ -159,7 +199,7 @@
     z-index: 2;
     padding: 35px 38px;
     text-align: left;
-    top: 24px;
+    top: 34px;
 }
 
 .wedding-mele-person-name {
@@ -173,14 +213,14 @@
     text-align: center;
 }
 .wedding-mele-person-description {
-    font-family: 'Jost', sans-serif;
-    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
     font-weight: 400;
     color: #666666;
     line-height: 1.6;
     text-align: center;
-    margin: 6px;
-    padding: 10px;
+    margin: 3px;
+    padding: 6px;
 }
 
 /* Heart Icons */
@@ -364,6 +404,45 @@
     }
 }
 
+/* iPad Pro (portrait/small desktop) – keep desktop layout, prevent overflow and “come close” on scroll */
+@media (min-width: 993px) and (max-width: 1024px) {
+    .wedding-mele-our-story-section {
+        padding: 48px 0 56px;
+    }
+
+    .wedding-mele-story-center-content {
+        max-width: 960px;
+        gap: 32px;
+        padding: 0 24px;
+    }
+
+    .wedding-mele-text-bubble {
+        width: 280px;
+        max-width: 280px;
+    }
+
+    .wedding-mele-vickram-section {
+        margin-top: 36px;
+        margin-bottom: 12px;
+    }
+
+    .wedding-mele-nisha-section {
+        margin-bottom: 36px;
+        margin-top: 12px;
+    }
+
+    .wedding-mele-person-img {
+        height: 420px;
+        max-width: 240px;
+    }
+
+    .wedding-mele-couple-images {
+        width: 36% !important;
+        min-height: 420px;
+    }
+
+}
+
 @media (max-width: 992px) {
     .wedding-mele-our-story-section {
         padding: 60px 0;
@@ -388,7 +467,7 @@
 
     .wedding-mele-story-center-content {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
         padding: 0 15px;
     }
 
@@ -401,30 +480,22 @@
     .wedding-mele-couple-images {
         order: 2;
         flex-direction: row;
-        gap: 15px;
+        gap: 4px;
+        justify-content: center !important;
     }
 
-    .wedding-mele-vickram-image {
-        transform: translateX(calc(-25%));
-    }
-
+    .wedding-mele-vickram-image,
     .wedding-mele-nisha-image {
-        transform: translateX(calc(25%));
+        transform: none;
     }
 
     .wedding-mele-couple-images.animate .wedding-mele-vickram-image,
     .wedding-mele-couple-images.animate .wedding-mele-nisha-image {
-        transform: translateX(0);
+        transform: none;
     }
 
     .wedding-mele-timeline {
-        position: relative;
-        top: auto;
-        left: auto;
-        transform: none;
-        width: 100%;
-        margin: 20px 0;
-        order: 2.5;
+        display: none !important;
     }
 
     .wedding-mele-nisha-section {
@@ -436,6 +507,8 @@
     .wedding-mele-text-bubble {
         width: 100%;
         max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .wedding-mele-person-img {
@@ -443,15 +516,97 @@
         max-width: 220px;
     }
 
+    .wedding-mele-couple-images {
+        width: 100% !important;
+        justify-content: center;
+    }
+
     .wedding-mele-left-frame,
     .wedding-mele-right-frame {
-        display: block;
+        display: none !important;
     }
 }
 
+/* iPad / tablet (769px–991px) – stacked layout, no full-bleed, comfortable spacing for scroll */
+@media (min-width: 769px) and (max-width: 991px) {
+    .wedding-mele-our-story-section {
+        padding: 52px 0 60px;
+        width: 100%;
+        min-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .wedding-mele-our-story-section .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wedding-mele-story-title-section {
+        margin-bottom: 36px;
+    }
+
+    .wedding-mele-story-center-content {
+        gap: 28px;
+        padding: 0;
+    }
+
+    .wedding-mele-text-bubble {
+        max-width: 420px;
+    }
+
+    .wedding-mele-person-section.wedding-mele-vickram-section {
+        margin-bottom: 8px;
+    }
+
+    .wedding-mele-person-section.wedding-mele-nisha-section {
+        margin-top: 8px;
+    }
+
+    .wedding-mele-person-img {
+        height: 380px;
+        max-width: 200px;
+    }
+
+    .wedding-mele-bubble-content {
+        padding: 30px 28px;
+        top: 30px;
+    }
+
+    .wedding-mele-couple-images {
+        min-height: 380px;
+        gap: 6px;
+    }
+}
+
+/* iPad Mini and smaller – responsive layout, avoid 100vw horizontal scroll */
 @media (max-width: 768px) {
     .wedding-mele-our-story-section {
-        padding: 50px 0;
+        padding: 48px 0 56px;
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .wedding-mele-our-story-section .container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+        margin-left: auto;
+        margin-right: auto;
+        box-sizing: border-box;
+    }
+
+    .wedding-mele-story-title-section {
+        margin-bottom: 36px;
     }
 
     .wedding-mele-bride-groom-text {
@@ -459,70 +614,200 @@
     }
 
     .wedding-mele-our-story-title {
-        font-size: 36px;
+        font-size: 34px;
     }
 
     .wedding-mele-decorative-img {
-        height: 35px;
+        height: 32px;
     }
 
     .wedding-mele-story-center-content {
-        gap: 30px;
+        gap: 16px;
+        padding: 0;
     }
 
     .wedding-mele-person-name {
-        font-size: 32px;
+        font-size: 24px;
     }
 
     .wedding-mele-person-description {
-        font-size: 14px;
+        font-size: 18px;
+        line-height: 1.55;
     }
 
     .wedding-mele-person-img {
-        height: 350px;
+        height: 340px;
         max-width: 200px;
     }
 
     .wedding-mele-bubble-content {
-        padding: 30px 25px;
+        padding: 47px 28px;
+        top: 38px;
+    }
+    .wedding-mele-text-bubble {
+        width: 100%;
+        max-width: 389px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 50px;
+    }
+
+    .wedding-mele-couple-images {
+        min-height: 320px;
+        width: 100% !important;
+        gap: 4px;
+    }
+
+    .wedding-mele-left-frame,
+    .wedding-mele-right-frame {
+        display: none !important;
+    }
+
+    .wedding-mele-timeline {
+        display: none !important;
+    }
+
+    /* Show heart icons on mobile to match desktop design */
+    .wedding-mele-heart-icon.wedding-mele-heart-right,
+    .wedding-mele-heart-icon.wedding-mele-heart-left {
+        display: block !important;
+    }
+}
+
+/* iPad Mini only (768px) – Vickram bubble left, Nisha bubble right */
+@media (min-width: 577px) and (max-width: 768px) {
+    .wedding-mele-story-center-content {
+        align-items: stretch;
+    }
+
+    .wedding-mele-person-section.wedding-mele-vickram-section {
+        align-self: flex-start;
+    }
+
+    .wedding-mele-person-section.wedding-mele-vickram-section .wedding-mele-text-bubble {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    .wedding-mele-person-section.wedding-mele-nisha-section {
+        align-self: flex-end;
+    }
+
+    .wedding-mele-person-section.wedding-mele-nisha-section .wedding-mele-text-bubble {
+        margin-left: auto;
+        margin-right: 0;
     }
 }
 
 @media (max-width: 576px) {
     .wedding-mele-our-story-section {
-        padding: 40px 0;
+        padding: 36px 0 48px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .wedding-mele-our-story-section .container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .wedding-mele-story-title-section {
+        margin-bottom: 28px;
     }
 
     .wedding-mele-bride-groom-text {
-        font-size: 20px;
+        font-size: 19px;
+        letter-spacing: 1px;
     }
 
     .wedding-mele-our-story-title {
-        font-size: 32px;
-    }
-
-    .wedding-mele-decorative-img {
-        height: 30px;
-    }
-
-    .wedding-mele-person-name {
         font-size: 28px;
     }
 
+    .wedding-mele-decorative-img {
+        height: 28px;
+    }
+
+    .wedding-mele-story-center-content {
+        gap: 12px;
+        padding: 0;
+    }
+
+    .wedding-mele-person-name {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
     .wedding-mele-person-description {
-        font-size: 13px;
+        font-size: 15px;
+        padding: 7px 65px;
     }
 
     .wedding-mele-person-img {
-        height: 300px;
-        max-width: 180px;
+        height: 280px;
+        max-width: 160px;
     }
 
     .wedding-mele-bubble-content {
-        padding: 25px 20px;
+        padding: 22px 18px;
+        top: 24px;
     }
 
     .wedding-mele-text-bubble {
         max-width: 100%;
+        min-height: 160px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .wedding-mele-couple-images {
+        min-height: 280px;
+        width: 100% !important;
+        gap: 2px;
+        justify-content: center;
+    }
+
+    .wedding-mele-bubble-bg {
+        height: 130%;
+    }
+
+    .wedding-mele-timeline {
+        display: none !important;
+    }
+}
+
+/* Extra small phones – single column stack stays readable */
+@media (max-width: 390px) {
+    .wedding-mele-our-story-title {
+        font-size: 26px;
+    }
+
+    .wedding-mele-person-name {
+        font-size: 20px;
+    }
+
+    .wedding-mele-person-img {
+        height: 260px;
+        max-width: 140px;
+    }
+
+    .wedding-mele-bubble-content {
+        padding: 18px 14px;
+    }
+}
+
+/* Mobile: softer reveal for Our Story blocks (no slide, just fade) */
+@media (max-width: 992px) {
+    .wedding-mele-our-story-section .wm-reveal {
+        transform: translate3d(0, 12px, 0);
+    }
+
+    .wedding-mele-our-story-section .wm-reveal.wm-reveal--left,
+    .wedding-mele-our-story-section .wm-reveal.wm-reveal--right {
+        transform: translate3d(0, 12px, 0);
+    }
+
+    .wedding-mele-our-story-section .wedding-mele-couple-images.wm-reveal {
+        transform: translate3d(0, 12px, 0);
     }
 }

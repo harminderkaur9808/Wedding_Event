@@ -17,32 +17,33 @@
     font-display: swap;
 }
 
-/* Reveal on scroll (shared) */
+/* Reveal on scroll – smooth timing and easing */
 .wm-reveal {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 20px, 0);
     transition:
-        opacity 700ms ease,
-        transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        opacity 850ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 850ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transition-delay: var(--reveal-delay, 0ms);
     will-change: opacity, transform;
 }
 
 .wm-reveal.wm-reveal--left {
-    transform: translate3d(-26px, 0, 0);
+    transform: translate3d(-28px, 0, 0);
 }
 
 .wm-reveal.wm-reveal--right {
-    transform: translate3d(26px, 0, 0);
+    transform: translate3d(28px, 0, 0);
 }
 
 .wm-reveal.wm-reveal--scale {
-    transform: translate3d(0, 16px, 0) scale(0.985);
+    transform: translate3d(0, 18px, 0) scale(0.98);
 }
 
 .wm-reveal.is-visible {
     opacity: 1;
     transform: none;
+    will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -51,6 +52,44 @@
         transform: none !important;
         transition: none !important;
     }
+}
+
+/* Section skeleton while content/images load */
+.wm-section-loading {
+    position: relative;
+    min-height: 120px;
+}
+
+.wm-section-loading::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        #f1f3f5 0%,
+        #f1f3f5 40%,
+        #e9ecef 50%,
+        #f1f3f5 60%,
+        #f1f3f5 100%
+    );
+    background-size: 200% 100%;
+    animation: wm-skeleton-shimmer 1.5s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.wm-section-loading > * {
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+.wm-section-loaded > * {
+    opacity: 1;
+}
+
+@keyframes wm-skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 /* Reset and Base Styles */
@@ -143,14 +182,14 @@ body {
     font-family: 'Volkhov', serif;
 }
 
-/* Login Button */
+/* Login Button – default white, hover transparent */
 .login-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: transparent;
+    background-color: #ffffff;
     border: 1px solid #ffffff;
-    color: #ffffff;
+    color: #2F4F75;
     padding: 8px 16px;
     border-radius: 5px;
     font-size: 15px;
@@ -163,8 +202,8 @@ body {
 }
 
 .login-btn:hover {
-    background-color: #ffffff;
-    color: #2F4F75;
+    background-color: transparent;
+    color: #ffffff;
 }
 
 .login-icon {

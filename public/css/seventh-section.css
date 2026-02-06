@@ -2,7 +2,7 @@
 .wedding-mele-seventh-section {
     width: 100%;
     position: relative;
-    padding: 80px 0;
+    padding: 50px 0;
     overflow: hidden;
     background-color: #f6f6ff;
 }
@@ -40,7 +40,7 @@
 
 .wedding-mele-seventh-subtitle {
     font-family: 'Britania Vintage', 'Volkhov', serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -64,7 +64,7 @@
 
 .wedding-mele-seventh-title {
     font-family: 'Volkhov', serif;
-    font-size: 46px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin: 0;
@@ -142,7 +142,7 @@
 }
 
 .wedding-mele-seventh-board-day {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -152,7 +152,7 @@
 }
 
 .wedding-mele-seventh-board-year {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -189,21 +189,25 @@
 
 .wedding-mele-seventh-detail-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 34px;
+    height: 34px;
     margin-top: 2px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-mele-seventh-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight: 600;
     color: #2F4F75;
     line-height: 1.7;
 }
-
+.wedding-mele-seventh-detail-text span{
+    
+    font-size: 22px;
+    font-weight: 400;
+}
 /* Entertainment */
 .wedding-mele-seventh-entertainment {
     width: 100%;
@@ -212,9 +216,9 @@
 
 .wedding-mele-seventh-entertainment-title {
     font-family: 'Volkhov', serif;
-    font-size: 22px;
+    font-size: 27px;
     font-weight: 700;
-    color: #2F4F75;
+    color: #2C2C2C;
     margin-bottom: 10px;
 }
 
@@ -291,6 +295,10 @@
     .wedding-mele-seventh-between-img {
         height: 24px;
     }
+    .wedding-mele-seventh-detail-text,
+    .wedding-mele-seventh-detail-text span {
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -303,7 +311,7 @@
     }
 
     .wedding-mele-seventh-detail-text {
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
@@ -320,7 +328,7 @@
         font-size: 20px;
     }
     .wedding-mele-seventh-board-date-text {
-        top: 56px;
+        top: 54px;
         transform: rotate(5deg);
     }
 

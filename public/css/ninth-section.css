@@ -2,7 +2,7 @@
 .wedding-mele-ninth-section {
     width: 100%;
     position: relative;
-    padding: 80px 0;
+    padding: 50px 0;
     overflow: hidden;
     background-color: #ffffff;
 }
@@ -22,7 +22,7 @@
 
 .wedding-mele-ninth-subtitle {
     font-family: 'Britania Vintage', 'Volkhov', serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -46,7 +46,7 @@
 
 .wedding-mele-ninth-title {
     font-family: 'Volkhov', serif;
-    font-size: 46px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin: 0;
@@ -114,7 +114,7 @@
 
 .wedding-mele-ninth-board-date-text {
     position: absolute;
-    top: 81px;
+    top: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -134,7 +134,7 @@
 }
 
 .wedding-mele-ninth-board-day {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -144,7 +144,7 @@
 }
 
 .wedding-mele-ninth-board-year {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -173,21 +173,25 @@
 
 .wedding-mele-ninth-detail-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 34px;
+    height: 34px;
     margin-top: 2px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-mele-ninth-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight: 600;
     color: #2F4F75;
     line-height: 1.7;
 }
-
+.wedding-mele-ninth-detail-text span{
+    
+    font-size: 20px;
+    font-weight: 400;
+}
 /* Entertainment */
 .wedding-mele-ninth-entertainment {
     width: 100%;
@@ -197,9 +201,9 @@
 
 .wedding-mele-ninth-entertainment-title {
     font-family: 'Volkhov', serif;
-    font-size: 18px;
+    font-size: 27px;
     font-weight: 700;
-    color: #2F4F75;
+    color: #2C2C2C;
 }
 
 .wedding-mele-ninth-entertainment-grid {
@@ -213,7 +217,7 @@
 .wedding-mele-ninth-entertainment-col {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
 }
 
 .wedding-mele-ninth-nameplate {
@@ -312,6 +316,14 @@
     .wedding-mele-ninth-between-img {
         height: 24px;
     }
+    .wedding-mele-ninth-detail-text,
+        .wedding-mele-ninth-detail-text span {
+        font-size: 14px;
+    }
+    .wedding-mele-ninth-detail-icon {
+    width: 28px;
+    height: 28px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -324,7 +336,7 @@
     }
 
     .wedding-mele-ninth-detail-text {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .wedding-mele-ninth-entertainment-title {
@@ -333,6 +345,9 @@
 
     .wedding-mele-ninth-nameplate-text {
         font-size: 12px;
+    }
+    .wedding-mele-seventh-entertainment-title {
+    font-size: 20px;
     }
 }
 
@@ -343,13 +358,13 @@
         top: 13px;
     }
     .wedding-mele-ninth-board-day {
-        font-size: 20px;
+        font-size: 21px;
     }
     .wedding-mele-ninth-board-month {
-        font-size: 24px;
+        font-size: 25px;
     }
     .wedding-mele-ninth-board-year {
-        font-size: 18px;
+        font-size:20px;
     }
     .wedding-mele-ninth-board-date-text {
         top: 56px;

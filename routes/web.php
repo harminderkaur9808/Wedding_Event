@@ -6,8 +6,6 @@ use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\WelcomeController;
 
-Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-
 // Test email route – sends a test email to amit.owninfotech@gmail.com (remove or protect in production)
 Route::get('/testemail', function () {
     $to = 'amit.owninfotech@gmail.com';
@@ -34,33 +32,10 @@ Route::get('/testemail', function () {
 })->name('testemail');
 
 use App\Http\Controllers\PicturesVideosController;
-
-Route::get('/pictures-videos', [PicturesVideosController::class, 'index'])->name('pictures_videos');
-Route::get('/pictures-videos/{category}', [PicturesVideosController::class, 'showCategory'])->name('pictures_videos.category');
-
-// Book Appointments Route
 use App\Http\Controllers\BookAppointmentsController;
-Route::get('/book-appointments', [BookAppointmentsController::class, 'index'])->name('book.appointments');
-
-// Ask the Host (public page; post actions require auth)
 use App\Http\Controllers\AskTheHostController;
-
-Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.the.host');
-Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store')->middleware('auth');
-Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store')->middleware('auth');
-
-// Local Attractions
 use App\Http\Controllers\LocalAttractionsController;
-
-Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
-
-// Updates by Family
 use App\Http\Controllers\UpdatesByFamilyController;
-
-Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
-Route::post('/updates-by-family', [UpdatesByFamilyController::class, 'store'])->name('updates.by.family.store')->middleware('auth');
-Route::patch('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'update'])->name('updates.by.family.update')->middleware('auth');
-Route::delete('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'destroy'])->name('updates.by.family.destroy')->middleware('auth');
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -83,7 +58,21 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserDashboardController;
 
+// Protected pages: only logged-in users can access; guests are redirected to login
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+    Route::get('/pictures-videos', [PicturesVideosController::class, 'index'])->name('pictures_videos');
+    Route::get('/pictures-videos/{category}', [PicturesVideosController::class, 'showCategory'])->name('pictures_videos.category');
+    Route::get('/book-appointments', [BookAppointmentsController::class, 'index'])->name('book.appointments');
+    Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.the.host');
+    Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store');
+    Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store');
+    Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
+    Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
+    Route::post('/updates-by-family', [UpdatesByFamilyController::class, 'store'])->name('updates.by.family.store');
+    Route::patch('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'update'])->name('updates.by.family.update');
+    Route::delete('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'destroy'])->name('updates.by.family.destroy');
+
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
     Route::post('/admin/profile/image', [AdminDashboardController::class, 'updateProfileImage'])->name('admin.profile.image');

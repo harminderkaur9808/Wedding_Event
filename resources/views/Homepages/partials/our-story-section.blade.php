@@ -11,7 +11,7 @@
 
     <div class="container">
         <!-- Title Section -->
-        <div class="wedding-mele-story-title-section">
+        <div class="wedding-mele-story-title-section wm-reveal" style="--reveal-delay: 0ms;">
             <h3 class="wedding-mele-bride-groom-text">{{ optional($sections['our_story'] ?? null)->subtitle ?? 'Bride & Groom' }}</h3>
             <div class="wedding-mele-title-decorative">
                 <img src="{{ asset('Images/Home/SecSection/betweentxtframe.png') }}" alt="Decorative Element" class="wedding-mele-decorative-img">
@@ -24,7 +24,7 @@
             <!-- Center Content -->
             <div class="wedding-mele-story-center-content">
                 <!-- Vickram Section -->
-                <div class="wedding-mele-person-section wedding-mele-vickram-section">
+                <div class="wedding-mele-person-section wedding-mele-vickram-section wm-reveal" style="--reveal-delay: 0ms;">
                     <div class="wedding-mele-text-bubble wedding-mele-left-bubble">
                         <div class="wedding-mele-bubble-content">
                             @php $ourStory = $sections['our_story'] ?? null; @endphp
@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- Couple Images -->
-                <div class="wedding-mele-couple-images">
+                <div class="wedding-mele-couple-images wm-reveal" style="--reveal-delay: 150ms;">
                     <div class="wedding-mele-person-image wedding-mele-vickram-image">
                         @php $groomImg = $ourStory?->getExtra('groom_image'); @endphp
                         <img src="{{ $groomImg ? asset('storage/' . $groomImg) : asset('Images/Home/SecSection/Vickram_img.png') }}" alt="{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}" class="wedding-mele-person-img">
@@ -53,7 +53,7 @@
                 </div>
 
                 <!-- Nisha Section -->
-                <div class="wedding-mele-person-section wedding-mele-nisha-section">
+                <div class="wedding-mele-person-section wedding-mele-nisha-section wm-reveal" style="--reveal-delay: 280ms;">
                     <div class="wedding-mele-text-bubble wedding-mele-right-bubble">
                         <div class="wedding-mele-bubble-content">
                             <h4 class="wedding-mele-person-name">{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}</h4>

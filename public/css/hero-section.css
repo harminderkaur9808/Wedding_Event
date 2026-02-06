@@ -567,6 +567,19 @@
     }
 }
 
+/* iPad / iPad Mini: slider height 47vh */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .wedding-mele-carousel-item {
+        height: 47vh;
+        max-height: 47vh;
+    }
+
+    .wedding-mele-slide-image {
+        height: 47vh;
+        max-height: 47vh;
+    }
+}
+
 @media (max-width: 767.98px) {
     .wedding-mele-carousel-item {
         height: 60vh;

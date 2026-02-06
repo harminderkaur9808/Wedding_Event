@@ -28,7 +28,7 @@
 
 .wedding-mele-blessings-text {
     font-family: 'Britaniya', 'Britania Vintage', 'Volkhov', serif !important;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -52,7 +52,7 @@
 
 .wedding-mele-shagun-text {
     font-family: 'Volkhov', serif;
-    font-size: 42px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin-top: 0px;
@@ -103,20 +103,22 @@
 
 .wedding-mele-invitation-title {
     font-family: 'Volkhov', serif;
-    font-size: 48px;
+    font-size: 45px;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     letter-spacing: 1px;
 }
 
+
 .wedding-mele-invitation-intro {
-    font-family: 'Jost', sans-serif;
-    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
     font-weight: 400;
-    color: #E0E0E0;
-    margin-bottom: 30px;
+    color: #ffffff;
+    margin-bottom: 10px;
     line-height: 1.6;
+
 }
 
 .wedding-mele-invitation-details {
@@ -133,20 +135,23 @@
 
 .wedding-mele-detail-icon {
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
+    width:34px;
+    height: 34px;
     display: block;
     object-fit: contain;
 }
 
 .wedding-mele-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: #E0E0E0;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
     line-height: 1.5;
 }
-
+.wedding-mele-detail-text span{
+    font-size: 20px;
+    font-weight: 300;
+}
 /* Right Section - Image */
 .wedding-mele-invitation-right {
     flex: 1;
@@ -198,7 +203,7 @@
 
 .wedding-mele-fourth-board-date-text {
     position: absolute;
-    top: 81px;
+    top: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -218,7 +223,7 @@
 }
 
 .wedding-mele-fourth-board-day {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -228,7 +233,7 @@
 }
 
 .wedding-mele-fourth-board-year {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -375,18 +380,25 @@
 
     .wedding-mele-invitation-title {
         font-size: 36px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
 
     .wedding-mele-invitation-intro {
         font-size: 14px;
-        margin-bottom: 25px;
+        margin-bottom: 05px;
     }
 
     .wedding-mele-detail-text {
         font-size: 14px;
     }
-
+    .wedding-mele-detail-text span {
+    font-size: 14px;
+    font-weight: 300;
+}
+.wedding-mele-detail-icon {
+    width: 28px;
+    height: 28px;
+}
     .wedding-mele-invitation-left {
         order: 2;
     }
@@ -411,6 +423,17 @@
         height: 100%;
         border-radius: 20px;
     }
+    .wedding-mele-fourth-board-day {
+    font-size: 21px;
+}
+
+.wedding-mele-fourth-board-month {
+    font-size: 25px;
+}
+
+.wedding-mele-fourth-board-year {
+    font-size: 20px;
+}
 }
 
 @media (max-width: 576px) {
@@ -493,7 +516,7 @@
     }
 
     .wedding-mele-detail-text {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .wedding-mele-invitation-right {
@@ -504,7 +527,7 @@
 /* Mobile: board / clip and date text on fourth section image */
 @media only screen and (max-width: 767px) {
     .wedding-mele-fourth-board-date-text {
-        top: 56px;
+        top: 54px;
     }
 
     .wedding-mele-fourth-dynamic-board {

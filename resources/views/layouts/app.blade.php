@@ -47,6 +47,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="{{ asset('js/header.js') }}"></script>
+    <script src="{{ asset('js/homepage-skeletons.js') }}"></script>
     <script src="{{ asset('js/our-story-animation.js') }}"></script>
     <script src="{{ asset('js/countdown.js') }}"></script>
     <script src="{{ asset('js/section-reveal.js') }}"></script>

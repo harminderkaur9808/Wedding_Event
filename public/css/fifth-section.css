@@ -29,7 +29,7 @@
 
 .wedding-mele-sacred-ritual-text {
     font-family: 'Britania Vintage', 'Volkhov', serif;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: normal;
     font-style: italic;
     color: #2F4F75;
@@ -53,7 +53,7 @@
 
 .wedding-mele-vatna-text {
     font-family: 'Volkhov', serif;
-    font-size: 42px;
+    font-size: 45px;
     font-weight: 700;
     color: #2F4F75;
     margin-top: 0px;
@@ -143,7 +143,7 @@
 }
 
 .wedding-mele-fifth-board-date-text {
-    top: 81px;
+    top: 70px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -164,7 +164,7 @@
 }
 
 .wedding-mele-fifth-board-day {
-    font-size: 26px;
+    font-size: 36px;
     font-weight: 700;
 }
 
@@ -174,7 +174,7 @@
 }
 
 .wedding-mele-fifth-board-year {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -256,19 +256,23 @@
 
 .wedding-mele-fifth-detail-icon {
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
     margin-top: 2px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-mele-fifth-detail-text {
-    font-family: 'Volkhov', serif;
-    font-size: 16px;
-    font-weight: 400;
+    font-family: 'Nunito', serif;
+    font-size: 22px;
+    font-weight: 600;
     color: #2F4F75;
     line-height: 1.6;
+}
+.wedding-mele-fifth-detail-text span{
+    font-size: 20px;
+    font-weight: 300;
 }
 
 /* Responsive Design */
@@ -284,7 +288,7 @@
     .wedding-mele-fifth-main-box {
         flex-direction: column;
         padding: 0;
-        gap: 0;
+        gap: 20px;
         border-radius: 20px;
         overflow: hidden;
     }
@@ -360,6 +364,14 @@
     .wedding-mele-fifth-detail-text {
         font-size: 14px;
     }
+        .wedding-mele-fifth-detail-text span {
+    font-size: 14px;
+    font-weight: 300;
+}
+.wedding-mele-fifth-detail-icon {
+    width: 28px;
+    height: 28px;
+}
 }
 
 @media (max-width: 576px) {
@@ -406,7 +418,7 @@
     }
 
     .wedding-mele-fifth-detail-text {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .wedding-mele-fifth-pinned-note {
@@ -436,7 +448,7 @@
         font-size: 20px;
     }
     .wedding-mele-fifth-board-date-text {
-        top: 56px;
+        top: 54px;
         display: flex;
         flex-direction: column;
         align-items: center;

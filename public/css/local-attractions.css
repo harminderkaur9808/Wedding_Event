@@ -115,6 +115,78 @@
     max-width: 1200px;
 }
 
+/* Row wrapper for items */
+.wm-la-item-row {
+    margin-bottom: 42px;
+}
+
+/* Full-width background for 2nd, 4th, 6th, ... sections (Local_attractions_09.png) */
+.wm-la-item-row--with-bg {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding: 60px 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* Light overlay so content stays readable; pattern still visible */
+.wm-la-item-row--with-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    z-index: 0;
+}
+
+.wm-la-item-row--with-bg .wm-la-list-container--inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.wm-la-item-row--with-bg .wm-la-item {
+    margin-bottom: 0;
+}
+
+.wm-la-item-row--with-decor {
+    position: relative;
+}
+
+.wm-la-item-row--with-decor .wm-la-item {
+    margin-bottom: 0;
+}
+
+.wm-la-decor {
+    position: absolute;
+    top: 9%;
+    transform: translateY(-50%);
+    width: auto;
+    max-width: 188px;
+    max-height: 357px;
+    object-fit: contain;
+    opacity: 14.85;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.wm-la-decor--left {
+    left: -17%;
+}
+
+.wm-la-decor--right {
+    right: -100px;
+}
+
+.wm-la-item-row--with-decor .wm-la-item {
+    position: relative;
+    z-index: 1;
+}
+
 .wm-la-item {
     display: grid;
     grid-template-columns: 1fr 1.05fr;
@@ -226,6 +298,16 @@
 }
 
 @media (max-width: 991.98px) {
+    .wm-la-decor {
+        max-width: 90px;
+        max-height: 200px;
+    }
+    .wm-la-decor--left {
+        left: -50px;
+    }
+    .wm-la-decor--right {
+        right: -50px;
+    }
     .wm-la-item,
     .wm-la-item--right {
         grid-template-columns: 1fr;
@@ -242,6 +324,12 @@
 @media (max-width: 575.98px) {
     .wm-la-list {
         padding: 50px 0 70px;
+    }
+    .wm-la-item-row--with-bg {
+        padding: 40px 16px;
+    }
+    .wm-la-decor {
+        display: none;
     }
     .wm-la-item-img {
         height: 200px;
@@ -270,11 +358,11 @@
     transform: translateY(0);
 }
 
-/* Stagger list items slightly for a softer look */
-.wm-la-animate.wm-la-in-view:nth-child(1) { transition-delay: 0s; }
-.wm-la-animate.wm-la-in-view:nth-child(2) { transition-delay: 0.08s; }
-.wm-la-animate.wm-la-in-view:nth-child(3) { transition-delay: 0.16s; }
-.wm-la-animate.wm-la-in-view:nth-child(4) { transition-delay: 0.24s; }
-.wm-la-animate.wm-la-in-view:nth-child(5) { transition-delay: 0.32s; }
-.wm-la-animate.wm-la-in-view:nth-child(6) { transition-delay: 0.4s; }
-.wm-la-animate.wm-la-in-view:nth-child(n+7) { transition-delay: 0.48s; }
+/* Stagger list items by index (works with decor wrapper on odd items) */
+.wm-la-item-index-1.wm-la-in-view { transition-delay: 0s; }
+.wm-la-item-index-2.wm-la-in-view { transition-delay: 0.08s; }
+.wm-la-item-index-3.wm-la-in-view { transition-delay: 0.16s; }
+.wm-la-item-index-4.wm-la-in-view { transition-delay: 0.24s; }
+.wm-la-item-index-5.wm-la-in-view { transition-delay: 0.32s; }
+.wm-la-item-index-6.wm-la-in-view { transition-delay: 0.4s; }
+.wm-la-animate.wm-la-in-view:not(.wm-la-item-index-1):not(.wm-la-item-index-2):not(.wm-la-item-index-3):not(.wm-la-item-index-4):not(.wm-la-item-index-5):not(.wm-la-item-index-6) { transition-delay: 0.48s; }
