@@ -843,7 +843,9 @@
                                                     <span class="admin-dashboard-media-badge">Admin</span>
                                                 @endif
                                             </h3>
-                                            <p class="admin-dashboard-media-user-email">{{ $userMedia['user_email'] }}</p>
+                                            @if(!empty($userMedia['user_email']))
+                                                <p class="admin-dashboard-media-user-email">{{ $userMedia['user_email'] }}</p>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -1290,20 +1292,19 @@ function togglePassword(inputId) {
 
 // Media Files Filter Function
 function filterMedia() {
-    const userId = document.getElementById('userFilter').value;
-    const category = document.getElementById('categoryFilter').value;
+    const userFilterEl = document.getElementById('userFilter');
+    const categoryFilterEl = document.getElementById('categoryFilter');
+    let userId = userFilterEl ? userFilterEl.value : 'all';
+    const category = categoryFilterEl ? categoryFilterEl.value : 'all';
     const url = new URL(window.location.href);
-    
-    // Always set user_id (default is admin's ID, but can select 'all')
-    if (userId === 'all') {
-        url.searchParams.set('user_id', 'all');
-    } else {
-        url.searchParams.set('user_id', userId);
+
+    // When a category is selected, show all users' media for that category (user filter ignored)
+    if (category !== 'all') {
+        userId = 'all';
     }
-    
-    // Always set category (default is first category)
+    url.searchParams.set('user_id', userId);
     url.searchParams.set('category', category);
-    
+
     window.location.href = url.toString();
 }
 
@@ -1311,11 +1312,13 @@ function filterMedia() {
 function openAddUserModal() {
     document.getElementById('addUserModal').classList.add('active');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('admin-add-user-modal-open');
 }
 
 function closeAddUserModal() {
     document.getElementById('addUserModal').classList.remove('active');
     document.body.style.overflow = '';
+    document.body.classList.remove('admin-add-user-modal-open');
     // Reset form
     document.getElementById('addUserForm').reset();
 }

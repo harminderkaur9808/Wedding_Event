@@ -1428,6 +1428,11 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 }
 
 /* Modal Styles */
+/* Hide main header when Create New User modal is open */
+body.admin-add-user-modal-open .wedding-header {
+    display: none !important;
+}
+
 .admin-dashboard-modal {
     position: fixed;
     top: 0;

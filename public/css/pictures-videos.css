@@ -235,6 +235,31 @@
     }
 }
 
+/* Category Page - Back button */
+.wm-pv-category-back-wrap {
+    margin-bottom: 24px;
+}
+
+.wm-pv-category-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2F4F75;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.wm-pv-category-back-btn:hover {
+    color: #1e3a52;
+}
+
+.wm-pv-category-back-icon {
+    flex-shrink: 0;
+}
+
 /* Category Page Styles */
 .wm-pv-category-controls {
     display: flex;

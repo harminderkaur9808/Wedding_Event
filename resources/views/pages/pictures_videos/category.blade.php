@@ -35,6 +35,15 @@
     <!-- Gallery Section with Tabs -->
     <section class="wm-pv-gallery-section">
         <div class="container">
+            <!-- Back to Pictures & Videos -->
+            <div class="wm-pv-category-back-wrap">
+                <a href="{{ route('pictures_videos') }}" class="wm-pv-category-back-btn" aria-label="Back to Pictures and Videos">
+                    <svg class="wm-pv-category-back-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back to Pictures &amp; Videos
+                </a>
+            </div>
             <!-- Tabs and Add Media Button -->
             <div class="wm-pv-category-controls">
                 <div class="wm-pv-category-tabs">

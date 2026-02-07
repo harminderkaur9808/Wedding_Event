@@ -690,12 +690,16 @@ class AdminDashboardController extends Controller
                 ->get()
             : collect();
 
+        // When a category is selected: show all media for that category from all users (no user-wise grouping)
+        $showAllByCategory = $selectedCategory !== 'all';
+
         // Organize media by user (filter by selected user and category)
         $mediaByUser = [];
         foreach ($allMedia as $media) {
             $userId = $media->user_id;
 
-            if ($selectedUserId !== 'all' && (string) $userId !== (string) $selectedUserId) {
+            // If a category is picked, ignore user filter and show all users' media for that category
+            if (!$showAllByCategory && $selectedUserId !== 'all' && (string) $userId !== (string) $selectedUserId) {
                 continue;
             }
 
@@ -706,12 +710,19 @@ class AdminDashboardController extends Controller
             $userName = $media->user ? $media->user->first_name . ' ' . $media->user->last_name : 'Unknown User';
             $userEmail = $media->email;
 
+            if ($showAllByCategory) {
+                // Single aggregated block for this category (key used only for structure)
+                $userId = '_all_';
+                $userName = 'All Users';
+                $userEmail = '';
+            }
+
             if (!isset($mediaByUser[$userId])) {
                 $mediaByUser[$userId] = [
                     'user_id' => $userId,
                     'user_name' => $userName,
                     'user_email' => $userEmail,
-                    'is_admin' => $media->user && $media->user->isAdmin(),
+                    'is_admin' => $showAllByCategory ? false : ($media->user && $media->user->isAdmin()),
                     'categories' => []
                 ];
             }
@@ -747,11 +758,16 @@ class AdminDashboardController extends Controller
             }
         }
 
-        uasort($mediaByUser, function ($a, $b) {
-            if ($a['is_admin'] && !$b['is_admin']) return -1;
-            if (!$a['is_admin'] && $b['is_admin']) return 1;
-            return strcmp($a['user_name'], $b['user_name']);
-        });
+        if (!$showAllByCategory) {
+            uasort($mediaByUser, function ($a, $b) {
+                if ($a['is_admin'] && !$b['is_admin']) return -1;
+                if (!$a['is_admin'] && $b['is_admin']) return 1;
+                return strcmp($a['user_name'], $b['user_name']);
+            });
+        }
+
+        // When showing by category, user filter is ignored; keep dropdown in sync
+        $selectedUserIdForView = $showAllByCategory ? 'all' : $selectedUserId;
 
         return view('AdminArea.AdminDashboard', [
             'user' => $admin,
@@ -760,7 +776,7 @@ class AdminDashboardController extends Controller
             'usersWithMedia' => $usersWithMedia,
             'userMediaCounts' => $userMediaCounts,
             'categoriesWithCount' => $categoriesWithCount,
-            'selectedUserId' => $selectedUserId,
+            'selectedUserId' => $selectedUserIdForView,
             'selectedCategory' => $selectedCategory
         ]);
     }

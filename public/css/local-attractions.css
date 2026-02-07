@@ -73,9 +73,9 @@
 }
 
 .wm-la-hero-title {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Volkhov', serif;
     font-size: clamp(32px, 4vw, 52px);
-    font-weight: 700;
+    font-weight: 500;
     color: #ffffff;
     margin: 0;
     line-height: 1.2;
