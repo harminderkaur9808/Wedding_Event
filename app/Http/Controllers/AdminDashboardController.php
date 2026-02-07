@@ -306,7 +306,7 @@ class AdminDashboardController extends Controller
         $user->profile_image = $imageName;
         $user->save();
 
-        $url = asset('storage/profile_images/' . $imageName);
+        $url = secure_media_url('profile_images/' . $imageName);
 
         return response()->json([
             'success' => true,
@@ -316,7 +316,59 @@ class AdminDashboardController extends Controller
     }
 
     /**
-     * Store a new note (admin only). Optionally share with selected admins.
+     * Show create note page (admin only).
+     */
+    public function createNotePage()
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $adminUsers = User::where('id', '!=', $user->id)
+            ->where(function ($q) {
+                $q->where('is_admin', true)->orWhere('role', 'admin');
+            })
+            ->orderBy('first_name')
+            ->get(['id', 'first_name', 'last_name', 'email']);
+        return view('AdminArea.notes.form', [
+            'user' => $user,
+            'note' => null,
+            'adminUsers' => $adminUsers,
+            'tagOptions' => Note::notificationTagOptions(),
+        ]);
+    }
+
+    /**
+     * Show edit note page (creator only).
+     */
+    public function editNotePage($id)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $note = Note::findOrFail($id);
+        $canEdit = $note->user_id === $user->id || $note->sharedWith()->where('users.id', $user->id)->exists();
+        if (!$canEdit) {
+            return redirect()->route('admin.dashboard', ['tab' => 'notes'])->with('error', 'You do not have permission to edit this note.');
+        }
+        $adminUsers = User::where('id', '!=', $user->id)
+            ->where(function ($q) {
+                $q->where('is_admin', true)->orWhere('role', 'admin');
+            })
+            ->orderBy('first_name')
+            ->get(['id', 'first_name', 'last_name', 'email']);
+        $note->load('sharedWith');
+        return view('AdminArea.notes.form', [
+            'user' => $user,
+            'note' => $note,
+            'adminUsers' => $adminUsers,
+            'tagOptions' => Note::notificationTagOptions(),
+        ]);
+    }
+
+    /**
+     * Store a new note (admin only). Optionally share with selected admins and tags.
      */
     public function storeNote(Request $request)
     {
@@ -324,16 +376,22 @@ class AdminDashboardController extends Controller
         if (!$user || !$user->isAdmin()) {
             return redirect()->route('login')->with('error', 'Access denied.');
         }
+        $validTags = array_keys(Note::notificationTagOptions());
         $request->validate([
-            'title' => 'required|string|max:255',
             'content' => 'nullable|string|max:10000',
             'share_with' => 'nullable|array',
             'share_with.*' => 'integer|exists:users,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|in:' . implode(',', $validTags),
         ]);
+        $content = $request->content ?? '';
+        $title = $content !== '' ? Str::limit(preg_replace('/\s+/', ' ', strip_tags($content)), 50) : 'Note';
+        $tags = $request->tags ?? [];
         $note = Note::create([
             'user_id' => $user->id,
-            'title' => $request->title,
-            'content' => $request->content ?? '',
+            'title' => $title,
+            'content' => $content,
+            'tags' => array_values(array_unique($tags)),
         ]);
         $shareWith = $request->share_with ?? [];
         $adminIds = User::whereIn('id', $shareWith)
@@ -356,17 +414,22 @@ class AdminDashboardController extends Controller
             return redirect()->route('login')->with('error', 'Access denied.');
         }
         $note = Note::findOrFail($id);
-        if ($note->user_id !== $user->id) {
-            return back()->with('error', 'You can only edit your own notes.');
+        $canEdit = $note->user_id === $user->id || $note->sharedWith()->where('users.id', $user->id)->exists();
+        if (!$canEdit) {
+            return back()->with('error', 'You do not have permission to edit this note.');
         }
+        $validTags = array_keys(Note::notificationTagOptions());
         $request->validate([
-            'title' => 'required|string|max:255',
             'content' => 'nullable|string|max:10000',
             'share_with' => 'nullable|array',
             'share_with.*' => 'integer|exists:users,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|in:' . implode(',', $validTags),
         ]);
-        $note->title = $request->title;
-        $note->content = $request->content ?? '';
+        $content = $request->content ?? '';
+        $note->title = $content !== '' ? Str::limit(preg_replace('/\s+/', ' ', strip_tags($content)), 50) : 'Note';
+        $note->content = $content;
+        $note->tags = array_values(array_unique($request->tags ?? []));
         $note->save();
         $shareWith = $request->share_with ?? [];
         $adminIds = User::whereIn('id', $shareWith)
@@ -389,8 +452,9 @@ class AdminDashboardController extends Controller
             return redirect()->route('login')->with('error', 'Access denied.');
         }
         $note = Note::findOrFail($id);
-        if ($note->user_id !== $user->id) {
-            return back()->with('error', 'You can only delete your own notes.');
+        $canDelete = $note->user_id === $user->id || $note->sharedWith()->where('users.id', $user->id)->exists();
+        if (!$canDelete) {
+            return back()->with('error', 'You do not have permission to delete this note.');
         }
         $note->delete();
         return redirect()->route('admin.dashboard', ['tab' => 'notes'])->with('success', 'Note deleted.');
@@ -458,7 +522,93 @@ class AdminDashboardController extends Controller
         }
 
         return redirect()->route('admin.dashboard', ['tab' => 'all-users'])
-            ->with('success', 'User ' . $user->first_name . ' ' . $user->last_name . ' has been rejected. An email notification has been sent.');
+            ->with('success', 'User ' . $user->first_name . ' ' . $user->last_name . ' has been blocked. An email notification has been sent.');
+    }
+
+    /**
+     * Show edit user form (admin editing another user's profile).
+     */
+    public function editUserPage($id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $editUser = User::findOrFail($id);
+        return view('AdminArea.edit_user', [
+            'user' => $admin,
+            'editUser' => $editUser,
+        ]);
+    }
+
+    /**
+     * Update a user's profile (admin).
+     */
+    public function updateUser(Request $request, $id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $editUser = User::findOrFail($id);
+
+        $familyRelationOptions = 'father,mother,brother,sister,uncle,aunt,cousin,grandfather,grandmother,nephew,niece,brother_in_law,sister_in_law,father_in_law,mother_in_law,friend,other';
+        $rules = [
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'family_relation' => 'nullable|string|in:' . $familyRelationOptions,
+            'password' => 'nullable|string|min:6|confirmed',
+            'status' => 'nullable|string|in:active,inactive',
+        ];
+        if ($editUser->isAdmin()) {
+            $rules['role'] = 'nullable|string|in:admin,user';
+        }
+        $request->validate($rules);
+
+        $editUser->first_name = $request->first_name;
+        $editUser->last_name = $request->last_name;
+        $editUser->email = $request->email;
+        $editUser->family_relation = $request->family_relation ?: null;
+        $editUser->status = $request->status ?: 'active';
+        if ($request->filled('password')) {
+            $editUser->password = Hash::make($request->password);
+        }
+        if ($editUser->isAdmin() && $request->has('role')) {
+            $editUser->role = $request->role;
+            $editUser->is_admin = ($request->role === 'admin');
+        }
+        $editUser->save();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'all-users'])
+            ->with('success', 'User ' . $editUser->first_name . ' ' . $editUser->last_name . ' has been updated.');
+    }
+
+    /**
+     * Delete a user (admin). Cannot delete self or the last admin.
+     */
+    public function destroyUser($id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+        $user = User::findOrFail($id);
+
+        if ($user->id === $admin->id) {
+            return back()->with('error', 'You cannot delete your own account.');
+        }
+        if ($user->isAdmin()) {
+            $adminCount = User::where('is_admin', true)->orWhere('role', 'admin')->count();
+            if ($adminCount <= 1) {
+                return back()->with('error', 'Cannot delete the last admin.');
+            }
+        }
+
+        $name = $user->first_name . ' ' . $user->last_name;
+        $user->delete();
+        return redirect()->route('admin.dashboard', ['tab' => 'all-users'])
+            ->with('success', 'User ' . $name . ' has been deleted.');
     }
 
     /**
@@ -573,7 +723,7 @@ class AdminDashboardController extends Controller
                         $mediaByUser[$userId]['categories'][$media->category]['images'][] = [
                             'id' => $media->id,
                             'path' => $path,
-                            'url' => asset('storage/user_media/' . $path),
+                            'url' => secure_media_url('user_media/' . $path),
                             'category' => $media->category,
                             'uploaded_at' => $media->created_at
                         ];
@@ -588,7 +738,7 @@ class AdminDashboardController extends Controller
                         $mediaByUser[$userId]['categories'][$media->category]['videos'][] = [
                             'id' => $media->id,
                             'path' => $path,
-                            'url' => asset('storage/user_media/' . $path),
+                            'url' => secure_media_url('user_media/' . $path),
                             'category' => $media->category,
                             'uploaded_at' => $media->created_at
                         ];
@@ -885,6 +1035,7 @@ class AdminDashboardController extends Controller
             'store_name' => '',
             'instruction' => 'Call at least one month ahead and book your appointments.',
             'address' => '',
+            'phone_number' => '',
             'distance' => '',
             'services' => '',
         ]);
@@ -906,10 +1057,11 @@ class AdminDashboardController extends Controller
             'store_name' => 'nullable|string|max:255',
             'instruction' => 'nullable|string',
             'address' => 'nullable|string|max:500',
+            'phone_number' => 'nullable|string|max:32',
             'distance' => 'nullable|string|max:500',
             'services' => 'nullable|string|max:500',
         ]);
-        $entry->update($request->only(['store_name', 'instruction', 'address', 'distance', 'services']));
+        $entry->update($request->only(['store_name', 'instruction', 'address', 'phone_number', 'distance', 'services']));
         return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $entry->section])
             ->with('success', 'Entry updated.');
     }

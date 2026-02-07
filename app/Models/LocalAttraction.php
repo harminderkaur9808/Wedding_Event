@@ -31,7 +31,7 @@ class LocalAttraction extends Model
         if (!Storage::disk('public')->exists($this->image_path)) {
             return null;
         }
-        return asset('storage/' . ltrim($this->image_path, '/'));
+        return secure_media_url(ltrim($this->image_path, '/'));
     }
 }
 

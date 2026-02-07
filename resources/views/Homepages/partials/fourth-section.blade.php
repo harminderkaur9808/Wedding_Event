@@ -65,7 +65,7 @@
                 <div class="wedding-mele-invitation-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-right-image-wrapper">
                         @php $fourthImg = $fourth?->getExtra('image'); @endphp
-                        <img src="{{ $fourthImg ? asset('storage/' . $fourthImg) : asset('Images/Home/Forth_sec/Foth_sec_right_frame.png') }}" alt="Couple" class="wedding-mele-right-image">
+                        <img src="{{ $fourthImg ? secure_media_url($fourthImg) : asset('Images/Home/Forth_sec/Foth_sec_right_frame.png') }}" alt="Couple" class="wedding-mele-right-image">
                         <!-- Board / clip on image + date text (same as other sections) -->
                         <div class="wedding-mele-fourth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-fourth-dynamic-board">

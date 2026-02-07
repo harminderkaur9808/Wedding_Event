@@ -8,6 +8,9 @@
 
     <title>@yield('title', 'Wedding Event - Vickram & Nisha')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('Images/Web_fab/wedding-favicon.png') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

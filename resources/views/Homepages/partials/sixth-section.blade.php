@@ -55,7 +55,7 @@
                 <div class="wedding-mele-sixth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-sixth-image-wrapper">
                         @php $sixthImg = $sixth?->getExtra('image'); @endphp
-                        <img src="{{ $sixthImg ? asset('storage/' . $sixthImg) : asset('Images/Home/sixthSec/Sixth-section-img-frame-right.png') }}" alt="Mehndi" class="wedding-mele-sixth-image">
+                        <img src="{{ $sixthImg ? secure_media_url($sixthImg) : asset('Images/Home/sixthSec/Sixth-section-img-frame-right.png') }}" alt="Mehndi" class="wedding-mele-sixth-image">
                         <!-- Board on image + date text (same as Vatna / Sangeet) -->
                         <div class="wedding-mele-sixth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-sixth-dynamic-board">

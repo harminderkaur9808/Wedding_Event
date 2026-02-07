@@ -23,7 +23,7 @@
                 <div class="wedding-mele-fifth-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-vatna-image-wrapper">
                         @php $fifthImg = $fifth?->getExtra('image'); @endphp
-                        <img src="{{ $fifthImg ? asset('storage/' . $fifthImg) : asset('Images/Home/fifthsec/Fifthsection_Vatna _framer.png') }}" alt="Vatna Ceremony" class="wedding-mele-vatna-image">
+                        <img src="{{ $fifthImg ? secure_media_url($fifthImg) : asset('Images/Home/fifthsec/Fifthsection_Vatna _framer.png') }}" alt="Vatna Ceremony" class="wedding-mele-vatna-image">
                         <!-- wedding-mele-fifth-board-on-image: board image first, then date text under it -->
                         <div class="wedding-mele-fifth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="Date board" class="wedding-mele-fifth-dynamic-board">

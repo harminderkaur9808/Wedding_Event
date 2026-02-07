@@ -67,7 +67,7 @@
                 <div class="wedding-mele-ninth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-ninth-image-wrapper">
                         @php $ninthImg = $ninth?->getExtra('image'); @endphp
-                        <img src="{{ $ninthImg ? asset('storage/' . $ninthImg) : asset('Images/Home/ninthSec/Jaggo_Gidha%20_and_Bhangra_Night.png') }}" alt="Jaggo, Gidha and Bhangra Night" class="wedding-mele-ninth-image">
+                        <img src="{{ $ninthImg ? secure_media_url($ninthImg) : asset('Images/Home/ninthSec/Jaggo_Gidha%20_and_Bhangra_Night.png') }}" alt="Jaggo, Gidha and Bhangra Night" class="wedding-mele-ninth-image">
                         <!-- Board on image + date text (same as Vatna / Mehndi / Sangeet) -->
                         <div class="wedding-mele-ninth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-ninth-dynamic-board">

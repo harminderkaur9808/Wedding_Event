@@ -36,6 +36,8 @@ use App\Http\Controllers\BookAppointmentsController;
 use App\Http\Controllers\AskTheHostController;
 use App\Http\Controllers\LocalAttractionsController;
 use App\Http\Controllers\UpdatesByFamilyController;
+use App\Http\Controllers\ImportantNotificationController;
+use App\Http\Controllers\ProtectedMediaController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -69,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store');
     Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
     Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
+    Route::get('/important-notification', [ImportantNotificationController::class, 'index'])->name('important.notification');
     Route::post('/updates-by-family', [UpdatesByFamilyController::class, 'store'])->name('updates.by.family.store');
     Route::patch('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'update'])->name('updates.by.family.update');
     Route::delete('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'destroy'])->name('updates.by.family.destroy');
@@ -77,6 +80,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/profile/update', [AdminDashboardController::class, 'updateProfile'])->name('admin.profile.update');
     Route::post('/admin/profile/image', [AdminDashboardController::class, 'updateProfileImage'])->name('admin.profile.image');
     Route::post('/admin/users/create', [AdminDashboardController::class, 'createUser'])->name('admin.users.create');
+    Route::get('/admin/users/{id}/edit', [AdminDashboardController::class, 'editUserPage'])->name('admin.users.edit');
+    Route::match(['put', 'patch'], '/admin/users/{id}', [AdminDashboardController::class, 'updateUser'])->name('admin.users.update');
+    Route::post('/admin/users/{id}/delete', [AdminDashboardController::class, 'destroyUser'])->name('admin.users.destroy');
     Route::post('/admin/users/{id}/approve', [AdminDashboardController::class, 'approveUser'])->name('admin.users.approve');
     Route::post('/admin/users/{id}/reject', [AdminDashboardController::class, 'rejectUser'])->name('admin.users.reject');
     Route::post('/admin/media/delete', [AdminDashboardController::class, 'deleteMedia'])->name('admin.media.delete');
@@ -88,8 +94,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/local-attractions/{id}', [AdminDashboardController::class, 'updateLocalAttraction'])->name('admin.local-attractions.update');
     Route::post('/admin/local-attractions/{id}/delete', [AdminDashboardController::class, 'destroyLocalAttraction'])->name('admin.local-attractions.destroy');
 
+    Route::get('/admin/notes/create', [AdminDashboardController::class, 'createNotePage'])->name('admin.notes.create');
+    Route::get('/admin/notes/{id}/edit', [AdminDashboardController::class, 'editNotePage'])->name('admin.notes.edit');
     Route::post('/admin/notes', [AdminDashboardController::class, 'storeNote'])->name('admin.notes.store');
-    Route::post('/admin/notes/{id}', [AdminDashboardController::class, 'updateNote'])->name('admin.notes.update');
+    Route::match(['put', 'patch'], '/admin/notes/{id}', [AdminDashboardController::class, 'updateNote'])->name('admin.notes.update');
     Route::post('/admin/notes/{id}/delete', [AdminDashboardController::class, 'destroyNote'])->name('admin.notes.destroy');
 
     Route::post('/admin/book-appointments/entries', [AdminDashboardController::class, 'storeBookAppointmentEntry'])->name('admin.book-appointments.entries.store');
@@ -106,4 +114,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pictures-videos/serve/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'serveMedia'])->name('pictures_videos.serve');
     // Download image/video (auth required)
     Route::get('/pictures-videos/download/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'downloadMedia'])->name('pictures_videos.download');
+
+    // Serve storage files (images/videos) only when logged in – no direct /storage/ access
+    Route::get('/media/serve', [ProtectedMediaController::class, 'serve'])->name('media.serve');
 });

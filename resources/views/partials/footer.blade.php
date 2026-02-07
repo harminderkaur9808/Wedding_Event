@@ -18,7 +18,9 @@
                 </div>
                 <h3 class="footer-couple-names">Vickram & Nisha</h3>
                 <p class="footer-description">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+                   <span class="footer-description-bold" style="font-weight: 400; font-size: 18px;">Two hearts, one beautiful journey.</span> <br>
+                    We are grateful to celebrate our special day with our beloved family and friends. Thank you for being part of our story. <br> <br>
+                    Stay updated with wedding schedules, travel information, photo galleries, and important announcements — all in one place.
                 </p>
             </div>
 
@@ -50,7 +52,7 @@
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <a href="mailto:Sra.jasmine@yahoo.com" class="footer-contact-link">Sra.jasmine@yahoo.com</a>
+                        <a href="mailto:sra.jasmine@yahoo.com" class="footer-contact-link">sra.jasmine@yahoo.com</a>
                     </li>
                     <li class="footer-contact-item">
                         <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +71,8 @@
 
         <!-- Copyright -->
         <div class="footer-copyright">
-            <p>Copyright © 2026. All rights reserved.</p>
+            <p>Copyright © {{ date('Y') }}. All rights reserved.</p>
+            <p class="footer-made-by">Crafted with <span class="footer-heart" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span> by <a href="https://owninfotech.com/" target="_blank" rel="noopener noreferrer" class="footer-made-by-link">Own Info Tech Pvt. Ltd.</a></p>
         </div>
     </div>
 </footer>

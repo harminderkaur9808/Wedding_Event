@@ -65,7 +65,7 @@
                             <div class="ask-the-host-question-meta">
                                 <div class="ask-the-host-avatar">
                                     @if($q->user->profile_image)
-                                        <img src="{{ asset('storage/profile_images/' . $q->user->profile_image) }}" alt="">
+                                        <img src="{{ secure_media_url('profile_images/' . $q->user->profile_image) }}" alt="">
                                     @else
                                         <span>{{ strtoupper(substr($q->user->first_name ?? 'U', 0, 1) . substr($q->user->last_name ?? '', 0, 1)) }}</span>
                                     @endif
@@ -110,7 +110,7 @@
                                         <div class="ask-the-host-reply-meta">
                                             <div class="ask-the-host-avatar ask-the-host-avatar-sm">
                                                 @if($reply->user->profile_image)
-                                                    <img src="{{ asset('storage/profile_images/' . $reply->user->profile_image) }}" alt="">
+                                                    <img src="{{ secure_media_url('profile_images/' . $reply->user->profile_image) }}" alt="">
                                                 @else
                                                     <span>{{ strtoupper(substr($reply->user->first_name ?? 'U', 0, 1) . substr($reply->user->last_name ?? '', 0, 1)) }}</span>
                                                 @endif

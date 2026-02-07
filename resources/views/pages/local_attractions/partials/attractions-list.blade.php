@@ -18,7 +18,7 @@
             <article class="wm-la-item wm-la-item--{{ $pos }} wm-la-animate wm-la-item-index-{{ $loop->iteration }}">
                 <div class="wm-la-item-media" aria-hidden="true">
                     @if(!empty($attraction->image_path))
-                        <img src="{{ asset('storage/' . ltrim($attraction->image_path, '/')) }}" alt="" class="wm-la-item-img">
+                        <img src="{{ secure_media_url(ltrim($attraction->image_path, '/')) }}" alt="" class="wm-la-item-img">
                     @else
                         <div class="wm-la-item-img wm-la-item-img--placeholder"></div>
                     @endif

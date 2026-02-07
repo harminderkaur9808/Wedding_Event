@@ -47,7 +47,7 @@
                 <div class="wedding-mele-tenth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-tenth-image-wrapper">
                         @php $tenthImg = $tenth?->getExtra('image'); @endphp
-                        <img src="{{ $tenthImg ? asset('storage/' . $tenthImg) : asset('Images/Home/tenthsecimg/Sehra%20%26%20Surma%20Ceremony.png') }}" alt="Sehra & Surma Ceremony" class="wedding-mele-tenth-image">
+                        <img src="{{ $tenthImg ? secure_media_url($tenthImg) : asset('Images/Home/tenthsecimg/Sehra%20%26%20Surma%20Ceremony.png') }}" alt="Sehra & Surma Ceremony" class="wedding-mele-tenth-image">
                         <!-- Board / clip on image + date text (same as other sections) -->
                         <div class="wedding-mele-tenth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-tenth-dynamic-board">

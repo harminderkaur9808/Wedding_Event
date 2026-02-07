@@ -86,7 +86,7 @@
                             <div class="user-dashboard-profile-picture">
                                 <div class="user-dashboard-profile-circle">
                                     @if($user->profile_image)
-                                        <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}" alt="Profile Picture" class="user-dashboard-profile-img">
+                                        <img src="{{ secure_media_url('profile_images/' . $user->profile_image) }}" alt="Profile Picture" class="user-dashboard-profile-img">
                                     @else
                                         <span class="user-dashboard-profile-initials">{{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}</span>
                                     @endif

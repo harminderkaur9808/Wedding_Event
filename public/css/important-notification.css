@@ -1,0 +1,454 @@
+/* Important Notification Page - First Section (Hero) – same structure/sizes as Updates by Family */
+
+.important-notification-hero {
+    position: relative;
+    width: 100%;
+    height: 25vh;
+    min-height: 180px;
+    overflow: hidden;
+    background: #054C82;
+}
+
+.important-notification-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.important-notification-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.important-notification-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: rgba(5, 76, 130, 0.7); /* #054C82 at 70% opacity - same as Book Appointments */
+}
+
+.important-notification-hero-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 20px;
+}
+
+.important-notification-hero-text {
+    max-width: 800px;
+}
+
+.important-notification-hero-eyebrow {
+    font-family: 'Britaniya', 'Georgia', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.important-notification-hero-decorative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.important-notification-hero-decorative-img {
+    width: auto;
+    height: 36px;
+    max-width: 180px;
+    object-fit: contain;
+    display: block;
+}
+
+.important-notification-hero-title {
+    font-family: 'Volkhov', serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(26px, 2.8vw, 42px);
+    color: #ffffff;
+    margin: 0;
+}
+
+/* ========== Second Section - Notification List ========== */
+
+.notif-section {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    padding: 48px 0 56px;
+    overflow: hidden;
+}
+
+.notif-list-wrap {
+    background: #d2dff130;
+    margin: 0 -24px;
+    padding: 24px 24px 28px;
+}
+
+/* Left and right decorative images – same pattern as updates-by-family timeline */
+.notif-section-side-decor {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.notif-section-side-decor--left {
+    left: 0;
+}
+
+.notif-section-side-decor--right {
+    right: 0;
+}
+
+.notif-section-side-decor-img {
+    width: auto;
+    height: 100%;
+    max-width: 180px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
+    opacity: 0.22;
+    filter: brightness(0) invert(1);
+}
+
+.notif-section-side-decor--right .notif-section-side-decor-img {
+    object-position: right center;
+    transform: scaleX(-1);
+}
+
+.notif-section-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.notif-section-title {
+    font-family: 'Volkhov', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3vw, 40px);
+    color: #054C82;
+    text-align: center;
+    margin: 0 0 28px;
+}
+
+/* Filter buttons - two rows, pill style, Volkhov, design match */
+.notif-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 14px;
+    row-gap: 24px;
+    margin-bottom: 32px;
+}
+
+.notif-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid #ffffff;
+    font-family: 'Volkhov', serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.notif-filter-btn:hover {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.notif-filter-btn:active {
+    transform: translateY(0);
+}
+
+/* Default (inactive): outline style – white/light bg, colored inner border + white border */
+.notif-filter-btn[data-filter="all"] {
+    background: #FFFFFF;
+    color: #2A3654;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #2A3654, 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.notif-filter-btn[data-filter="important"],
+.notif-filter-btn[data-filter="flight_info"],
+.notif-filter-btn[data-filter="local_transport"] {
+    background: #FFFFFF;
+    color: #7B7594;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #A8A4BD, 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.notif-filter-btn[data-filter="today"],
+.notif-filter-btn[data-filter="travel_update"],
+.notif-filter-btn[data-filter="airport_pickup"],
+.notif-filter-btn[data-filter="event_reminder"],
+.notif-filter-btn[data-filter="salon_makeup"] {
+    background: #FFFFFF;
+    color: #2A3654;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #2A3654, 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.notif-filter-btn[data-filter="schedule_update"],
+.notif-filter-btn[data-filter="hotel_stay"] {
+    background: #FFFFFF;
+    color: #5B9FC9;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #B9E0FC, 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Active (selected): filled with white border */
+.notif-filter-btn--active {
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+.notif-filter-btn--active[data-filter="all"] {
+    background: #2A3654;
+    color: #FFFFFF;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+.notif-filter-btn--active[data-filter="important"],
+.notif-filter-btn--active[data-filter="flight_info"],
+.notif-filter-btn--active[data-filter="local_transport"] {
+    background: #A8A4BD;
+    color: #FFFFFF;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+.notif-filter-btn--active[data-filter="today"],
+.notif-filter-btn--active[data-filter="travel_update"],
+.notif-filter-btn--active[data-filter="airport_pickup"],
+.notif-filter-btn--active[data-filter="event_reminder"],
+.notif-filter-btn--active[data-filter="salon_makeup"] {
+    background: #2A3654;
+    color: #FFFFFF;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+.notif-filter-btn--active[data-filter="schedule_update"],
+.notif-filter-btn--active[data-filter="hotel_stay"] {
+    background: #B9E0FC;
+    color: #2A3654;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Notification list */
+.notif-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #eee;
+}
+
+.notif-item {
+    display: flex;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid #eee;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.notif-item--hidden {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    overflow: hidden;
+}
+.notif-item--show {
+    animation: notifItemShow 0.4s ease forwards;
+}
+@keyframes notifItemShow {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notif-item-avatar {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e8eef3;
+}
+
+.notif-item-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.notif-item-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notif-item-name {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.notif-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #6b7280;
+    font-family: 'Jost', sans-serif;
+}
+
+.notif-item-icon {
+    flex-shrink: 0;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.notif-item-date,
+.notif-item-time {
+    display: inline-flex;
+    align-items: center;
+}
+
+.notif-item-message-wrap {
+    margin: 0 0 12px;
+}
+
+.notif-item-message {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #4b5563;
+    margin: 0 0 8px;
+}
+
+.notif-item-message-wrap .notif-item-message:last-of-type {
+    margin-bottom: 0;
+}
+
+.notif-item-message-full {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.notif-see-more {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2A3654;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.notif-see-more:hover {
+    color: #1e293b;
+}
+
+.notif-item-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    border: 2px solid #ffffff;
+}
+
+.notif-item-tag--important,
+.notif-item-tag--event {
+    background: #7B68A6;
+}
+
+.notif-item-tag--today,
+.notif-item-tag--travel,
+.notif-item-tag--flight,
+.notif-item-tag--airport,
+.notif-item-tag--transport,
+.notif-item-tag--salon {
+    background: #054C82;
+}
+
+.notif-item-tag--schedule,
+.notif-item-tag--hotel,
+.notif-item-tag--schedule_update,
+.notif-item-tag--hotel_stay {
+    background: #5B9BD5;
+}
+
+.notif-item-tag--travel_update,
+.notif-item-tag--flight_info,
+.notif-item-tag--airport_pickup,
+.notif-item-tag--event_reminder,
+.notif-item-tag--local_transport,
+.notif-item-tag--salon_makeup {
+    background: #054C82;
+}
+
+.notif-item-avatar-initials {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #054C82;
+    background: #e0e7ff;
+}
+
+.notif-item-empty .notif-item-body {
+    width: 100%;
+}
+
+/* See All link */
+.notif-see-all-wrap {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.notif-see-all {
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #054C82;
+    text-decoration: none;
+}
+
+.notif-see-all:hover {
+    color: #033a63;
+    text-decoration: underline;
+}

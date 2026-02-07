@@ -12,6 +12,7 @@ class BookAppointmentEntry extends Model
         'store_name',
         'instruction',
         'address',
+        'phone_number',
         'distance',
         'services',
     ];

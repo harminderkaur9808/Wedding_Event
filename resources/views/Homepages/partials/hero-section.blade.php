@@ -5,7 +5,7 @@
     for ($i = 1; $i <= 3; $i++) {
         $path = $hero?->getExtra('slider_' . $i);
         if ($path && \Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
-            $sliderImages[] = asset('storage/' . $path);
+            $sliderImages[] = secure_media_url($path);
         } else {
             $sliderImages[] = $defaultImage;
         }

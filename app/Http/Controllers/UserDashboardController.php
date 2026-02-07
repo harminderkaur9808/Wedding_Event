@@ -88,7 +88,7 @@ class UserDashboardController extends Controller
                         $mediaByCategory[$category]['images'][] = [
                             'id' => $media->id,
                             'path' => $imagePath,
-                            'url' => asset('storage/user_media/' . $imagePath),
+                            'url' => secure_media_url('user_media/' . $imagePath),
                             'uploaded_at' => $media->created_at
                         ];
                     }
@@ -102,7 +102,7 @@ class UserDashboardController extends Controller
                         $mediaByCategory[$category]['videos'][] = [
                             'id' => $media->id,
                             'path' => $videoPath,
-                            'url' => asset('storage/user_media/' . $videoPath),
+                            'url' => secure_media_url('user_media/' . $videoPath),
                             'uploaded_at' => $media->created_at
                         ];
                     }
@@ -197,7 +197,7 @@ class UserDashboardController extends Controller
         $user->profile_image = $imageName;
         $user->save();
 
-        $url = asset('storage/profile_images/' . $imageName);
+        $url = secure_media_url('profile_images/' . $imageName);
 
         return response()->json([
             'success' => true,

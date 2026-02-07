@@ -124,7 +124,7 @@
 .wm-la-item-row--with-bg {
     width: 100vw;
     max-width: 100vw;
-    margin-left: calc(50% - 50vw);
+    margin-left: calc(49.2% - 50vw);
     margin-right: calc(50% - 50vw);
     padding: 60px 20px;
     background-size: cover;
@@ -139,7 +139,7 @@
     position: absolute;
     inset: 0;
     background: rgba(255, 255, 255, 0.45);
-    z-index: 0;
+    z-index: -90;
 }
 
 .wm-la-item-row--with-bg .wm-la-list-container--inner {

@@ -44,11 +44,11 @@
                 <div class="wedding-mele-couple-images wm-reveal" style="--reveal-delay: 150ms;">
                     <div class="wedding-mele-person-image wedding-mele-vickram-image">
                         @php $groomImg = $ourStory?->getExtra('groom_image'); @endphp
-                        <img src="{{ $groomImg ? asset('storage/' . $groomImg) : asset('Images/Home/SecSection/Vickram_img.png') }}" alt="{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}" class="wedding-mele-person-img">
+                        <img src="{{ $groomImg ? secure_media_url($groomImg) : asset('Images/Home/SecSection/Vickram_img.png') }}" alt="{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}" class="wedding-mele-person-img">
                     </div>
                     <div class="wedding-mele-person-image wedding-mele-nisha-image">
                         @php $brideImg = $ourStory?->getExtra('bride_image'); @endphp
-                        <img src="{{ $brideImg ? asset('storage/' . $brideImg) : asset('Images/Home/SecSection/Nisha_img.png') }}" alt="{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}" class="wedding-mele-person-img">
+                        <img src="{{ $brideImg ? secure_media_url($brideImg) : asset('Images/Home/SecSection/Nisha_img.png') }}" alt="{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}" class="wedding-mele-person-img">
                     </div>
                 </div>
 

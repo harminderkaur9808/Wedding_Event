@@ -1,3 +1,11 @@
+@php
+    $weddingDate = \App\Models\PageSection::weddingDate();
+    $weddingDateFormatted = $weddingDate ? $weddingDate->format('d M, Y') : '31 Dec, 2027';
+    $saveTheDate = $weddingDate ? $weddingDate->format('m-d-Y') : '01-01-2027';
+    $baseUrl = config('app.url');
+    $logoUrl = $baseUrl . '/Images/Email_template_logo/email_logo.png';
+    $bannerUrl = $baseUrl . '/Images/Email_template_logo/maintitlebg.png';
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,163 +13,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Approved - {{ config('app.name') }}</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        .email-header {
-            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-            padding: 40px 30px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Georgia, 'Times New Roman', serif; background-color: #f0f4f8; padding: 24px 16px; color: #333; }
+        .email-wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08); }
+        .email-logo-block { text-align: center; padding: 40px 24px 20px; background: #fff; }
+        .email-logo-block img { max-width: 140px; height: auto; display: inline-block; }
+        .email-logo-block .couple-name { display: block; font-size: 22px; font-weight: 600; color: #2F4F75; margin-top: 14px; letter-spacing: 0.5px; }
+        .email-banner {
+            background-image: url('{{ $bannerUrl }}');
+            background-size: cover;
+            background-position: center;
+            background-color: #E8F2F7;
+            padding: 40px 28px;
             text-align: center;
-            color: #ffffff;
         }
-        .email-header h1 {
-            font-size: 32px;
-            font-weight: 400;
-            margin-bottom: 10px;
-            font-family: 'Vibur', cursive;
-            letter-spacing: 2px;
-        }
-        .email-header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        .success-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-        .decorative-divider {
-            text-align: center;
-            padding: 20px 0;
-            color: #28a745;
-        }
-        .email-body {
-            padding: 40px 30px;
-            color: #333333;
-            line-height: 1.8;
-        }
-        .greeting {
-            font-size: 20px;
-            color: #28a745;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .content-text {
-            font-size: 16px;
-            color: #555555;
-            margin-bottom: 25px;
-        }
-        .success-box {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 25px;
-            margin: 30px 0;
-            border-radius: 6px;
-        }
-        .success-box h3 {
-            color: #155724;
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+        .email-banner h1 { font-size: 26px; font-weight: 700; color: #1e3a52; margin-bottom: 10px; line-height: 1.3; font-family: Georgia, serif; }
+        .email-banner .subheading { font-size: 16px; font-weight: 600; color: #2F4F75; }
+        .email-body { padding: 36px 32px; line-height: 1.7; font-size: 15px; text-align: center; }
+        .email-body .content-inner { text-align: left; max-width: 520px; margin: 0 auto; }
+        .email-body .greeting { font-size: 16px; color: #1e3a52; margin-bottom: 24px; }
+        .email-body .great-news { font-size: 22px; font-weight: 700; color: #1e3a52; margin-bottom: 16px; text-align: center; }
+        .email-body .intro { color: #444; margin-bottom: 20px; text-align: center; }
+        .email-body .access-heading { font-size: 15px; color: #1e3a52; margin: 24px 0 12px; }
+        .email-body ul { margin: 0 0 24px 20px; color: #444; font-size: 15px; }
+        .email-body ul li { margin: 8px 0; }
+        .email-body .note-text { font-size: 14px; color: #444; margin: 20px 0; text-align: center; }
         .cta-button {
             display: inline-block;
-            background: #28a745;
+            background: #2C3E50;
             color: #ffffff !important;
-            padding: 15px 40px;
+            padding: 14px 32px;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
-            margin: 25px 0;
+            margin: 24px 0;
             text-align: center;
         }
-        .email-footer {
-            background: #f9f9f9;
-            padding: 30px;
-            text-align: center;
-            color: #666666;
-            font-size: 14px;
-            border-top: 1px solid #e0e0e0;
-        }
-        .footer-love {
-            color: #2F4F75;
-            font-style: italic;
-            margin-top: 15px;
-        }
+        .wedding-date-row { margin-top: 28px; padding-top: 24px; border-top: 1px solid #e2e8f0; text-align: left; }
+        .wedding-date-row .calendar-icon { display: inline-block; width: 22px; height: 22px; vertical-align: middle; margin-right: 10px; }
+        .wedding-date-row .date-text { font-size: 15px; font-weight: 600; color: #2F4F75; }
+        .email-footer { padding: 32px 28px; text-align: center; background: #fafbfc; border-top: 1px solid #e2e8f0; }
+        .email-footer .closing { font-size: 15px; color: #444; margin-bottom: 24px; line-height: 1.6; }
+        .email-footer .signature { font-size: 16px; font-weight: 600; font-style: italic; color: #2F4F75; margin-bottom: 8px; }
+        .email-footer .couple-name { font-size: 16px; font-weight: 700; font-style: italic; color: #2F4F75; margin-bottom: 24px; }
+        .email-footer .save-the-date { font-size: 14px; color: #64748b; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <div class="email-header">
-            <div class="success-icon">✓</div>
-            <h1>Account Approved!</h1>
-            <p>Welcome to {{ config('app.name') }}</p>
+    <div class="email-wrapper">
+        <div class="email-logo-block">
+            <img src="{{ $logoUrl }}" alt="Vickram & Nisha" width="140">
+            <span class="couple-name">Vickram & Nisha</span>
         </div>
-        
-        <div class="decorative-divider">
-            <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#28a745" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+        <div class="email-banner">
+            <h1>Account Approved</h1>
+            <p class="subheading">Welcome to Vikram & Nisha's Wedding</p>
         </div>
-
         <div class="email-body">
-            <div class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</div>
-            
-            <div class="success-box">
-                <h3>🎉 Great News!</h3>
-                <p style="color: #155724; margin: 0;">Your account has been approved by the administrator. You can now log in and access all features of the Wedding Event platform!</p>
-            </div>
-
-            <div class="content-text">
-                We're excited to have you join us in celebrating this special occasion. You can now:
-            </div>
-
-            <ul style="color: #555555; font-size: 16px; margin-left: 20px; margin-bottom: 25px;">
-                <li style="margin: 10px 0;">View and upload pictures and videos</li>
-                <li style="margin: 10px 0;">Access all wedding event features</li>
-                <li style="margin: 10px 0;">Connect with family and friends</li>
-                <li style="margin: 10px 0;">Stay updated with event information</li>
-            </ul>
-
-            <div class="content-text">
-                <strong>Note:</strong> Please use the login credentials that were sent to you in your welcome email.
-            </div>
-
-            <div style="text-align: center;">
-                <a href="{{ url('/login') }}" class="cta-button">Login to Your Account</a>
-            </div>
-
-            <div class="content-text" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                We look forward to sharing this beautiful journey with you!
+            <div class="content-inner">
+                <p class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</p>
+                <p class="great-news">Great News!</p>
+                <p class="intro">Your account for Vikram & Nisha's Wedding Website has been successfully approved.</p>
+                <p class="access-heading">You can now log in and access:</p>
+                <ul>
+                    <li>Event schedules &amp; updates</li>
+                    <li>Travel &amp; accommodation information</li>
+                    <li>Photos &amp; videos</li>
+                    <li>Appointment bookings</li>
+                    <li>Family updates</li>
+                </ul>
+                <p style="text-align: center;">
+                    <a href="{{ url('/login') }}" class="cta-button">Login to your account</a>
+                </p>
+                <p class="note-text"><strong>Note:</strong> Please use the login credentials that were sent to you in your welcome email.</p>
+                <div class="wedding-date-row">
+                    <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="#2F4F75" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span class="date-text">Wedding Date: {{ $weddingDateFormatted }}</span>
+                </div>
             </div>
         </div>
-
         <div class="email-footer">
-            <div>
-                <strong>{{ config('app.name') }}</strong><br>
-                Wedding Event - Vickram & Nisha
-            </div>
-            <div style="margin-top: 15px;">
-                Save The Date: 12-31-2026
-            </div>
-            <div class="footer-love">
-                With Love & Joy ❤️
-            </div>
+            <p class="closing">We are so happy to have you join us and can not wait to celebrate together!</p>
+            <p class="signature">With Love,</p>
+            <p class="couple-name">Vickram & Nisha</p>
+            <p class="save-the-date">Save The Date: {{ $saveTheDate }}</p>
         </div>
     </div>
 </body>

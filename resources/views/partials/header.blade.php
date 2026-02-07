@@ -3,7 +3,8 @@
     <div class="top-header">
         <div class="container">
             <div class="top-header-content">
-                <div class="top-header-left">
+                <div class="top-header-left top-header-spacer"></div>
+                <div class="top-header-center">
                     <span class="save-date-text">Save The Date</span>
                     <div class="date-section">
                         <img src="{{ asset('Images/Header/Calender_imghader.png') }}" alt="Calendar" class="calendar-icon">
@@ -15,7 +16,7 @@
                         <div class="user-welcome-section">
                             <span class="welcome-text">Welcome, {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
                             @if(Auth::user()->profile_image)
-                                <img src="{{ asset('storage/profile_images/' . Auth::user()->profile_image) }}" alt="Profile" class="header-profile-img">
+                                <img src="{{ secure_media_url('profile_images/' . Auth::user()->profile_image) }}" alt="Profile" class="header-profile-img">
                             @else
                                 <div class="header-profile-initials">{{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}</div>
                             @endif
@@ -64,6 +65,7 @@
                             <a href="{{ route('ask.the.host') }}" class="nav-link {{ request()->routeIs('ask.the.host') ? 'active' : '' }}">Ask the Host</a>
                             <a href="{{ route('updates.by.family') }}" class="nav-link {{ request()->routeIs('updates.by.family') ? 'active' : '' }}">Updates by family</a>
                             <a href="{{ route('local.attractions') }}" class="nav-link {{ request()->routeIs('local.attractions') ? 'active' : '' }}">Local Attractions</a>
+                            <a href="{{ route('important.notification') }}" class="nav-link {{ request()->routeIs('important.notification') ? 'active' : '' }}">Important Notification</a>
                         </nav>
                         <a href="{{ route('book.appointments') }}" 
                            class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3"

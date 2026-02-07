@@ -22,7 +22,7 @@
                 <div class="wedding-mele-seventh-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-seventh-image-wrapper">
                         @php $seventhImg = $seventh?->getExtra('image'); @endphp
-                        <img src="{{ $seventhImg ? asset('storage/' . $seventhImg) : asset('Images/Home/Seven_sec_img/Sangeet_seven_sec_img.png') }}" alt="Sangeet Night" class="wedding-mele-seventh-image">
+                        <img src="{{ $seventhImg ? secure_media_url($seventhImg) : asset('Images/Home/Seven_sec_img/Sangeet_seven_sec_img.png') }}" alt="Sangeet Night" class="wedding-mele-seventh-image">
                         <!-- Board on image + date text under it (like Vatna section) -->
                         <div class="wedding-mele-seventh-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-seventh-dynamic-board">

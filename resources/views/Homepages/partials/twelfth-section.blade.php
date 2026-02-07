@@ -57,7 +57,7 @@
                 <div class="wedding-mele-twelfth-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-twelfth-image-wrapper">
                         @php $twelfthImg = $twelfth?->getExtra('image'); @endphp
-                        <img src="{{ $twelfthImg ? asset('storage/' . $twelfthImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Reception" class="wedding-mele-twelfth-image">
+                        <img src="{{ $twelfthImg ? secure_media_url($twelfthImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Reception" class="wedding-mele-twelfth-image">
                         <!-- Board / clip on image + date text (same as tenth) -->
                         <div class="wedding-mele-twelfth-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-twelfth-dynamic-board">

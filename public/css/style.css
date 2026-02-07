@@ -142,18 +142,26 @@ body {
     gap: 15px;
 }
 
+.top-header-spacer,
 .top-header-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-header-center {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
-    flex: 1;
+    flex-shrink: 0;
 }
 
 .top-header-right {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    flex: 1;
+    min-width: 0;
 }
 
 .save-date-text {
@@ -762,9 +770,13 @@ main {
         flex-wrap: wrap;
     }
 
-    .top-header-left {
-        justify-content: center;
+    .top-header-spacer {
+        display: none;
+    }
+
+    .top-header-center {
         flex: 1 1 100%;
+        justify-content: center;
     }
 
     .top-header-right {

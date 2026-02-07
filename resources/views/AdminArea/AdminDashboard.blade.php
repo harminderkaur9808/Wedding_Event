@@ -125,7 +125,7 @@
                             <div class="admin-dashboard-profile-picture">
                                 <div class="admin-dashboard-profile-circle">
                                     @if($user->profile_image)
-                                        <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}" alt="Profile Picture" class="admin-dashboard-profile-img">
+                                        <img src="{{ secure_media_url('profile_images/' . $user->profile_image) }}" alt="Profile Picture" class="admin-dashboard-profile-img">
                                     @else
                                         <span class="admin-dashboard-profile-initials">{{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}</span>
                                     @endif
@@ -280,7 +280,7 @@
                                                 <td data-label="Name">
                                                     <div class="admin-dashboard-user-info">
                                                         @if($userItem->profile_image)
-                                                            <img src="{{ asset('storage/profile_images/' . $userItem->profile_image) }}" alt="{{ $userItem->first_name }}" class="admin-dashboard-user-avatar">
+                                                            <img src="{{ secure_media_url('profile_images/' . $userItem->profile_image) }}" alt="{{ $userItem->first_name }}" class="admin-dashboard-user-avatar">
                                                         @else
                                                             <div class="admin-dashboard-user-avatar-initials">{{ strtoupper(substr($userItem->first_name, 0, 1) . substr($userItem->last_name, 0, 1)) }}</div>
                                                         @endif
@@ -305,29 +305,36 @@
                                                     @elseif($userItem->is_approved)
                                                         <span class="admin-dashboard-approval-badge approved">Approved</span>
                                                     @else
-                                                        <span class="admin-dashboard-approval-badge pending">Pending</span>
+                                                        <span class="admin-dashboard-approval-badge blocked">Blocked</span>
                                                     @endif
                                                 </td>
                                                 <td data-label="Actions">
-                                                    @if(!$userItem->isAdmin())
-                                                        @if($userItem->is_approved)
-                                                            <form action="{{ route('admin.users.reject', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
+                                                    <div class="admin-dashboard-user-actions">
+                                                        <a href="{{ route('admin.users.edit', $userItem->id) }}" class="admin-dashboard-action-btn edit-btn">Edit profile</a>
+                                                        @if(!$userItem->isAdmin())
+                                                            @if($userItem->is_approved)
+                                                                <form action="{{ route('admin.users.reject', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
+                                                                    @csrf
+                                                                    <button type="submit" class="admin-dashboard-action-btn reject-btn" onclick="return confirm('Are you sure you want to block this user?')">
+                                                                        Block
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <form action="{{ route('admin.users.approve', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
+                                                                    @csrf
+                                                                    <button type="submit" class="admin-dashboard-action-btn approve-btn">
+                                                                        Approve
+                                                                    </button>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+                                                        @if($userItem->id !== Auth::id())
+                                                            <form action="{{ route('admin.users.destroy', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form" onsubmit="return confirm('Are you sure you want to delete this user? This cannot be undone.');">
                                                                 @csrf
-                                                                <button type="submit" class="admin-dashboard-action-btn reject-btn" onclick="return confirm('Are you sure you want to reject this user?')">
-                                                                    Reject
-                                                                </button>
-                                                            </form>
-                                                        @else
-                                                            <form action="{{ route('admin.users.approve', $userItem->id) }}" method="POST" class="admin-dashboard-inline-form">
-                                                                @csrf
-                                                                <button type="submit" class="admin-dashboard-action-btn approve-btn">
-                                                                    Approve
-                                                                </button>
+                                                                <button type="submit" class="admin-dashboard-action-btn delete-btn">Delete</button>
                                                             </form>
                                                         @endif
-                                                    @else
-                                                        <span class="admin-dashboard-action-btn disabled">N/A</span>
-                                                    @endif
+                                                    </div>
                                                 </td>
                                             </tr>
                                         @empty
@@ -340,15 +347,17 @@
                                 </div>
                             </div>
                             
-                            <!-- Pagination -->
-                            @if(isset($users) && $users->hasPages())
+                            <!-- Pagination: always show when we have a users list (10 per page default) -->
+                            @if(isset($users) && $users->total() > 0)
                                 <div class="admin-dashboard-pagination">
                                     <div class="admin-dashboard-pagination-info">
                                         Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }} users
                                     </div>
-                                    <div class="admin-dashboard-pagination-links">
-                                        {{ $users->appends(['tab' => 'all-users'])->links() }}
-                                    </div>
+                                    @if($users->hasPages())
+                                        <div class="admin-dashboard-pagination-links">
+                                            {{ $users->appends(['tab' => 'all-users'])->links() }}
+                                        </div>
+                                    @endif
                                 </div>
                             @endif
                         </div>
@@ -408,7 +417,7 @@
                                                             <label for="hero_slider_input_{{ $num }}" class="admin-dashboard-hero-slider-box-inner">
                                                                 <span class="admin-dashboard-hero-slider-box-preview">
                                                                     @if($hasImage)
-                                                                        <img src="{{ asset('storage/' . $sliderPath) }}" alt="{{ $label }}">
+                                                                        <img src="{{ secure_media_url($sliderPath) }}" alt="{{ $label }}">
                                                                     @endif
                                                                 </span>
                                                                 <span class="admin-dashboard-hero-slider-box-plus" aria-hidden="true">
@@ -427,14 +436,14 @@
                                                 <div class="admin-dashboard-form-group">
                                                     <label class="admin-dashboard-label">Groom photo</label>
                                                     @if($sec->getExtra('groom_image'))
-                                                        <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('groom_image')) }}" alt="Groom" class="admin-dashboard-thumb"></div>
+                                                        <div class="admin-dashboard-image-preview"><img src="{{ secure_media_url($sec->getExtra('groom_image')) }}" alt="Groom" class="admin-dashboard-thumb"></div>
                                                     @endif
                                                     <input type="file" name="groom_image" class="admin-dashboard-input" accept="image/*">
                                                 </div>
                                                 <div class="admin-dashboard-form-group">
                                                     <label class="admin-dashboard-label">Bride photo</label>
                                                     @if($sec->getExtra('bride_image'))
-                                                        <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('bride_image')) }}" alt="Bride" class="admin-dashboard-thumb"></div>
+                                                        <div class="admin-dashboard-image-preview"><img src="{{ secure_media_url($sec->getExtra('bride_image')) }}" alt="Bride" class="admin-dashboard-thumb"></div>
                                                     @endif
                                                     <input type="file" name="bride_image" class="admin-dashboard-input" accept="image/*">
                                                 </div>
@@ -445,7 +454,7 @@
                                             <div class="admin-dashboard-form-group">
                                                 <label class="admin-dashboard-label">Section image (shown on homepage)</label>
                                                 @if($sec->getExtra('image'))
-                                                    <div class="admin-dashboard-image-preview"><img src="{{ asset('storage/' . $sec->getExtra('image')) }}" alt="Section" class="admin-dashboard-thumb"></div>
+                                                    <div class="admin-dashboard-image-preview"><img src="{{ secure_media_url($sec->getExtra('image')) }}" alt="Section" class="admin-dashboard-thumb"></div>
                                                 @endif
                                                 <input type="file" name="image" class="admin-dashboard-input" accept="image/*">
                                             </div>
@@ -662,7 +671,7 @@
                                         <label class="admin-dashboard-label">Image</label>
                                         @if($attraction->image_path)
                                             <div class="admin-dashboard-image-preview">
-                                                <img src="{{ asset('storage/' . $attraction->image_path) }}" alt="Image" class="admin-dashboard-thumb">
+                                                <img src="{{ secure_media_url($attraction->image_path) }}" alt="Image" class="admin-dashboard-thumb">
                                             </div>
                                             <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
                                                 <input type="checkbox" name="remove_image" value="1">
@@ -736,6 +745,10 @@
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Address</label>
                                         <input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="e.g. 1905 Calle Barcelona, Carlsbad, CA 92009">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Phone number</label>
+                                        <input type="text" name="phone_number" class="admin-dashboard-input" value="{{ old('phone_number', $entry->phone_number) }}" placeholder="e.g. (760) 123-4567">
                                     </div>
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Distance</label>
@@ -930,12 +943,12 @@
                             </div>
                             <div class="admin-dashboard-title-with-action">
                                 <h1 class="admin-dashboard-title">Notes</h1>
-                                <button type="button" class="admin-dashboard-btn admin-dashboard-btn-primary" onclick="openNotesModal()" style="display:inline-flex;align-items:center;gap:8px;">
+                                <a href="{{ route('admin.notes.create') }}" class="admin-dashboard-btn admin-dashboard-btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
                                     Create Note
-                                </button>
+                                </a>
                             </div>
                         </div>
                         <p class="admin-dashboard-description">Create notes and share them with selected admins. Only you and the admins you choose can view each note.</p>
@@ -944,10 +957,11 @@
                             @forelse($notes ?? [] as $note)
                                 @php
                                     $isOwner = $note->user_id === $user->id;
+                                    $canEditNote = $isOwner || $note->sharedWith->pluck('id')->contains($user->id);
                                 @endphp
                                 <div class="admin-dashboard-note-card">
                                     <div class="admin-dashboard-note-card-header">
-                                        <h3 class="admin-dashboard-note-card-title">{{ $note->title }}</h3>
+                                        <h3 class="admin-dashboard-note-card-title">{{ $note->title ?: \Str::limit($note->content, 50) ?: 'Note' }}</h3>
                                         <div class="admin-dashboard-note-card-meta">
                                             <span class="admin-dashboard-note-badge {{ $isOwner ? 'admin-dashboard-note-badge-owner' : 'admin-dashboard-note-badge-shared' }}">
                                                 {{ $isOwner ? 'My note' : 'Shared with me' }}
@@ -957,6 +971,16 @@
                                         </div>
                                     </div>
                                     <div class="admin-dashboard-note-card-body">
+                                        @if(!empty($note->tags))
+                                            <div class="admin-dashboard-note-card-tags">
+                                                @foreach($note->tags as $tagSlug)
+                                                    @php $tagLabels = \App\Models\Note::notificationTagOptions(); @endphp
+                                                    @if(isset($tagLabels[$tagSlug]))
+                                                        <span class="admin-dashboard-note-card-tag">{{ $tagLabels[$tagSlug] }}</span>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        @endif
                                         <div class="admin-dashboard-note-content-wrap">
                                             <p class="admin-dashboard-note-content">{{ $note->content ?: '—' }}</p>
                                             <button type="button" class="admin-dashboard-note-view-more-btn" onclick="toggleNoteContent(this)" aria-label="Toggle full content">View more</button>
@@ -966,7 +990,7 @@
                                                 @foreach($note->sharedWith->take(3) as $sharedUser)
                                                     <div class="admin-dashboard-note-avatar" title="{{ $sharedUser->first_name }} {{ $sharedUser->last_name }}">
                                                         @if($sharedUser->profile_image)
-                                                            <img src="{{ asset('storage/profile_images/' . $sharedUser->profile_image) }}" alt="">
+                                                            <img src="{{ secure_media_url('profile_images/' . $sharedUser->profile_image) }}" alt="">
                                                         @else
                                                             <span class="admin-dashboard-note-avatar-initials">{{ strtoupper(substr($sharedUser->first_name, 0, 1) . substr($sharedUser->last_name, 0, 1)) }}</span>
                                                         @endif
@@ -979,8 +1003,8 @@
                                         @endif
                                     </div>
                                     <div class="admin-dashboard-note-card-actions">
-                                        @if($isOwner)
-                                            <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary admin-dashboard-btn-sm" onclick="editNote({{ $note->id }}, {{ json_encode($note->title) }}, {{ json_encode($note->content) }}, {{ json_encode($note->sharedWith->pluck('id')->toArray()) }})">Edit</button>
+                                        @if($canEditNote)
+                                            <a href="{{ route('admin.notes.edit', $note->id) }}" class="admin-dashboard-btn admin-dashboard-btn-secondary admin-dashboard-btn-sm">Edit</a>
                                             <form method="POST" action="{{ route('admin.notes.destroy', $note->id) }}" class="admin-dashboard-note-delete-form" onsubmit="return confirm('Delete this note?');">
                                                 @csrf
                                                 <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-danger admin-dashboard-btn-sm">Delete</button>
@@ -1197,12 +1221,13 @@
                         </span>
                     </div>
                 </div>
-
-                <div class="admin-dashboard-modal-actions">
-                    <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary" onclick="closeAddUserModal()">Cancel</button>
-                    <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary">Create User</button>
-                </div>
             </form>
+        </div>
+        <div class="admin-dashboard-modal-footer">
+            <div class="admin-dashboard-modal-actions">
+                <button type="button" class="admin-dashboard-btn admin-dashboard-btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                <button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary" form="addUserForm">Create User</button>
+            </div>
         </div>
     </div>
 </div>

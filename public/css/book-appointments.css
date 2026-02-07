@@ -266,6 +266,13 @@
     margin-top: 2px;
 }
 
+.book-appointments-detail-icon-svg {
+    flex-shrink: 0;
+    display: block;
+    color: #2F4F75;
+    stroke: #2F4F75;
+}
+
 .book-appointments-no-entries {
     font-family: 'Nunito', sans-serif;
     font-size: 15px;

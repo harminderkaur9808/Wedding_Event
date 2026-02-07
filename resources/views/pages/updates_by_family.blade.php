@@ -124,7 +124,7 @@
                     <div class="updates-by-family-entry-node">
                         <div class="updates-by-family-entry-avatar">
                             @if($hasImage)
-                                <img src="{{ asset('storage/profile_images/' . $user->profile_image) }}" alt="{{ $name }}">
+                                <img src="{{ secure_media_url('profile_images/' . $user->profile_image) }}" alt="{{ $name }}">
                             @else
                                 <span class="updates-by-family-entry-avatar-initials" aria-hidden="true">{{ $initials ?? 'A' }}</span>
                             @endif

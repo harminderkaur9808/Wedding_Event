@@ -66,7 +66,7 @@
                 <div class="wedding-mele-eleventh-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-eleventh-image-wrapper">
                         @php $eleventhImg = $eleventh?->getExtra('image'); @endphp
-                        <img src="{{ $eleventhImg ? asset('storage/' . $eleventhImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Wedding" class="wedding-mele-eleventh-image">
+                        <img src="{{ $eleventhImg ? secure_media_url($eleventhImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Wedding" class="wedding-mele-eleventh-image">
                         <!-- Board on image + date text (top-right corner) -->
                         <div class="wedding-mele-eleventh-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-eleventh-dynamic-board">

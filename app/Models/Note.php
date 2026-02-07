@@ -8,7 +8,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Note extends Model
 {
-    protected $fillable = ['user_id', 'title', 'content'];
+    protected $fillable = ['user_id', 'title', 'content', 'tags'];
+
+    protected $casts = [
+        'tags' => 'array',
+    ];
+
+    /**
+     * Predefined notification tags (slug => label) for filtering on frontend.
+     */
+    public static function notificationTagOptions(): array
+    {
+        return [
+            'important'       => 'Important',
+            'today'           => 'Today',
+            'schedule_update' => 'Schedule Update',
+            'travel_update'   => 'Travel Update',
+            'flight_info'     => 'Flight Info',
+            'airport_pickup'  => 'Airport Pickup',
+            'hotel_stay'      => 'Hotel & Stay',
+            'event_reminder'  => 'Event Reminder',
+            'local_transport' => 'Local Transport',
+            'salon_makeup'    => 'Salon / Makeup',
+        ];
+    }
 
     /**
      * Admin who created the note.
