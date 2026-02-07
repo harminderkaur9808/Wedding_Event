@@ -214,15 +214,16 @@
     box-shadow: 0 0 0 2px #B9E0FC, 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Active (selected): filled with white border */
+/* Active (selected): double border – white inner + same-color outer (reference style) */
 .notif-filter-btn--active {
-    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 .notif-filter-btn--active[data-filter="all"] {
     background: #2A3654;
     color: #FFFFFF;
     border-color: #ffffff;
-    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px #4B6381, 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 .notif-filter-btn--active[data-filter="important"],
 .notif-filter-btn--active[data-filter="flight_info"],
@@ -230,7 +231,7 @@
     background: #A8A4BD;
     color: #FFFFFF;
     border-color: #ffffff;
-    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px #BFC6D8, 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 .notif-filter-btn--active[data-filter="today"],
 .notif-filter-btn--active[data-filter="travel_update"],
@@ -240,14 +241,14 @@
     background: #2A3654;
     color: #FFFFFF;
     border-color: #ffffff;
-    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px #4B6381, 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 .notif-filter-btn--active[data-filter="schedule_update"],
 .notif-filter-btn--active[data-filter="hotel_stay"] {
     background: #B9E0FC;
     color: #2A3654;
     border-color: #ffffff;
-    box-shadow: 0 0 0 2px #ffffff, 0 6px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 4px #8FC5E8, 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 
 /* Notification list */
