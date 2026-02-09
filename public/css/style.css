@@ -177,7 +177,7 @@ body {
 }
 
 .save-date-text {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.5px;
     font-family: 'Volkhov', serif;
@@ -190,14 +190,14 @@ body {
 }
 
 .calendar-icon {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-date {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 400;
     font-family: 'Volkhov', serif;
 }
@@ -258,13 +258,13 @@ body {
 .login-btn {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background-color: #ffffff;
     border: 1px solid #ffffff;
     color: #2F4F75;
-    padding: 5px 12px;
+    padding: 8px 16px;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 400;
     font-family: 'Volkhov', serif;
     cursor: pointer;
@@ -279,8 +279,8 @@ body {
 }
 
 .login-icon {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     object-fit: contain;
     display: block;
 }
@@ -769,8 +769,8 @@ main {
     }
 
     .login-btn {
-        padding: 6px 12px;
-        font-size: 14px;
+        padding: 8px 14px;
+        font-size: 15px;
     }
 
     .welcome-text {
@@ -785,8 +785,8 @@ main {
     }
 
     .login-icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
     }
 
     .wedding-logo {
@@ -939,26 +939,26 @@ main {
     }
 
     .login-btn {
-        padding: 6px 12px;
-        font-size: 13px;
+        padding: 8px 14px;
+        font-size: 15px;
     }
 
     .login-icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
     }
 
     .save-date-text {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .wedding-date {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .calendar-icon {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
     }
 
     .wedding-logo {
@@ -1017,17 +1017,22 @@ main {
 
     .save-date-text,
     .wedding-date {
-        font-size: 12px;
+        font-size: 15px;
+    }
+
+    .calendar-icon {
+        width: 22px;
+        height: 22px;
     }
 
     .login-btn {
-        padding: 5px 10px;
-        font-size: 12px;
+        padding: 7px 12px;
+        font-size: 14px;
     }
 
     .login-icon {
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
     }
 
     .nav-link {
