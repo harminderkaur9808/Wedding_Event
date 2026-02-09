@@ -280,6 +280,12 @@
     flex: 0 0 16px;
 }
 
+.wm-la-item-meta-ico--svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+}
+
 .wm-la-item-map-link {
     color: #2F4F75;
     text-decoration: underline;

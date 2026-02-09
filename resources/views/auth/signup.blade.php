@@ -116,6 +116,15 @@
                             @enderror
                         </div>
 
+                        <!-- Phone # Field -->
+                        <div class="login-wed-lex1-form-group">
+                            <label for="phone" class="login-wed-lex1-label">Phone # <span class="login-wed-lex1-required">*</span></label>
+                            <input type="tel" id="phone" name="phone" class="login-wed-lex1-input @error('phone') is-invalid @enderror" placeholder="e.g. (760) 123-4567" value="{{ old('phone') }}" required maxlength="32">
+                            @error('phone')
+                                <span class="login-wed-lex1-error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Family Relation Field -->
                         <div class="login-wed-lex1-form-group">
                             <label for="family_relation" class="login-wed-lex1-label">Family relation <span class="login-wed-lex1-required">*</span></label>
@@ -181,6 +190,16 @@
                             </div>
                         </div>
 
+                        @if(config('services.recaptcha.site_key'))
+                        <!-- reCAPTCHA -->
+                        <div class="login-wed-lex1-form-group login-wed-lex1-recaptcha-wrap">
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                            @error('g-recaptcha-response')
+                                <span class="login-wed-lex1-error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        @endif
+
                         <!-- Submit Button -->
                         <button type="submit" class="login-wed-lex1-submit-btn">Sign up</button>
 
@@ -196,6 +215,9 @@
 </div>
 
 @push('scripts')
+@if(config('services.recaptcha.site_key'))
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endif
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);

@@ -379,6 +379,69 @@ a.wm-pv-category-tab.active {
     background-color: #e8e8e8;
 }
 
+/* Admin drag handle for reordering (only visible when canReorder) */
+.wm-pv-drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border-radius: 6px;
+    cursor: grab;
+    transition: background 0.2s;
+}
+.wm-pv-drag-handle:hover {
+    background: rgba(47, 79, 117, 0.9);
+}
+.wm-pv-drag-handle:active {
+    cursor: grabbing;
+}
+.wm-pv-category-grid.sortable-dragging .wm-pv-drag-handle {
+    cursor: grabbing;
+}
+
+/* Sortable.js drag state */
+.wm-pv-category-item.sortable-ghost {
+    opacity: 0.4;
+}
+.wm-pv-category-item.sortable-chosen {
+    opacity: 0.9;
+}
+.wm-pv-category-item.sortable-drag {
+    opacity: 1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Toast when admin saves order */
+.wm-pv-order-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #2F4F75;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10010;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+}
+.wm-pv-order-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
 .wm-pv-category-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -467,6 +530,11 @@ a.wm-pv-category-tab.active {
     background-color: #0055A5;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+}
+
+/* Hide header when image/video viewer is open */
+body.pv-viewer-open .wedding-header {
+    display: none !important;
 }
 
 /* Image Viewer Modal */

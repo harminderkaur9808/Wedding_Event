@@ -14,6 +14,8 @@ class BookAppointmentEntry extends Model
         'address',
         'phone_number',
         'distance',
+        'website',
+        'map_url',
         'services',
     ];
 

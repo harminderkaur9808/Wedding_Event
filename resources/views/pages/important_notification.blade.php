@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Important Notification - Wedding Event')
+@section('title', 'Travel & Accommodation - Wedding Event')
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/important-notification.css') }}">
@@ -8,22 +8,22 @@
 
 @section('content')
     <!-- First Section - Hero Banner -->
-    <section class="important-notification-hero" aria-label="Important Notification">
+    <section class="important-notification-hero" aria-label="Travel & Accommodation">
         <div class="important-notification-hero-bg" aria-hidden="true">
             <img
                 src="{{ asset('Images/notifications_imgs/Important_Notification_0.png') }}"
-                alt="Notifications - Important Notification"
+                alt="Travel & Accommodation"
                 class="important-notification-hero-bg-img"
             >
         </div>
         <div class="important-notification-hero-overlay" aria-hidden="true"></div>
         <div class="container important-notification-hero-content">
             <div class="important-notification-hero-text">
-                <div class="important-notification-hero-eyebrow">Notifications</div>
+                <div class="important-notification-hero-eyebrow">Travel & Accommodation</div>
                 <div class="important-notification-hero-decorative">
                     <img src="{{ asset('Images/updates_by_family/hairbetweenmain.svg') }}" alt="" class="important-notification-hero-decorative-img">
                 </div>
-                <h1 class="important-notification-hero-title">Important Notification</h1>
+                <h1 class="important-notification-hero-title">Travel & Accommodation</h1>
             </div>
         </div>
     </section>

@@ -8,9 +8,13 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Safe when table already exists (e.g. created earlier without this migration recorded).
      */
     public function up(): void
     {
+        if (Schema::hasTable('password_reset_tokens')) {
+            return;
+        }
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');

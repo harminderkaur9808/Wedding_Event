@@ -46,8 +46,9 @@
                 <div class="ask-the-host-form-wrap" id="askTheHostFormWrap" style="{{ old('question_text') ? 'display: block;' : 'display: none;' }}">
                     <form action="{{ route('ask.the.host.questions.store') }}" method="POST" class="ask-the-host-form">
                         @csrf
-                        <label for="question_text" class="ask-the-host-form-label">Your question</label>
-                        <textarea name="question_text" id="question_text" class="ask-the-host-form-textarea" rows="4" placeholder="Type your question here..." required minlength="3" maxlength="2000">{{ old('question_text') }}</textarea>
+                        <label for="question_text" class="ask-the-host-form-label">Your question <span class="ask-the-host-word-hint">(limit 150 words)</span></label>
+                        <textarea name="question_text" id="question_text" class="ask-the-host-form-textarea" rows="4" placeholder="Type your question here..." required minlength="3" maxlength="2000" data-max-words="150">{{ old('question_text') }}</textarea>
+                        <span class="ask-the-host-word-count" id="questionWordCount" aria-live="polite"></span>
                         @error('question_text')
                             <span class="ask-the-host-error">{{ $message }}</span>
                         @enderror
@@ -58,10 +59,22 @@
                     </form>
                 </div>
 
-                <!-- List of Questions (logged-in only) -->
-                <div class="ask-the-host-list">
-                    @forelse($queries ?? [] as $q)
-                        <article class="ask-the-host-question" data-query-id="{{ $q->id }}">
+                <!-- List of Questions (logged-in only): 10 shown by default, View More loads next 10 -->
+                @php
+                    $queriesList = $queries ?? collect();
+                    $perPage = 10;
+                    $totalQuestions = $queriesList->count();
+                    $hasMoreQuestions = $totalQuestions > $perPage;
+                @endphp
+                <div class="ask-the-host-list" id="askTheHostList" data-shown="{{ $perPage }}" data-total="{{ $totalQuestions }}" data-per-page="{{ $perPage }}">
+                    @forelse($queriesList as $idx => $q)
+                        @php
+                            $shortText = Str::words($q->question_text, 50);
+                            $fullText = $q->question_text;
+                            $isLong = Str::words($q->question_text, 50) !== $q->question_text;
+                            $isHidden = $idx >= $perPage;
+                        @endphp
+                        <article class="ask-the-host-question {{ $isHidden ? 'ask-the-host-question-hidden' : '' }}" data-query-id="{{ $q->id }}" data-index="{{ $idx }}" style="{{ $isHidden ? 'display: none;' : '' }}">
                             <div class="ask-the-host-question-meta">
                                 <div class="ask-the-host-avatar">
                                     @if($q->user->profile_image)
@@ -78,12 +91,22 @@
                                     <span class="ask-the-host-date">{{ $q->created_at->format('j M h:i a') }}</span>
                                 </div>
                             </div>
-                            <p class="ask-the-host-question-text">{{ $q->question_text }}</p>
+                            <div class="ask-the-host-question-text-wrap">
+                                <p class="ask-the-host-question-text">
+                                    @if($isLong)
+                                        <span class="ask-the-host-question-short">{{ $shortText }}</span>
+                                        <span class="ask-the-host-question-full" style="display: none;">{{ $fullText }}</span>
+                                        <button type="button" class="ask-the-host-see-more-btn" aria-expanded="false">See more</button>
+                                    @else
+                                        {{ $fullText }}
+                                    @endif
+                                </p>
+                            </div>
                             <div class="ask-the-host-actions">
                                 <button type="button" class="ask-the-host-reply-trigger" data-query-id="{{ $q->id }}">Answer</button>
                                 @if($q->replies_count > 0)
-                                    <button type="button" class="ask-the-host-see-replies" data-query-id="{{ $q->id }}" data-count="{{ $q->replies_count }}">
-                                        See {{ $q->replies_count }} {{ Str::plural('Reply', $q->replies_count) }}
+                                    <button type="button" class="ask-the-host-see-replies {{ $q->replies_count > 0 ? 'replies-open' : '' }}" data-query-id="{{ $q->id }}" data-count="{{ $q->replies_count }}">
+                                        Hide {{ $q->replies_count }} {{ Str::plural('Reply', $q->replies_count) }}
                                     </button>
                                 @endif
                             </div>
@@ -103,8 +126,8 @@
                                 </form>
                             </div>
 
-                            <!-- Replies list (toggle) -->
-                            <div class="ask-the-host-replies" id="replies-{{ $q->id }}" style="display: none;">
+                            <!-- Replies list: visible by default when there are replies -->
+                            <div class="ask-the-host-replies" id="replies-{{ $q->id }}" style="{{ $q->replies_count > 0 ? 'display: block;' : 'display: none;' }}">
                                 @foreach($q->replies as $reply)
                                     <div class="ask-the-host-reply">
                                         <div class="ask-the-host-reply-meta">
@@ -130,6 +153,11 @@
                         <p class="ask-the-host-empty">No questions yet. Be the first to ask!</p>
                     @endforelse
                 </div>
+                @if($hasMoreQuestions)
+                <div class="ask-the-host-view-more-wrap" id="askTheHostViewMoreWrap">
+                    <button type="button" class="ask-the-host-view-more-btn" id="askTheHostViewMoreBtn">View More</button>
+                </div>
+                @endif
             @else
                 @include('partials.login-required-card', ['message' => 'Please log in to view and participate in Questions & Answers.'])
             @endauth
@@ -155,6 +183,58 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Word count for question textarea (limit 150 words)
+    var questionText = document.getElementById('question_text');
+    var wordCountEl = document.getElementById('questionWordCount');
+    var maxWords = 150;
+    function countWords(str) {
+        return str.trim() ? str.trim().split(/\s+/).length : 0;
+    }
+    function updateWordCount() {
+        if (!wordCountEl || !questionText) return;
+        var n = countWords(questionText.value);
+        wordCountEl.textContent = n + ' / ' + maxWords + ' words';
+        wordCountEl.classList.toggle('ask-the-host-word-count-over', n > maxWords);
+    }
+    if (questionText && wordCountEl) {
+        questionText.addEventListener('input', updateWordCount);
+        questionText.addEventListener('paste', function() { setTimeout(updateWordCount, 0); });
+        updateWordCount();
+    }
+    var questionForm = document.querySelector('.ask-the-host-form');
+    if (questionForm && questionText) {
+        questionForm.addEventListener('submit', function(e) {
+            if (countWords(questionText.value) > maxWords) {
+                e.preventDefault();
+                alert('The question must not exceed 150 words. Please shorten your question.');
+            }
+        });
+    }
+
+    // See more / See less for long question text
+    document.querySelectorAll('.ask-the-host-see-more-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var p = btn.closest('.ask-the-host-question-text');
+            if (!p) return;
+            var short = p.querySelector('.ask-the-host-question-short');
+            var full = p.querySelector('.ask-the-host-question-full');
+            if (!short || !full) return;
+            var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+            if (isExpanded) {
+                short.style.display = 'inline';
+                full.style.display = 'none';
+                btn.textContent = 'See more';
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                short.style.display = 'none';
+                full.style.display = 'inline';
+                btn.textContent = 'See less';
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
     document.querySelectorAll('.ask-the-host-reply-trigger').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             if (btn.tagName === 'A') return;
@@ -174,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var isHidden = repliesEl.style.display === 'none';
             repliesEl.style.display = isHidden ? 'block' : 'none';
             btn.classList.toggle('replies-open', isHidden);
-            btn.textContent = isHidden ? 'Hide replies' : 'See ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies');
+            btn.textContent = isHidden ? 'Hide ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies') : 'See ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies');
         });
     });
 
@@ -185,6 +265,25 @@ document.addEventListener('DOMContentLoaded', function() {
             if (wrap) wrap.style.display = 'none';
         });
     });
+
+    // View More: show next 10 questions
+    var viewMoreBtn = document.getElementById('askTheHostViewMoreBtn');
+    var listEl = document.getElementById('askTheHostList');
+    if (viewMoreBtn && listEl) {
+        var perPage = parseInt(listEl.getAttribute('data-per-page') || '10', 10);
+        viewMoreBtn.addEventListener('click', function() {
+            var hidden = listEl.querySelectorAll('.ask-the-host-question-hidden');
+            var toShow = Math.min(perPage, hidden.length);
+            for (var i = 0; i < toShow; i++) {
+                hidden[i].style.display = '';
+                hidden[i].classList.remove('ask-the-host-question-hidden');
+            }
+            var stillHidden = listEl.querySelectorAll('.ask-the-host-question-hidden');
+            if (stillHidden.length === 0) {
+                document.getElementById('askTheHostViewMoreWrap').style.display = 'none';
+            }
+        });
+    }
 });
 </script>
 @endpush

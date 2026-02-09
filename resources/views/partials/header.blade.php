@@ -3,7 +3,23 @@
     <div class="top-header">
         <div class="container">
             <div class="top-header-content">
-                <div class="top-header-left top-header-spacer"></div>
+                <div class="top-header-left">
+                    <span class="top-header-countdown-title">Date We Getting Married</span>
+                    <div class="top-header-countdown-wrapper" id="header-wedding-countdown" data-wedding-date="{{ $headerWeddingDateIso ?? '2026-12-31T12:00:00' }}">
+                        <div class="top-header-countdown-box">
+                            <span class="top-header-countdown-number" id="header-days">0</span>
+                            <span class="top-header-countdown-label">Day</span>
+                        </div>
+                        <div class="top-header-countdown-box">
+                            <span class="top-header-countdown-number" id="header-hours">0</span>
+                            <span class="top-header-countdown-label">Hours</span>
+                        </div>
+                        <div class="top-header-countdown-box">
+                            <span class="top-header-countdown-number" id="header-minutes">0</span>
+                            <span class="top-header-countdown-label">Minutes</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="top-header-center">
                     <span class="save-date-text">Save The Date</span>
                     <div class="date-section">
@@ -65,7 +81,7 @@
                             <a href="{{ route('ask.the.host') }}" class="nav-link {{ request()->routeIs('ask.the.host') ? 'active' : '' }}">Ask the Host</a>
                             <a href="{{ route('updates.by.family') }}" class="nav-link {{ request()->routeIs('updates.by.family') ? 'active' : '' }}">Updates by family</a>
                             <a href="{{ route('local.attractions') }}" class="nav-link {{ request()->routeIs('local.attractions') ? 'active' : '' }}">Local Attractions</a>
-                            <a href="{{ route('important.notification') }}" class="nav-link {{ request()->routeIs('important.notification') ? 'active' : '' }}">Important Notification</a>
+                            <a href="{{ route('important.notification') }}" class="nav-link {{ request()->routeIs('important.notification') ? 'active' : '' }}">Travel & Accommodation</a>
                         </nav>
                         <a href="{{ route('book.appointments') }}" 
                            class="book-appointment-btn mt-3 mt-lg-0 ms-lg-3"

@@ -1313,6 +1313,36 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     opacity: 1;
 }
 
+.admin-dashboard-media-item--hidden {
+    display: none !important;
+}
+
+.admin-dashboard-media-view-more-wrap {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.admin-dashboard-media-view-more-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2F4F75;
+    background: #fff;
+    border: 2px solid #2F4F75;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.admin-dashboard-media-view-more-btn:hover {
+    background: #2F4F75;
+    color: #fff;
+}
+
 .admin-dashboard-media-actions {
     display: flex;
     align-items: center;

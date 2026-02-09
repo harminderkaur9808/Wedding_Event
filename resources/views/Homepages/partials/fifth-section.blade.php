@@ -14,6 +14,9 @@
                     <img src="{{ asset('Images/Home/fifthsec/Fifthsection_betweenimg_framer.png') }}" alt="Decorative Element" class="wedding-mele-fifth-decorative-img">
                 </div>
                 <h2 class="wedding-mele-vatna-text">{{ $fifth?->title ?? 'Vatna' }}</h2>
+                @if($fifth?->short_description)
+                    <p class="wedding-mele-section-description">{{ $fifth->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main Content Box -->

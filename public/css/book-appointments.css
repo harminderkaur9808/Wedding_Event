@@ -269,6 +269,16 @@
 .book-appointments-detail-icon-svg {
     flex-shrink: 0;
     display: block;
+}
+
+.book-appointments-detail-link {
+    color: #2F4F75;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.book-appointments-detail-link:hover {
+    color: #054C82;
     color: #2F4F75;
     stroke: #2F4F75;
 }

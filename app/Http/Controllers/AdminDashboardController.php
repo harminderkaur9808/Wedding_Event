@@ -143,6 +143,7 @@ class AdminDashboardController extends Controller
             'address' => '',
             'distance' => '',
             'map_url' => '',
+            'website' => '',
             'image_path' => null,
             'image_position' => ((($maxOrder + 1) % 2) === 0) ? 'left' : 'right',
         ]);
@@ -171,6 +172,7 @@ class AdminDashboardController extends Controller
             'address' => 'nullable|string|max:500',
             'distance' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
+            'website' => 'nullable|string|max:2048',
             'image_position' => 'required|in:left,right',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'remove_image' => 'nullable|in:1',
@@ -200,6 +202,7 @@ class AdminDashboardController extends Controller
         $attraction->address = $request->input('address') ?? '';
         $attraction->distance = $request->input('distance') ?? '';
         $attraction->map_url = $request->input('map_url') ?? '';
+        $attraction->website = $request->input('website') ?? '';
         $attraction->image_position = $request->input('image_position', 'left');
         $attraction->save();
 
@@ -557,6 +560,7 @@ class AdminDashboardController extends Controller
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'nullable|string|max:32',
             'family_relation' => 'nullable|string|in:' . $familyRelationOptions,
             'password' => 'nullable|string|min:6|confirmed',
             'status' => 'nullable|string|in:active,inactive',
@@ -569,6 +573,7 @@ class AdminDashboardController extends Controller
         $editUser->first_name = $request->first_name;
         $editUser->last_name = $request->last_name;
         $editUser->email = $request->email;
+        $editUser->phone = $request->phone ?: null;
         $editUser->family_relation = $request->family_relation ?: null;
         $editUser->status = $request->status ?: 'active';
         if ($request->filled('password')) {
@@ -796,6 +801,7 @@ class AdminDashboardController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
+            'phone' => 'nullable|string|max:32',
             'password' => 'required|string|min:8|confirmed',
             'family_relation' => 'required|string|max:255',
             'role' => 'nullable|string|in:user,admin',
@@ -811,6 +817,7 @@ class AdminDashboardController extends Controller
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
+        $user->phone = $request->phone ?: null;
         $user->password = Hash::make($request->password);
         $user->family_relation = $request->family_relation;
         // DB enum is 'simpleuser' | 'admin'; form sends 'user' | 'admin'
@@ -1053,6 +1060,8 @@ class AdminDashboardController extends Controller
             'address' => '',
             'phone_number' => '',
             'distance' => '',
+            'website' => '',
+            'map_url' => '',
             'services' => '',
         ]);
         return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $request->section])
@@ -1075,9 +1084,11 @@ class AdminDashboardController extends Controller
             'address' => 'nullable|string|max:500',
             'phone_number' => 'nullable|string|max:32',
             'distance' => 'nullable|string|max:500',
+            'website' => 'nullable|string|max:2048',
+            'map_url' => 'nullable|string|max:2048',
             'services' => 'nullable|string|max:500',
         ]);
-        $entry->update($request->only(['store_name', 'instruction', 'address', 'phone_number', 'distance', 'services']));
+        $entry->update($request->only(['store_name', 'instruction', 'address', 'phone_number', 'distance', 'website', 'map_url', 'services']));
         return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $entry->section])
             ->with('success', 'Entry updated.');
     }

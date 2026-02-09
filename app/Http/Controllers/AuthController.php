@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -17,19 +18,29 @@ use App\Mail\AdminNewUserNotification;
 class AuthController extends Controller
 {
     /**
-     * Show login form. Store intended URL (e.g. ask-the-host) so we can redirect back after login.
+     * Show login form. After login, users are always redirected to the home page.
      */
     public function showLoginForm(Request $request)
     {
-        if ($request->filled('intended')) {
-            $intended = $request->get('intended');
-            // Only allow same-origin or relative path (avoid open redirect)
-            if (str_starts_with($intended, url('/')) || str_starts_with($intended, '/')) {
-                session(['url.intended' => $intended]);
-            }
-        }
-
         return view('auth.login');
+    }
+
+    /**
+     * Verify reCAPTCHA response with Google (skip if keys not configured).
+     */
+    private static function verifyRecaptcha(?string $token, ?string $remoteIp = null): bool
+    {
+        $secret = config('services.recaptcha.secret_key');
+        if (empty($secret) || empty($token)) {
+            return empty($secret); // skip verification if no secret configured
+        }
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => $secret,
+            'response' => $token,
+            'remoteip' => $remoteIp,
+        ]);
+        $data = $response->json();
+        return isset($data['success']) && $data['success'] === true;
     }
 
     /**
@@ -44,6 +55,10 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        if (!static::verifyRecaptcha($request->input('g-recaptcha-response'), $request->ip())) {
+            return back()->withErrors(['g-recaptcha-response' => 'Please complete the reCAPTCHA verification.'])->withInput();
         }
 
         $credentials = $request->only('email', 'password');
@@ -65,12 +80,8 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            // Redirect to intended URL (e.g. ask-the-host) if set, otherwise to dashboard by role
-            if ($user->isAdmin()) {
-                return redirect()->intended(route('admin.dashboard'))->with('success', 'Welcome back, ' . $user->first_name . '!');
-            }
-
-            return redirect()->intended(route('user.dashboard'))->with('success', 'Welcome back, ' . $user->first_name . '!');
+            // Always redirect to home page after login (never to intended URL or dashboard)
+            return redirect()->route('welcome')->with('success', 'Welcome back, ' . $user->first_name . '!');
         }
 
         return back()->withErrors([
@@ -95,12 +106,17 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:32',
             'family_relation' => 'required|string|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
+        }
+
+        if (!static::verifyRecaptcha($request->input('g-recaptcha-response'), $request->ip())) {
+            return back()->withErrors(['g-recaptcha-response' => 'Please complete the reCAPTCHA verification.'])->withInput();
         }
 
         // Determine if user should be admin based on family relation
@@ -113,6 +129,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'family_relation' => $request->family_relation,
             'password' => Hash::make($request->password),
             'role' => $isAdmin ? 'admin' : 'simpleuser',

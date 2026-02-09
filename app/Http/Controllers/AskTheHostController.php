@@ -6,6 +6,7 @@ use App\Models\AskTheHostQuery;
 use App\Models\AskTheHostReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AskTheHostController extends Controller
 {
@@ -32,7 +33,17 @@ class AskTheHostController extends Controller
     public function storeQuestion(Request $request)
     {
         $request->validate([
-            'question_text' => ['required', 'string', 'min:3', 'max:2000'],
+            'question_text' => [
+                'required',
+                'string',
+                'min:3',
+                'max:2000',
+                function ($attribute, $value, $fail) {
+                    if (Str::wordCount($value) > 150) {
+                        $fail('The question must not exceed 150 words. Current: ' . Str::wordCount($value) . ' words.');
+                    }
+                },
+            ],
         ]);
 
         AskTheHostQuery::create([

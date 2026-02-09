@@ -14,6 +14,9 @@
                     <img src="{{ asset('Images/Home/Seven_sec_img/betweebtxtico_frame.svg') }}" alt="Decorative Element" class="wedding-mele-seventh-between-img">
                 </div>
                 <h2 class="wedding-mele-seventh-title">{{ $seventh?->title ?? 'Sangeet Night' }}</h2>
+                @if($seventh?->short_description)
+                    <p class="wedding-mele-section-description">{{ $seventh->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main -->

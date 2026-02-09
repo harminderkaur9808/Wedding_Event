@@ -9,6 +9,9 @@
                     <img src="{{ asset('Images/Home/ninthSec/betweebtxtico_frame.svg') }}" alt="Decorative Element" class="wedding-mele-ninth-between-img">
                 </div>
                 <h2 class="wedding-mele-ninth-title">{!! nl2br(e($ninth?->title ?? "Jaggo, Gidha and\nBhangra Night")) !!}</h2>
+                @if($ninth?->short_description)
+                    <p class="wedding-mele-section-description">{{ $ninth->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main -->

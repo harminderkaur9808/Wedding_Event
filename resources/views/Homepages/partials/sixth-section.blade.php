@@ -17,6 +17,9 @@
                     <img src="{{ asset('Images/Home/sixthSec/betweebtxt_img_0.svg') }}" alt="Decorative Element" class="wedding-mele-sixth-between-img">
                 </div>
                 <h2 class="wedding-mele-mehndi-text">{{ $sixth?->title ?? 'Mehndi' }}</h2>
+                @if($sixth?->short_description)
+                    <p class="wedding-mele-section-description">{{ $sixth->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main box -->

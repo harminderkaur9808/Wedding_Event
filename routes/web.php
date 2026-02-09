@@ -71,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store');
     Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
     Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
-    Route::get('/important-notification', [ImportantNotificationController::class, 'index'])->name('important.notification');
+    Route::get('/travel-accommodation', [ImportantNotificationController::class, 'index'])->name('important.notification');
     Route::post('/updates-by-family', [UpdatesByFamilyController::class, 'store'])->name('updates.by.family.store');
     Route::patch('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'update'])->name('updates.by.family.update');
     Route::delete('/updates-by-family/{update}', [UpdatesByFamilyController::class, 'destroy'])->name('updates.by.family.destroy');
@@ -110,6 +110,8 @@ Route::middleware(['auth'])->group(function () {
     
     // Media upload route
     Route::post('/pictures-videos/{category}/upload', [PicturesVideosController::class, 'uploadMedia'])->name('pictures_videos.upload');
+    // Admin only: save gallery display order (drag-and-drop)
+    Route::post('/pictures-videos/{category}/gallery-order', [PicturesVideosController::class, 'updateGalleryOrder'])->name('pictures_videos.gallery_order');
     // Serve image/video inline (auth required – used for gallery display so URLs require login)
     Route::get('/pictures-videos/serve/{mediaId}/{type}/{index}', [PicturesVideosController::class, 'serveMedia'])->name('pictures_videos.serve');
     // Download image/video (auth required)

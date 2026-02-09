@@ -4,8 +4,10 @@
 
 @section('content')
     @include('Homepages.partials.hero-section')
-    @include('Homepages.partials.our-story-section')
-    @include('Homepages.partials.third-section')
+    {{-- Our Story section – commented out for now --}}
+    {{-- @include('Homepages.partials.our-story-section') --}}
+    {{-- Third section (Date We Getting Married countdown block) – commented out for now; countdown is in top header --}}
+    {{-- @include('Homepages.partials.third-section') --}}
     @include('Homepages.partials.fourth-section')
     @include('Homepages.partials.fifth-section')
     @include('Homepages.partials.sixth-section')

@@ -15,6 +15,7 @@ class LocalAttraction extends Model
         'address',
         'distance',
         'map_url',
+        'website',
         'image_path',
         'image_position',
     ];

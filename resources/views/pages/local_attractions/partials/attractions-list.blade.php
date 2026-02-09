@@ -43,6 +43,14 @@
                                 <span><strong>Distance:</strong> {{ $attraction->distance }}</span>
                             </li>
                         @endif
+                        @if(!empty($attraction->website))
+                            <li class="wm-la-item-meta-row">
+                                <svg class="wm-la-item-meta-ico wm-la-item-meta-ico--svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                                </svg>
+                                <span><strong>Website:</strong> <a class="wm-la-item-map-link" href="{{ $attraction->website }}" target="_blank" rel="noopener noreferrer">Visit Website</a></span>
+                            </li>
+                        @endif
                         @if(!empty($attraction->map_url))
                             <li class="wm-la-item-meta-row">
                                 <img src="{{ asset('Images/Local_attractions/map_location_main_icon.svg') }}" alt="" class="wm-la-item-meta-ico">

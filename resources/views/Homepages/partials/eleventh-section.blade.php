@@ -13,6 +13,9 @@
                     <img src="{{ asset('Images/Home/eleventhsecimg/between_txtframe.png') }}" alt="Decorative Element" class="wedding-mele-eleventh-between-img">
                 </div>
                 <h2 class="wedding-mele-eleventh-title">{{ $eleventh?->title ?? 'Wedding' }}</h2>
+                @if($eleventh?->short_description)
+                    <p class="wedding-mele-section-description">{{ $eleventh->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main -->

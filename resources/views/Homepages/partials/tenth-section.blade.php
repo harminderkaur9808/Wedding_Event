@@ -14,6 +14,9 @@
                     <img src="{{ asset('Images/Home/tenthsecimg/betweebtxtico_frame.svg') }}" alt="Decorative Element" class="wedding-mele-tenth-between-img">
                 </div>
                 <h2 class="wedding-mele-tenth-title">{{ $tenth?->title ?? 'Sehra & Surma Ceremony' }}</h2>
+                @if($tenth?->short_description)
+                    <p class="wedding-mele-section-description">{{ $tenth->short_description }}</p>
+                @endif
             </div>
 
             <!-- Main -->

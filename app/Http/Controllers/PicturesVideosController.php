@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserMedia;
+use App\Models\GalleryDisplayOrder;
 
 class PicturesVideosController extends Controller
 {
@@ -77,6 +78,31 @@ class PicturesVideosController extends Controller
         usort($items, function ($a, $b) {
             return ($b['sort_ts'] ?? 0) <=> ($a['sort_ts'] ?? 0);
         });
+
+        // Apply admin-saved display order if set (admin drag-and-drop order)
+        $savedOrder = GalleryDisplayOrder::where('category', $category)->where('type', $type)->first();
+        if ($savedOrder && !empty($savedOrder->order)) {
+            $orderIds = $savedOrder->order;
+            $byId = [];
+            foreach ($items as $item) {
+                $byId[$item['id']] = $item;
+            }
+            $ordered = [];
+            foreach ($orderIds as $id) {
+                if (isset($byId[$id])) {
+                    $ordered[] = $byId[$id];
+                    unset($byId[$id]);
+                }
+            }
+            // Append any items not in saved order (e.g. newly uploaded) at end, keeping their relative order
+            foreach ($items as $item) {
+                if (isset($byId[$item['id']])) {
+                    $ordered[] = $item;
+                }
+            }
+            $items = $ordered;
+        }
+
         // Set title by position (1, 2, 3...) and remove sort_ts
         $items = array_values(array_map(function ($item, $index) {
             unset($item['sort_ts']);
@@ -99,12 +125,50 @@ class PicturesVideosController extends Controller
         
         $categoryName = $categoryNames[$category] ?? ucfirst($category);
         
+        $user = Auth::user();
+        $canReorder = $user && $user->isAdmin();
+
         return view('pages.pictures_videos.category', [
             'category' => $category,
             'categoryName' => $categoryName,
             'type' => $type,
-            'items' => $items
+            'items' => $items,
+            'canReorder' => $canReorder,
         ]);
+    }
+
+    /**
+     * Update gallery display order (admin only). Saves the order of images/videos for drag-and-drop.
+     */
+    public function updateGalleryOrder(Request $request, $category)
+    {
+        $user = Auth::user();
+        if (!$user || !$user->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Access denied. Admin only.'], 403);
+        }
+
+        $category = strtolower($category);
+        $type = $request->input('type', 'images');
+        if (!in_array($type, ['images', 'videos'], true)) {
+            return response()->json(['success' => false, 'message' => 'Invalid type.'], 422);
+        }
+
+        $order = $request->input('order');
+        if (!is_array($order)) {
+            return response()->json(['success' => false, 'message' => 'Order must be an array of item ids.'], 422);
+        }
+
+        // Sanitize: only allow strings that look like our item ids (media_123_img_0 or media_123_vid_0)
+        $order = array_values(array_filter(array_map(function ($id) {
+            return is_string($id) && preg_match('/^media_\d+_(img|vid)_\d+$/', $id) ? $id : null;
+        }, $order)));
+
+        GalleryDisplayOrder::updateOrCreate(
+            ['category' => $category, 'type' => $type],
+            ['order' => $order]
+        );
+
+        return response()->json(['success' => true, 'message' => 'Order saved.']);
     }
 
     /**

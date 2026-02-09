@@ -1,92 +1,87 @@
 /**
  * Wedding Countdown Timer
  * Dynamically calculates countdown from current time to wedding date
+ * Supports homepage countdown and header countdown (Days, Hours, Minutes)
  * Automatically detects user's timezone/country
  */
 
 (function() {
     'use strict';
 
-    // Wedding date: from backend (data-wedding-date on #wedding-countdown) or fallback
-    const countdownEl = document.getElementById('wedding-countdown');
-    const dateStr = countdownEl && countdownEl.getAttribute('data-wedding-date');
+    // Wedding date: from header (on every page) or homepage #wedding-countdown, or fallback
+    const headerCountdownEl = document.getElementById('header-wedding-countdown');
+    const mainCountdownEl = document.getElementById('wedding-countdown');
+    const dateStr = (headerCountdownEl && headerCountdownEl.getAttribute('data-wedding-date'))
+        || (mainCountdownEl && mainCountdownEl.getAttribute('data-wedding-date'));
     const weddingDate = dateStr ? new Date(dateStr) : new Date('2026-12-31T12:00:00');
-    
+
     // Get user's timezone
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const userCountry = Intl.DateTimeFormat().resolvedOptions().locale;
-    
+
     console.log('User Timezone:', userTimezone);
     console.log('User Locale:', userCountry);
 
-    // DOM Elements
+    // DOM Elements - main (homepage) and header
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
+    const headerDaysElement = document.getElementById('header-days');
+    const headerHoursElement = document.getElementById('header-hours');
+    const headerMinutesElement = document.getElementById('header-minutes');
 
     /**
-     * Calculate time difference and update countdown
+     * Calculate time difference and update all countdown displays
      */
     function updateCountdown() {
         const now = new Date();
         const difference = weddingDate.getTime() - now.getTime();
 
-        // If wedding date has passed
-        if (difference <= 0) {
-            daysElement.textContent = '0';
-            hoursElement.textContent = '0';
-            minutesElement.textContent = '0';
-            if (secondsElement) secondsElement.textContent = '0';
-            return;
+        let days = 0, hours = 0, minutes = 0, seconds = 0;
+        if (difference > 0) {
+            days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            seconds = Math.floor((difference % (1000 * 60)) / 1000);
         }
 
-        // Calculate days, hours, minutes, and seconds
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        const hoursStr = hours.toString().padStart(2, '0');
+        const minutesStr = minutes.toString().padStart(2, '0');
+        const secondsStr = seconds.toString().padStart(2, '0');
 
-        // Update DOM elements
-        daysElement.textContent = days.toString();
-        hoursElement.textContent = hours.toString().padStart(2, '0');
-        minutesElement.textContent = minutes.toString().padStart(2, '0');
-        if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
+        // Update main (homepage) countdown if present
+        if (daysElement) daysElement.textContent = days.toString();
+        if (hoursElement) hoursElement.textContent = hoursStr;
+        if (minutesElement) minutesElement.textContent = minutesStr;
+        if (secondsElement) secondsElement.textContent = secondsStr;
+
+        // Update header countdown if present
+        if (headerDaysElement) headerDaysElement.textContent = days.toString();
+        if (headerHoursElement) headerHoursElement.textContent = hoursStr;
+        if (headerMinutesElement) headerMinutesElement.textContent = minutesStr;
     }
 
     /**
-     * Format number with leading zeros if needed
-     */
-    function formatNumber(num, digits = 2) {
-        return num.toString().padStart(digits, '0');
-    }
-
-    /**
-     * Initialize countdown
+     * Initialize countdown - run if any countdown elements exist
      */
     function initCountdown() {
-        // Check if elements exist
-        if (!daysElement || !hoursElement || !minutesElement) {
-            console.error('Countdown elements not found');
+        const hasMain = daysElement && hoursElement && minutesElement;
+        const hasHeader = headerDaysElement && headerHoursElement && headerMinutesElement;
+        if (!hasMain && !hasHeader) {
             return;
         }
-        // secondsElement is optional for backward compatibility
 
-        // Initial update
         updateCountdown();
-
-        // Update every second for real-time countdown
         setInterval(updateCountdown, 1000);
     }
 
-    // Wait for DOM to be ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initCountdown);
     } else {
         initCountdown();
     }
 
-    // Export for potential external use
     window.WeddingCountdown = {
         update: updateCountdown,
         getTimezone: () => userTimezone,

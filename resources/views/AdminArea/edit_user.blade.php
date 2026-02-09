@@ -95,6 +95,11 @@
                             @error('email')<span class="admin-notes-form-error">{{ $message }}</span>@enderror
                         </div>
                         <div class="admin-notes-form-group">
+                            <label for="phone" class="admin-notes-form-label">Phone #</label>
+                            <input type="tel" id="phone" name="phone" class="admin-notes-form-input" value="{{ old('phone', $editUser->phone) }}" placeholder="e.g. (760) 123-4567" maxlength="32">
+                            @error('phone')<span class="admin-notes-form-error">{{ $message }}</span>@enderror
+                        </div>
+                        <div class="admin-notes-form-group">
                             <label for="family_relation" class="admin-notes-form-label">Family Relation</label>
                             <select id="family_relation" name="family_relation" class="admin-notes-form-input">
                                 <option value="">Choose</option>

@@ -67,16 +67,21 @@
             </div>
 
             @php
-                $perPage = 12;
+                $perPage = 28;
                 $itemsInitial = array_slice($items, 0, $perPage);
                 $totalItems = count($items);
                 $hasMore = $totalItems > $perPage;
             @endphp
-            <!-- Image/Video Grid (12 shown by default, View More loads next 12) -->
+            <!-- Image/Video Grid (28 shown by default, View More loads next 28). Admin can drag to reorder. -->
             <div class="wm-pv-category-grid" id="galleryGrid" data-shown="{{ count($itemsInitial) }}" data-total="{{ $totalItems }}" data-per-page="{{ $perPage }}">
                 @auth
                     @forelse($itemsInitial as $index => $item)
-                        <div class="wm-pv-category-item" data-index="{{ $index }}" onclick="openImageViewer({{ $index }})">
+                        <div class="wm-pv-category-item" data-id="{{ $item['id'] }}" data-index="{{ $index }}" onclick="openImageViewer({{ $index }})">
+                            @if(!empty($canReorder))
+                            <div class="wm-pv-drag-handle" title="Drag to reorder (admin)" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" aria-hidden="true">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            </div>
+                            @endif
                             <div class="wm-pv-category-item-image">
                                 @if(isset($item['is_video']) && $item['is_video'])
                                     <video src="{{ $item['url'] }}" class="wm-pv-category-item-img" style="object-fit: cover;"></video>
@@ -120,11 +125,14 @@
                 @endauth
             </div>
 
-            <!-- View More Button (shows when more than 12 items; loads next 12 on click) -->
+            <!-- View More Button (shows when more than 28 items; loads next 28 on click) -->
             @if($hasMore)
                 <div class="wm-pv-category-view-more" id="viewMoreContainer">
                     <button type="button" class="wm-pv-category-view-more-btn" id="viewMoreBtn">View More</button>
                 </div>
+            @endif
+            @if(!empty($canReorder))
+            <div class="wm-pv-order-toast" id="galleryOrderToast" aria-live="polite">Order saved.</div>
             @endif
         </div>
     </section>
@@ -221,13 +229,17 @@
     @endauth
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script>
 const galleryItems = @json($items);
 let currentImageIndex = 0;
 const currentCategory = '{{ $category }}';
 const currentType = '{{ $type }}';
-const perPage = {{ $perPage ?? 12 }};
+const perPage = {{ $perPage ?? 28 }};
 const showFullViewIconUrl = @json(asset('Images/picturesandvideos/Showfullviewicon.png'));
+const canReorder = @json($canReorder ?? false);
+const galleryOrderUrl = @json(route('pictures_videos.gallery_order', ['category' => $category]));
+const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
 // Fix history navigation - prevent multiple history entries when switching tabs
 document.addEventListener('DOMContentLoaded', function() {
@@ -259,14 +271,13 @@ function openImageViewer(index) {
     updateImageViewer();
     document.getElementById('imageViewer').classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    // Don't create history entries for image viewer
-    // The modal is just a UI overlay, not a navigation state
+    document.body.classList.add('pv-viewer-open');
 }
 
 function closeImageViewer() {
     document.getElementById('imageViewer').classList.remove('active');
     document.body.style.overflow = '';
+    document.body.classList.remove('pv-viewer-open');
 }
 
 function navigateImage(direction) {
@@ -407,7 +418,70 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// View More: load next 12 items
+// Admin drag-and-drop: init Sortable and save order on drop
+document.addEventListener('DOMContentLoaded', function() {
+    if (!canReorder || typeof Sortable === 'undefined') return;
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    new Sortable(galleryGrid, {
+        handle: '.wm-pv-drag-handle',
+        animation: 200,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onStart: function() {
+            galleryGrid.classList.add('sortable-dragging');
+        },
+        onEnd: function() {
+            galleryGrid.classList.remove('sortable-dragging');
+            var visibleIds = [];
+            Array.from(galleryGrid.querySelectorAll('.wm-pv-category-item')).forEach(function(el) {
+                var id = el.getAttribute('data-id');
+                if (id) visibleIds.push(id);
+            });
+            var allIds = galleryItems.map(function(item) { return item.id; });
+            var restIds = allIds.filter(function(id) { return visibleIds.indexOf(id) === -1; });
+            var fullOrder = visibleIds.concat(restIds);
+
+            fetch(galleryOrderUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ order: fullOrder, type: currentType })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    var byId = {};
+                    galleryItems.forEach(function(item) { byId[item.id] = item; });
+                    var reordered = [];
+                    fullOrder.forEach(function(id) {
+                        if (byId[id]) reordered.push(byId[id]);
+                    });
+                    galleryItems.length = 0;
+                    reordered.forEach(function(item) { galleryItems.push(item); });
+                    galleryGrid.querySelectorAll('.wm-pv-category-item').forEach(function(el, idx) {
+                        el.setAttribute('data-index', idx);
+                        el.onclick = function() { openImageViewer(idx); };
+                    });
+                    showGalleryOrderSaved();
+                } else {
+                    alert(data.message || 'Failed to save order.');
+                }
+            })
+            .catch(function() {
+                alert('Failed to save order.');
+            });
+        }
+    });
+});
+
+// View More: load next 28 items
 document.addEventListener('DOMContentLoaded', function() {
     const viewMoreBtn = document.getElementById('viewMoreBtn');
     const galleryGrid = document.getElementById('galleryGrid');
@@ -422,6 +496,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const item = galleryItems[i];
             const div = document.createElement('div');
             div.className = 'wm-pv-category-item';
+            div.setAttribute('data-id', item.id);
             div.setAttribute('data-index', i);
             div.onclick = function() { openImageViewer(i); };
 
@@ -432,7 +507,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 mediaHtml = '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" class="wm-pv-category-item-img" loading="lazy" decoding="async" onload="this.classList.add(\'loaded\')" onerror="this.style.opacity=1">';
             }
             const badgeHtml = item.is_current_user ? '<div style="position: absolute; top: 8px; right: 8px; background: rgba(46, 125, 50, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">Your Upload</div>' : '';
-            div.innerHTML = '<div class="wm-pv-category-item-image">' + mediaHtml +
+            const handleHtml = canReorder ? '<div class="wm-pv-drag-handle" title="Drag to reorder (admin)" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>' : '';
+            div.innerHTML = handleHtml + '<div class="wm-pv-category-item-image">' + mediaHtml +
                 '<div class="wm-pv-category-item-overlay"><img src="' + escapeHtml(showFullViewIconUrl) + '" alt="View Full" class="wm-pv-category-item-hover-icon"></div>' +
                 badgeHtml + '</div>';
             galleryGrid.appendChild(div);
@@ -448,6 +524,15 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function showGalleryOrderSaved() {
+    var el = document.getElementById('galleryOrderToast');
+    if (el) {
+        el.classList.add('show');
+        clearTimeout(window._galleryOrderToastTimer);
+        window._galleryOrderToastTimer = setTimeout(function() { el.classList.remove('show'); }, 3000);
+    }
 }
 </script>
 @endpush

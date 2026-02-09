@@ -46,6 +46,18 @@
     will-change: auto;
 }
 
+/* Homepage section description (under section title) */
+.wedding-mele-section-description {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #2F4F75;
+    line-height: 1.6;
+    max-width: 95%;
+    margin: 16px auto 0;
+    text-align: center;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .wm-reveal {
         opacity: 1 !important;
@@ -124,7 +136,7 @@ body {
 .top-header {
     background-color: #2F4F75;
     color: #ffffff;
-    padding: 12px 0;
+    padding: 6px 0;
     position: relative;
     z-index: 10002;
 }
@@ -139,7 +151,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 15px;
+    gap: 10px;
 }
 
 .top-header-spacer,
@@ -165,7 +177,7 @@ body {
 }
 
 .save-date-text {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.5px;
     font-family: 'Volkhov', serif;
@@ -178,29 +190,81 @@ body {
 }
 
 .calendar-icon {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     object-fit: contain;
     display: block;
 }
 
 .wedding-date {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 400;
     font-family: 'Volkhov', serif;
+}
+
+/* Top header left – "Date We Getting Married" + countdown (compact) */
+.top-header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+.top-header-countdown-title {
+    font-family: 'Volkhov', serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.top-header-countdown-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.top-header-countdown-box {
+    background-color: #ffffff;
+    border-radius: 5px;
+    padding: 4px 10px;
+    min-width: 44px;
+    text-align: center;
+    border: 1px solid rgba(47, 79, 117, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.top-header-countdown-number {
+    display: block;
+    font-family: 'Volkhov', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #2F4F75;
+    line-height: 1.2;
+}
+
+.top-header-countdown-label {
+    display: block;
+    font-size: 9px;
+    font-weight: 500;
+    color: #2F4F75;
+    text-transform: capitalize;
 }
 
 /* Login Button – default white, hover transparent */
 .login-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background-color: #ffffff;
     border: 1px solid #ffffff;
     color: #2F4F75;
-    padding: 8px 16px;
+    padding: 5px 12px;
     border-radius: 5px;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 400;
     font-family: 'Volkhov', serif;
     cursor: pointer;
@@ -215,8 +279,8 @@ body {
 }
 
 .login-icon {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     object-fit: contain;
     display: block;
 }
@@ -239,6 +303,10 @@ body {
     white-space: nowrap;
 }
 
+.top-header .welcome-text {
+    font-size: 12px;
+}
+
 .header-profile-img {
     width: 32px;
     height: 32px;
@@ -249,6 +317,13 @@ body {
     border: 2px solid #ffffff;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.top-header .header-profile-img,
+.top-header .header-profile-initials {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
 }
 
 .header-profile-initials {
@@ -772,6 +847,34 @@ main {
 
     .top-header-spacer {
         display: none;
+    }
+
+    .top-header-left {
+        align-items: center;
+        width: 100%;
+    }
+
+    .top-header-countdown-title {
+        font-size: 11px;
+        text-align: center;
+    }
+
+    .top-header-countdown-wrapper {
+        gap: 5px;
+        justify-content: center;
+    }
+
+    .top-header-countdown-box {
+        padding: 3px 8px;
+        min-width: 38px;
+    }
+
+    .top-header-countdown-number {
+        font-size: 12px;
+    }
+
+    .top-header-countdown-label {
+        font-size: 8px;
     }
 
     .top-header-center {

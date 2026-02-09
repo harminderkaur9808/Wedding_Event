@@ -173,6 +173,13 @@
     width: 100%;
 }
 
+.login-wed-lex1-recaptcha-wrap {
+    margin-bottom: 20px;
+}
+.login-wed-lex1-recaptcha-wrap .g-recaptcha {
+    display: inline-block;
+}
+
 .login-wed-lex1-label {
     display: block;
     font-family: 'Nunito', sans-serif;

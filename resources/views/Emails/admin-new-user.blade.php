@@ -61,6 +61,7 @@
                     <h3>New User Details</h3>
                     <div class="info-item"><span class="info-label">Full Name:</span><span class="info-value">{{ $user->first_name }} {{ $user->last_name }}</span></div>
                     <div class="info-item"><span class="info-label">Email:</span><span class="info-value">{{ $user->email }}</span></div>
+                    <div class="info-item"><span class="info-label">Phone:</span><span class="info-value">{{ $user->phone ?? 'N/A' }}</span></div>
                     <div class="info-item"><span class="info-label">Family Relation:</span><span class="info-value">{{ $user->family_relation ?? 'N/A' }}</span></div>
                     <div class="info-item"><span class="info-label">Registration Date:</span><span class="info-value">{{ $user->created_at->format('F d, Y h:i A') }}</span></div>
                     <div class="info-item"><span class="info-label">Status:</span><span class="info-value" style="color: #e67e22; font-weight: 600;">Pending Approval</span></div>

@@ -266,6 +266,7 @@
                                             <th>S.No</th>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Role</th>
                                             <th>Family Relation</th>
                                             <th>Status</th>
@@ -288,6 +289,7 @@
                                                     </div>
                                                 </td>
                                                 <td data-label="Email">{{ $userItem->email }}</td>
+                                                <td data-label="Phone">{{ $userItem->phone ?? '—' }}</td>
                                                 <td data-label="Role">
                                                     <span class="admin-dashboard-role-badge {{ $userItem->isAdmin() ? 'role-admin' : 'role-user' }}">
                                                         {{ $userItem->isAdmin() ? 'Admin' : 'User' }}
@@ -339,7 +341,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="8" class="admin-dashboard-empty-state">No users found.</td>
+                                                <td colspan="9" class="admin-dashboard-empty-state">No users found.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -388,13 +390,18 @@
                             <label for="pageSectionSelect" class="admin-dashboard-label">Select section to edit</label>
                             <select id="pageSectionSelect" class="admin-dashboard-input admin-dashboard-section-select">
                                 @foreach($pageSections ?? [] as $sec)
-                                    <option value="{{ $sec->slug }}">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</option>
+                                    {{-- Our Story and Date We Getting Married (wedding_day) sections hidden from admin for now --}}
+                                    @if(!in_array($sec->slug, ['our_story', 'wedding_day']))
+                                        <option value="{{ $sec->slug }}">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="admin-dashboard-page-sections">
                             @foreach($pageSections ?? [] as $sec)
+                                {{-- Our Story and Date We Getting Married (wedding_day) sections hidden from admin for now --}}
+                                @if(!in_array($sec->slug, ['our_story', 'wedding_day']))
                                 <div class="admin-dashboard-section-card js-page-section-card" id="page-section-card-{{ $sec->slug }}" data-section-slug="{{ $sec->slug }}" style="display: none;">
                                     <h3 class="admin-dashboard-section-card-title">{{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
                                     <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero' || in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'])) enctype="multipart/form-data" @endif>
@@ -481,8 +488,8 @@
                                         @endif
 
                                         <div class="admin-dashboard-form-group">
-                                            <label for="short_description_{{ $sec->slug }}" class="admin-dashboard-label">Short description</label>
-                                            <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input" rows="2" placeholder="Optional intro or tagline for this section">{{ old('short_description', $sec->short_description) }}</textarea>
+                                            <label for="short_description_{{ $sec->slug }}" class="admin-dashboard-label">Description</label>
+                                            <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input" rows="5" placeholder="Paragraph text shown under the section title on the homepage">{{ old('short_description', $sec->short_description) }}</textarea>
                                         </div>
                                         @endif
 
@@ -575,6 +582,7 @@
                                         </div>
                                     </form>
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                         @if(empty($pageSections) && !($pageSectionsError ?? null))
@@ -668,6 +676,11 @@
                                     </div>
 
                                     <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Website</label>
+                                        <input type="url" name="website" class="admin-dashboard-input" value="{{ old('website', $attraction->website ?? '') }}" placeholder="https://example.com">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Image</label>
                                         @if($attraction->image_path)
                                             <div class="admin-dashboard-image-preview">
@@ -734,14 +747,10 @@
                                             <input type="text" name="store_name" class="admin-dashboard-input" value="{{ old('store_name', $entry->store_name) }}" placeholder="e.g. ULTA BEAUTY STORE">
                                         </div>
                                     </div>
-                                    @if(($bookAppointmentSection ?? '') === 'hair')
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Instruction</label>
-                                        <input type="text" name="instruction" class="admin-dashboard-input" value="{{ old('instruction', $entry->instruction) }}" placeholder="e.g. Call at least one month ahead and book your appointments.">
+                                        <input type="text" name="instruction" class="admin-dashboard-input" value="{{ old('instruction', $entry->instruction) }}" placeholder="e.g. Call at least one month ahead and book your appointments. Leave blank to hide on frontend.">
                                     </div>
-                                    @else
-                                    {{-- Instruction field only for Hair section; commented out for Makeup, Nails, Spa --}}
-                                    @endif
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Address</label>
                                         <input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="e.g. 1905 Calle Barcelona, Carlsbad, CA 92009">
@@ -753,6 +762,14 @@
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Distance</label>
                                         <input type="text" name="distance" class="admin-dashboard-input" value="{{ old('distance', $entry->distance) }}" placeholder="e.g. Approximately 2-3 miles from Park Hyatt Aviara.">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Website</label>
+                                        <input type="url" name="website" class="admin-dashboard-input" value="{{ old('website', $entry->website ?? '') }}" placeholder="https://example.com">
+                                    </div>
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Map URL (Google Maps)</label>
+                                        <input type="url" name="map_url" class="admin-dashboard-input" value="{{ old('map_url', $entry->map_url ?? '') }}" placeholder="https://maps.google.com/...">
                                     </div>
                                     <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Services</label>
@@ -855,11 +872,15 @@
                                                 <h4 class="admin-dashboard-media-category-title">{{ ucfirst($category) }}</h4>
                                                 
                                                 @if(isset($media['images']) && count($media['images']) > 0)
+                                                    @php
+                                                        $imagesCount = count($media['images']);
+                                                        $imagesInitial = 20;
+                                                    @endphp
                                                     <div class="admin-dashboard-media-grid">
-                                                        <h5 class="admin-dashboard-media-type-title">Images ({{ count($media['images']) }})</h5>
-                                                        <div class="admin-dashboard-media-items">
+                                                        <h5 class="admin-dashboard-media-type-title">Images ({{ $imagesCount }})</h5>
+                                                        <div class="admin-dashboard-media-items" id="admin-media-images-{{ $userId }}-{{ $category }}" data-initial="{{ $imagesInitial }}" data-total="{{ $imagesCount }}">
                                                             @foreach($media['images'] as $image)
-                                                                <div class="admin-dashboard-media-item">
+                                                                <div class="admin-dashboard-media-item admin-dashboard-media-item-paginated {{ $loop->iteration > $imagesInitial ? 'admin-dashboard-media-item--hidden' : '' }}" data-item-index="{{ $loop->iteration - 1 }}">
                                                                     <img src="{{ $image['url'] }}" alt="Image" class="admin-dashboard-media-thumb">
                                                                     <div class="admin-dashboard-media-overlay">
 
@@ -886,15 +907,24 @@
                                                                 </div>
                                                             @endforeach
                                                         </div>
+                                                        @if($imagesCount > $imagesInitial)
+                                                            <div class="admin-dashboard-media-view-more-wrap" data-target="admin-media-images-{{ $userId }}-{{ $category }}">
+                                                                <button type="button" class="admin-dashboard-media-view-more-btn">View more</button>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 @endif
 
                                                 @if(isset($media['videos']) && count($media['videos']) > 0)
+                                                    @php
+                                                        $videosCount = count($media['videos']);
+                                                        $videosInitial = 20;
+                                                    @endphp
                                                     <div class="admin-dashboard-media-grid">
-                                                        <h5 class="admin-dashboard-media-type-title">Videos ({{ count($media['videos']) }})</h5>
-                                                        <div class="admin-dashboard-media-items">
+                                                        <h5 class="admin-dashboard-media-type-title">Videos ({{ $videosCount }})</h5>
+                                                        <div class="admin-dashboard-media-items" id="admin-media-videos-{{ $userId }}-{{ $category }}" data-initial="{{ $videosInitial }}" data-total="{{ $videosCount }}">
                                                             @foreach($media['videos'] as $video)
-                                                                <div class="admin-dashboard-media-item">
+                                                                <div class="admin-dashboard-media-item admin-dashboard-media-item-paginated {{ $loop->iteration > $videosInitial ? 'admin-dashboard-media-item--hidden' : '' }}" data-item-index="{{ $loop->iteration - 1 }}">
                                                                     <video src="{{ $video['url'] }}" class="admin-dashboard-media-thumb"></video>
                                                                     <div class="admin-dashboard-media-overlay">
                                                                         <div class="admin-dashboard-media-actions">
@@ -918,6 +948,11 @@
                                                                 </div>
                                                             @endforeach
                                                         </div>
+                                                        @if($videosCount > $videosInitial)
+                                                            <div class="admin-dashboard-media-view-more-wrap" data-target="admin-media-videos-{{ $userId }}-{{ $category }}">
+                                                                <button type="button" class="admin-dashboard-media-view-more-btn">View more</button>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 @endif
                                             </div>
@@ -1150,6 +1185,15 @@
                     @enderror
                 </div>
 
+                <!-- Phone # -->
+                <div class="admin-dashboard-form-group">
+                    <label for="modal_phone" class="admin-dashboard-label">Phone #</label>
+                    <input type="tel" id="modal_phone" name="phone" class="admin-dashboard-input @error('phone') admin-dashboard-input-error @enderror" value="{{ old('phone') }}" placeholder="e.g. (760) 123-4567" maxlength="32">
+                    @error('phone')
+                        <span class="admin-dashboard-error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <!-- Family Relation -->
                 <div class="admin-dashboard-form-group">
                     <label for="modal_family_relation" class="admin-dashboard-label">Family relation <span class="admin-dashboard-required">*</span></label>
@@ -1307,6 +1351,28 @@ function filterMedia() {
 
     window.location.href = url.toString();
 }
+
+// Media Files – View more (show next 20 items per section)
+(function() {
+    var perPage = 20;
+    document.addEventListener('click', function(e) {
+        var btn = e.target && e.target.closest('.admin-dashboard-media-view-more-btn');
+        if (!btn) return;
+        var wrap = btn.closest('.admin-dashboard-media-view-more-wrap');
+        var targetId = wrap && wrap.getAttribute('data-target');
+        if (!targetId) return;
+        var container = document.getElementById(targetId);
+        if (!container) return;
+        var hidden = container.querySelectorAll('.admin-dashboard-media-item--hidden');
+        var toShow = Math.min(perPage, hidden.length);
+        for (var i = 0; i < toShow; i++) {
+            hidden[i].classList.remove('admin-dashboard-media-item--hidden');
+        }
+        if (hidden.length <= perPage) {
+            wrap.style.display = 'none';
+        }
+    });
+})();
 
 // Add User Modal Functions
 function openAddUserModal() {

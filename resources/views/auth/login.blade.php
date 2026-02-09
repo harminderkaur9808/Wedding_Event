@@ -135,6 +135,16 @@
                             <a href="{{ route('password.request') }}" class="login-wed-lex1-forgot-link">Forgot password ?</a>
                         </div>
 
+                        @if(config('services.recaptcha.site_key'))
+                        <!-- reCAPTCHA -->
+                        <div class="login-wed-lex1-form-group login-wed-lex1-recaptcha-wrap">
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                            @error('g-recaptcha-response')
+                                <span class="login-wed-lex1-error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        @endif
+
                         <!-- Submit Button -->
                         <button type="submit" class="login-wed-lex1-submit-btn">Login</button>
 
@@ -150,6 +160,9 @@
 </div>
 
 @push('scripts')
+@if(config('services.recaptcha.site_key'))
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endif
 <script>
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
