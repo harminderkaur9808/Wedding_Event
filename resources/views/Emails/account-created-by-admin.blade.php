@@ -5,6 +5,7 @@
     $baseUrl = config('app.url');
     $logoUrl = $baseUrl . '/Images/Email_template_logo/email_logo.png';
     $bannerUrl = $baseUrl . '/Images/Email_template_logo/maintitlebg.png';
+    $bgImageUrl = rtrim($baseUrl, '/') . '/Images/Email_template_logo/bgimageoftheemail.png';
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +16,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Georgia, 'Times New Roman', serif; background-color: #f0f4f8; padding: 24px 16px; color: #333; }
-        .email-wrapper { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08); }
+        .email-wrapper { max-width: 600px; margin: 0 auto; background: #ffffff url('{{ $bgImageUrl }}') center center no-repeat; background-size: cover; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08); }
         .email-logo-block { text-align: center; padding: 40px 24px 20px; background: #fff; }
         .email-logo-block img { max-width: 140px; height: auto; display: inline-block; }
         .email-logo-block .couple-name { display: block; font-size: 22px; font-weight: 600; color: #2F4F75; margin-top: 14px; letter-spacing: 0.5px; }

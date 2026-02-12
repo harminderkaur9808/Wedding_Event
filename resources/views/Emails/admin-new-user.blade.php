@@ -4,6 +4,7 @@
     $bannerUrl = $baseUrl . '/Images/Email_template_logo/maintitlebg.png';
     $leftDecorUrl = $baseUrl . '/Images/Email_template_logo/left_ICO.png';
     $rightDecorUrl = $baseUrl . '/Images/Email_template_logo/right_ICO.png';
+    $bgImageUrl = $baseUrl . '/Images/Email_template_logo/bgimageoftheemail.png';
     $adminDashboardUrl = url('/admin/dashboard');
     try {
         $weddingDate = \App\Models\PageSection::weddingDate();
@@ -31,7 +32,8 @@
             max-width: 600px;
             width: 100%;
             margin: 0 auto;
-            background: #ffffff;
+            background: #ffffff url('{{ $bgImageUrl }}') center center no-repeat;
+            background-size: cover;
             overflow: hidden;
         }
         .email-decor-left,
@@ -195,8 +197,7 @@
 </head>
 <body>
     <div class="email-wrapper">
-        <img src="{{ $leftDecorUrl }}" alt="" class="email-decor-left" aria-hidden="true">
-        <img src="{{ $rightDecorUrl }}" alt="" class="email-decor-right" aria-hidden="true">
+      
         <div class="email-logo-block">
             <img src="{{ $logoUrl }}" alt="Vickram & Nisha" width="140">
         </div>
