@@ -14,20 +14,22 @@
     width: 100%;
 }
 
+/* Desktop: hero slide max-height 450px */
 .wedding-mele-carousel-item {
     width: 100%;
     position: relative;
-    height: 85vh;
-    max-height: 85vh;
+    height: 450px;
+    max-height: 450px;
 }
 
 .wedding-mele-slide-image {
     width: 100%;
-    height: 85vh;
-    max-height: 85vh;
+    height: 550px;
+    max-height: 550px;
     object-fit: cover;
     display: block;
 }
+
 
 /* Heart Overlay Styles */
 .wedding-mele-heart-overlay {
