@@ -54,14 +54,14 @@
     <!-- Main Header -->
     <div class="main-header">
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light p-0">
+            <nav class="navbar navbar-expand-xl navbar-light p-0">
                 <!-- Logo -->
                 <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
                     <img src="{{ asset('Images/Header/weeding_logo.png') }}" alt="Wedding Logo" class="wedding-logo">
                 </a>
 
-                <!-- Mobile Menu Toggle Button -->
-                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Mobile/Tablet Menu Toggle Button (hidden on desktop 1025px+) -->
+                <button class="navbar-toggler d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 

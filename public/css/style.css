@@ -711,6 +711,51 @@ main {
     }
 }
 
+/* Desktop menu from 1025px (Bootstrap xl is 1200px; we want expand at 1025px) */
+@media (min-width: 1025px) {
+    .main-header .navbar-expand-xl .navbar-toggler {
+        display: none !important;
+    }
+
+    .main-header .navbar-expand-xl .navbar-collapse {
+        display: flex !important;
+    }
+}
+
+/* Tablet (768px - 1024px): collapsed by default; when opened, show dropdown like mobile */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .main-header .navbar-collapse.show {
+        display: flex !important;
+        flex-direction: column;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(0, 85, 165, 0.1);
+    }
+
+    .main-header .navbar-collapse.show .header-right {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .main-header .navbar-collapse.show .main-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .main-header .navbar-collapse.show .nav-link {
+        padding: 8px 0;
+        width: 100%;
+    }
+
+    .main-header .navbar-collapse.show .book-appointment-btn {
+        width: 100%;
+    }
+}
+
 /* iPad Pro and Large Tablets (768px - 991px) */
 @media (max-width: 991.98px) {
     .wedding-logo {
