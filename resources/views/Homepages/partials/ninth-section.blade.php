@@ -23,25 +23,21 @@
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-ninth-detail-icon">
                             <span class="wedding-mele-ninth-detail-text">Date: <span>{{ $ninth?->getDateDisplayString() ?? '28 Feb 2026' }}</span></span>
                         </div>
-
                         <div class="wedding-mele-ninth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-ninth-detail-icon">
                             <span class="wedding-mele-ninth-detail-text">Time: <span>{{ $ninth?->getExtra('time') ?? '6 pm to midnight' }}</span></span>
                         </div>
-
                         <div class="wedding-mele-ninth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-ninth-detail-icon">
                             <span class="wedding-mele-ninth-detail-text">Venue: <span>{{ $ninth?->getExtra('venue') ?? 'Park Hyatt Aviara Resort-760-448-1234' }}</span></span>
                         </div>
-
-                        <div class="wedding-mele-ninth-detail-item">
-                            <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-ninth-detail-icon">
-                            <span class="wedding-mele-ninth-detail-text">Dress Code: <span>{{ $ninth?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}</span></span>
-                        </div>
-
                         <div class="wedding-mele-ninth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-ninth-detail-icon">
                             <span class="wedding-mele-ninth-detail-text">Address: <span>{{ $ninth?->getExtra('address') ?? '7100 Aviara Resort Drive, Carlsbad CA 92011' }}</span></span>
+                        </div>
+                        <div class="wedding-mele-ninth-detail-item">
+                            <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-ninth-detail-icon">
+                            <span class="wedding-mele-ninth-detail-text">Dress Code: <span>{{ $ninth?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}</span></span>
                         </div>
                     </div>
 

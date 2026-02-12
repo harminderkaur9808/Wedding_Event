@@ -25,22 +25,13 @@
                     <div class="wedding-mele-invitation-details">
                         <div class="wedding-mele-detail-item">
                             <img
-                                src="{{ asset('Images/Home/Forth_sec/ico/Dress_code_icon_0.svg') }}"
-                                alt="Dress Code"
-                                class="wedding-mele-detail-icon"
-                            >
-                            <span class="wedding-mele-detail-text">Dress Code: <span>{{ $fourth?->getExtra('dress_code') ?? 'Traditional Outfits' }}</span></span>
-                        </div>
-                        
-                        <div class="wedding-mele-detail-item">
-                            <img
                                 src="{{ asset('Images/Home/Forth_sec/ico/Mask%20group.svg') }}"
                                 alt="Date"
                                 class="wedding-mele-detail-icon"
                             >
                             <span class="wedding-mele-detail-text">Date: <span>{{ $fourth?->getExtra('date') ?? '2/21/2026' }}</span></span>
                         </div>
-                        
+
                         <div class="wedding-mele-detail-item">
                             <img
                                 src="{{ asset('Images/Home/Forth_sec/ico/timer_icon_0.svg') }}"
@@ -49,7 +40,7 @@
                             >
                             <span class="wedding-mele-detail-text">Time: <span>{{ $fourth?->getExtra('time') ?? '9 am - 12 pm' }}</span></span>
                         </div>
-                        
+
                         <div class="wedding-mele-detail-item">
                             <img
                                 src="{{ asset('Images/Home/Forth_sec/ico/venue_ico_0.svg') }}"
@@ -57,6 +48,15 @@
                                 class="wedding-mele-detail-icon"
                             >
                             <span class="wedding-mele-detail-text">Venue: <span>{{ $fourth?->getExtra('venue') ?? 'Phoenix AZ' }}</span></span>
+                        </div>
+
+                        <div class="wedding-mele-detail-item">
+                            <img
+                                src="{{ asset('Images/Home/Forth_sec/ico/Dress_code_icon_0.svg') }}"
+                                alt="Dress Code"
+                                class="wedding-mele-detail-icon"
+                            >
+                            <span class="wedding-mele-detail-text">Dress Code: <span>{{ $fourth?->getExtra('dress_code') ?? 'Traditional Outfits' }}</span></span>
                         </div>
                     </div>
                 </div>

@@ -138,24 +138,22 @@ class AuthController extends Controller
             'status' => 'active',
         ]);
 
-        // Send welcome email to user
+        // Send welcome email to the new user
         try {
             Mail::to($user->email)->send(new UserWelcomeMail($user, $plainPassword));
-        } catch (\Exception $e) {
-            // Log error but don't fail registration
-            \Log::error('Failed to send welcome email: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send welcome email to user: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
 
-        // Send notification email to all admins if user is not admin
+        // Send notification email to all admins (only when new user is not an admin)
         if (!$isAdmin) {
             try {
                 $admins = User::where('is_admin', true)->orWhere('role', 'admin')->get();
                 foreach ($admins as $admin) {
                     Mail::to($admin->email)->send(new AdminNewUserNotification($user));
                 }
-            } catch (\Exception $e) {
-                // Log error but don't fail registration
-                \Log::error('Failed to send admin notification email: ' . $e->getMessage());
+            } catch (\Throwable $e) {
+                \Log::error('Failed to send admin notification email: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             }
         }
 

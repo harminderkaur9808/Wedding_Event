@@ -2,24 +2,15 @@
     $baseUrl = rtrim(config('app.url', ''), '/');
     $logoUrl = $baseUrl . '/Images/Email_template_logo/email_logo.png';
     $bannerUrl = $baseUrl . '/Images/Email_template_logo/maintitlebg.png';
-    $heartIconUrl = $baseUrl . '/Images/Email_template_logo/Heartcleander.png';
     $leftDecorUrl = $baseUrl . '/Images/Email_template_logo/left_ICO.png';
     $rightDecorUrl = $baseUrl . '/Images/Email_template_logo/right_ICO.png';
-    try {
-        $weddingDate = \App\Models\PageSection::weddingDate();
-        $weddingDateFormatted = $weddingDate ? $weddingDate->format('j M, Y') : '31 Dec, 2027';
-        $saveTheDate = $weddingDate ? $weddingDate->format('m-d-Y') : '01-01-2027';
-    } catch (\Throwable $e) {
-        $weddingDateFormatted = '31 Dec, 2027';
-        $saveTheDate = '01-01-2027';
-    }
 @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Vikram & Nisha's Wedding Website</title>
+    <title>Question Received - Ask the Host</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -75,17 +66,12 @@
             text-align: center;
         }
         .email-banner h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: #2F4F75;
+            color: #1e3a52;
             margin-bottom: 10px;
             line-height: 1.3;
             font-family: Georgia, serif;
-        }
-        .email-banner .subheading {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2F4F75;
         }
         .email-body {
             padding: 36px 32px;
@@ -100,109 +86,113 @@
         }
         .email-body .greeting {
             font-size: 16px;
-            color: #054C82;
-            margin-bottom: 18px;
+            font-weight: 700;
+            color: #2F4F75;
+            margin-bottom: 12px;
         }
         .email-body .intro {
-            color: #054C82;
-            margin-bottom: 16px;
-            font-weight: 600;
+            color: #2F4F75;
+            margin-bottom: 20px;
+            font-weight: 400;
         }
-        .email-body .intro-highlight {
+        .email-body .intro .intro-bold {
             font-weight: 700;
-            color: #054C82;
-            text-decoration: none;
+            color: #2F4F75;
         }
-        .email-body .credentials-heading {
+        .email-body .user-details {
+            text-align: left;
+            max-width: 360px;
+            margin: 0 auto 20px;
+            color: #333;
+            font-size: 15px;
+        }
+        .email-body .user-details .detail-row {
+            padding: 6px 0;
+            white-space: nowrap;
+        }
+        .email-body .user-details .detail-label {
+            font-weight: 700;
+            color: #2F4F75;
+            margin-right: 4px;
+        }
+        .email-body .user-details .detail-value {
+            color: #333;
+            font-weight: 400;
+        }
+        .email-body .question-heading {
             font-size: 16px;
             font-weight: 700;
             color: #2F4F75;
-            margin: 24px 0 12px;
-            text-align: center;
+            margin: 24px 0 8px;
         }
-        .credentials-plain {
-            margin: 0 0 24px;
-            text-align: center;
-        }
-        .credentials-plain .credential-item {
-            margin: 6px 0;
-            font-size: 15px;
-            color: #054C82;
-            font-weight: 700;
-        }
-        .credentials-plain .credential-label,
-        .credentials-plain .credential-value {
+        .email-body .question-content {
+            color: #333;
+            margin-bottom: 24px;
             font-weight: 400;
-            color: #054C82;
         }
-        .important-notice {
-            padding: 0;
-            margin: 20px 0;
-            font-size: 14px;
-            color: #054C82;
-            text-align: left;
-        }
-        .important-notice strong { color: #054C82; }
-        .wedding-date-wrap {
-            margin-top: 28px;
-            padding-top: 24px;
-            border-top: 1px solid #e2e8f0;
+        .email-cta-row {
+            margin: 12px 0 24px;
             text-align: center;
         }
-        .wedding-date-row {
+        .email-cta-row .cta-label {
+            font-size: 15px;
+            color: #2F4F75;
+            margin: 0;
             display: inline-block;
-            background: #E9F6FF;
-            border: 1px solid #b8d4e8;
-            padding: 7px 11px;
-            text-align: left;
-        }
-        .wedding-date-row .calendar-icon {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
             vertical-align: middle;
             margin-right: 10px;
-            object-fit: contain;
         }
-        .wedding-date-row .date-label,
-        .wedding-date-row .date-value {
+        .email-cta-row .email-cta-btn {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .email-cta-btn {
+            display: inline-block;
+            background: #2F4F75;
+            color: #fff !important;
             font-size: 15px;
             font-weight: 400;
-            color: #054C82;
+            padding: 4px 11px;
+            text-decoration: none;
+            font-family: Georgia, serif;
         }
+        .email-cta-btn:hover {
+            background: #1e3a52;
+        }
+        .email-body .note-text {
+            font-size: 14px;
+            color: #2F4F75;
+            margin-top: 0;
+        }
+        .email-body .note-text strong { color: #2F4F75; }
         .email-footer {
             padding: 32px 28px;
             text-align: center;
             background: #fafbfc;
             border-top: 1px solid #e2e8f0;
         }
-        .email-footer .closing {
-            font-size: 15px;
-            color: #054C82;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
         .email-footer .signature {
             font-size: 16px;
             margin-bottom: 24px;
         }
         .email-footer .signature-intro {
-            color: #054C82;
+            color: #2F4F75;
             font-weight: 400;
         }
         .email-footer .signature-names {
-            color: #054C82;
+            color: #2F4F75;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 18px;
+            font-style: italic;
         }
         .email-footer .save-the-date {
             font-size: 14px;
-            font-weight: 700;
-            color: #054C82;
+            font-weight: 400;
+            color: #2F4F75;
         }
         .email-footer .save-the-date-value {
             font-weight: 700;
-            color: #054C82;
+            color: #2F4F75;
         }
     </style>
 </head>
@@ -215,37 +205,33 @@
         </div>
 
         <div class="email-banner">
-            <h1>Welcome to Vikram & Nisha's Wedding Website!</h1>
-            <p class="subheading">Your Access Request is Pending Approval</p>
+            <h1>Question Received</h1>
         </div>
 
         <div class="email-body">
             <div class="content-inner">
-                <p class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</p>
-                <p class="intro">Thank you for joining Vikram & Nisha's Wedding Website.</p>
-                <p class="intro">Your account has been successfully created and is currently <span class="intro-highlight">pending approval by the host.</span></p>
+                <p class="greeting">Hello,</p>
+                <p class="intro">A new question has been submitted on the <span class="intro-bold">Ask the Host</span> section.</p>
 
-                <p class="credentials-heading">Please find your login credentials below:</p>
-                <div class="credentials-plain">
-                    <div class="credential-item"><span class="credential-label">Email: </span><span class="credential-value">{{ $user->email }}</span></div>
-                    <div class="credential-item"><span class="credential-label">Password: </span><span class="credential-value">{{ $password }}</span></div>
+                <div class="user-details">
+                    <div class="detail-row"><span class="detail-label">Submitted By</span>: <span class="detail-value">{{ $submittedByName }}</span></div>
+                    <div class="detail-row"><span class="detail-label">Email</span>: <span class="detail-value">{{ $submittedByEmail }}</span></div>
+                    <div class="detail-row"><span class="detail-label">Date</span>: <span class="detail-value">{{ $submittedAt }}</span></div>
                 </div>
 
-                <div class="important-notice">
-                    <strong>Important:</strong> Your account is currently pending approval. You will receive an email notification once your account has been approved by the administrator. After approval, you'll be able to log in and access all features.
+                <p class="question-heading">Question</p>
+                <p class="question-content">{{ $questionText }}</p>
+
+                <div class="email-cta-row">
+                    <span class="cta-label">View &amp; Reply</span>
+                    <a href="{{ $viewReplyUrl }}" class="email-cta-btn">Click here</a>
                 </div>
 
-                <div class="wedding-date-wrap">
-                    <div class="wedding-date-row">
-                        <img src="{{ $heartIconUrl }}" alt="Wedding date" class="calendar-icon" width="28" height="28">
-                        <span class="date-label">Wedding Date: </span><span class="date-value">{{ $weddingDateFormatted }}</span>
-                    </div>
-                </div>
+                <p class="note-text">Please log in to respond to the guest at your earliest convenience.</p>
             </div>
         </div>
 
         <div class="email-footer">
-            <p class="closing">We are excited to celebrate this beautiful journey together and look forward to sharing all event details with you soon.</p>
             <p class="signature"><span class="signature-intro">With Love,</span><br><span class="signature-names">Vickram & Nisha</span></p>
             <p class="save-the-date">Save The Date: <span class="save-the-date-value">{{ $saveTheDate }}</span></p>
         </div>

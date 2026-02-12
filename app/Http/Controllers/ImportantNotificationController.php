@@ -25,7 +25,7 @@ class ImportantNotificationController extends Controller
             ->values();
 
         $notesTotalCount = $allNotes->count();
-        $notes = $allNotes->take(10);
+        $notes = $allNotes; // Pass all notes; view shows first 10, "See All" reveals the rest on the same page
 
         // Only show filter tags that have at least one notification with a message
         $allTagOptions = Note::notificationTagOptions();

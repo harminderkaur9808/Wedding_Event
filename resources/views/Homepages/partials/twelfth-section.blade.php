@@ -26,22 +26,19 @@
                     <div class="wedding-mele-twelfth-details">
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Reception: <span>{{ $twelfth?->getExtra('date') ?? '1/2/2027' }}</span></span>
+                            <span class="wedding-mele-twelfth-detail-text">Date: <span>{{ $twelfth?->getExtra('date') ?? '1/2/2027' }}</span></span>
                         </div>
-
+                        <div class="wedding-mele-twelfth-detail-item">
+                            <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-twelfth-detail-icon">
+                            <span class="wedding-mele-twelfth-detail-text">Time: <span>{{ $twelfth?->getExtra('time') ?? '6 pm onwards' }}</span></span>
+                        </div>
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-twelfth-detail-icon">
                             <span class="wedding-mele-twelfth-detail-text">Venue: <span>{{ $twelfth?->getExtra('venue') ?? 'Park Hyatt Aviara Resort-760-448-1234' }}</span></span>
                         </div>
-
                         <div class="wedding-mele-twelfth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-twelfth-detail-icon">
                             <span class="wedding-mele-twelfth-detail-text">Address: <span>{{ $twelfth?->getExtra('address') ?? '7100 Aviara Resort Drive, Carlsbad CA 92011' }}</span></span>
-                        </div>
-
-                        <div class="wedding-mele-twelfth-detail-item">
-                            <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-twelfth-detail-icon">
-                            <span class="wedding-mele-twelfth-detail-text">Time: <span>{{ $twelfth?->getExtra('time') ?? '6 pm onwards' }}</span></span>
                         </div>
 
                         {{-- Dress code and Dress code subtext removed for twelfth section

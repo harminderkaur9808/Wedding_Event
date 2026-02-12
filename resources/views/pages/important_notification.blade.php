@@ -50,7 +50,7 @@
             <div class="notif-list-wrap">
             <ul class="notif-list" id="notifList">
                 @forelse($notes ?? [] as $note)
-                    <li class="notif-item" data-tags="{{ is_array($note->tags) ? implode(',', $note->tags) : '' }}">
+                    <li class="notif-item {{ $loop->iteration > 10 ? 'notif-item--more' : '' }}" data-tags="{{ is_array($note->tags) ? implode(',', $note->tags) : '' }}" style="{{ $loop->iteration > 10 ? 'display: none;' : '' }}">
                         <div class="notif-item-avatar">
                             @if($note->user && $note->user->profile_image)
                                 <img src="{{ secure_media_url('profile_images/' . $note->user->profile_image) }}" alt="" class="notif-item-avatar-img">
@@ -103,7 +103,7 @@
 
             @if(($notesTotalCount ?? 0) > 10)
             <div class="notif-see-all-wrap">
-                <a href="{{ route('admin.dashboard', ['tab' => 'notes']) }}" class="notif-see-all">See All</a>
+                <button type="button" class="notif-see-all" id="notifSeeAllBtn" aria-expanded="false">See All</button>
             </div>
             @endif
         </div>
@@ -170,6 +170,30 @@
                 }
             });
         });
+
+        // See All: show/hide notes beyond the first 10 on the same page (no redirect to admin)
+        var seeAllBtn = document.getElementById('notifSeeAllBtn');
+        if (seeAllBtn && list) {
+            seeAllBtn.addEventListener('click', function() {
+                var moreItems = list.querySelectorAll('.notif-item--more');
+                var expanded = this.getAttribute('aria-expanded') === 'true';
+                if (expanded) {
+                    moreItems.forEach(function(el) { el.style.display = 'none'; });
+                    this.setAttribute('aria-expanded', 'false');
+                    this.textContent = 'See All';
+                } else {
+                    var activeBtn = document.querySelector('.notif-filter-btn--active');
+                    var activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+                    moreItems.forEach(function(el) {
+                        var tags = (el.getAttribute('data-tags') || '').split(',');
+                        var showByFilter = activeFilter === 'all' || tags.indexOf(activeFilter) !== -1;
+                        if (showByFilter) el.style.display = '';
+                    });
+                    this.setAttribute('aria-expanded', 'true');
+                    this.textContent = 'Show less';
+                }
+            });
+        }
     })();
     </script>
     @endpush

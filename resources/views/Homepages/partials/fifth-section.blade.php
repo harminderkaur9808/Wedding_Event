@@ -50,24 +50,21 @@
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-fifth-detail-icon">
                             <span class="wedding-mele-fifth-detail-text">Date: <span>{{ $fifth?->getExtra('date') ?? '2/25/2026' }}</span></span>
                         </div>
-                        
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-fifth-detail-icon">
                             <span class="wedding-mele-fifth-detail-text">Time: <span>{{ $fifth?->getExtra('time') ?? '9 am - 12 pm' }}</span></span>
                         </div>
-                        
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-fifth-detail-icon">
                             <span class="wedding-mele-fifth-detail-text">Venue: <span>{{ $fifth?->getExtra('venue') ?? 'Phoenix AZ' }}</span></span>
                         </div>
-                        
-                        <div class="wedding-mele-fifth-detail-item">
-                            <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-fifth-detail-icon">
-                            <span class="wedding-mele-fifth-detail-text">Dress Code: <span>{{ $fifth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span></span>
-                        </div>
                         <div class="wedding-mele-fifth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-fifth-detail-icon">
                             <span class="wedding-mele-fifth-detail-text">Address: <span>{{ $fifth?->getExtra('address') ?? 'Phoenix AZ' }}</span></span>
+                        </div>
+                        <div class="wedding-mele-fifth-detail-item">
+                            <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-fifth-detail-icon">
+                            <span class="wedding-mele-fifth-detail-text">Dress Code: <span>{{ $fifth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span></span>
                         </div>
                     </div>
                 </div>

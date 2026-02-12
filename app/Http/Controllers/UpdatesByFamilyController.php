@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FamilyUpdateNotificationMail;
 use App\Models\FamilyUpdate;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class UpdatesByFamilyController extends Controller
 {
@@ -40,10 +43,26 @@ class UpdatesByFamilyController extends Controller
             'message.max'      => 'Message may not exceed 2000 characters.',
         ]);
 
-        FamilyUpdate::create([
+        $familyUpdate = FamilyUpdate::create([
             'user_id' => $user->id,
             'message' => $validated['message'],
         ]);
+
+        // Notify all admins + only approved (non-admin) users; exclude the poster
+        $recipients = User::where('id', '!=', $user->id)
+            ->where(function ($q) {
+                $q->where('is_admin', true)
+                    ->orWhere('role', 'admin')
+                    ->orWhere('is_approved', true);
+            })
+            ->get();
+        foreach ($recipients as $recipient) {
+            try {
+                Mail::to($recipient->email)->send(new FamilyUpdateNotificationMail($recipient, $familyUpdate));
+            } catch (\Throwable $e) {
+                \Log::error('Family update email failed for ' . $recipient->email . ': ' . $e->getMessage());
+            }
+        }
 
         return redirect()->route('updates.by.family')
             ->with('success', 'Update added successfully.');

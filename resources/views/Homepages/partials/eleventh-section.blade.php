@@ -25,19 +25,20 @@
                     <div class="wedding-mele-eleventh-details">
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{{ $eleventh?->getExtra('date') ?? '12-31-2026' }}</span>
+                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{{ $eleventh?->getExtra('date') ?? '01-01-2027' }}</span></span>
                         </div>
-
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">Time: <span>{{ $eleventh?->getExtra('time') ?? '9 am-12 pm' }}</span></span>
                         </div>
-
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">Venue: <span>{{ $eleventh?->getExtra('venue') ?? 'Ramit and Maninder Residence' }}</span></span>
                         </div>
-
+                        <div class="wedding-mele-eleventh-detail-item">
+                            <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-eleventh-detail-icon">
+                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{{ $eleventh?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ' }}</span></span>
+                        </div>
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">
@@ -56,11 +57,6 @@
                                     <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> Red Turbans Head Covers&nbsp;&nbsp;&nbsp;<b>Women:</b> Any Color</span>
                                 @endif
                             </span>
-                        </div>
-
-                        <div class="wedding-mele-eleventh-detail-item">
-                            <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{{ $eleventh?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ' }}</span></span>
                         </div>
                     </div>
                 </div>

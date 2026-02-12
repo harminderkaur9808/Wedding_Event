@@ -76,22 +76,39 @@
                         @endphp
                         <article class="ask-the-host-question {{ $isHidden ? 'ask-the-host-question-hidden' : '' }}" data-query-id="{{ $q->id }}" data-index="{{ $idx }}" style="{{ $isHidden ? 'display: none;' : '' }}">
                             <div class="ask-the-host-question-meta">
-                                <div class="ask-the-host-avatar">
-                                    @if($q->user->profile_image)
-                                        <img src="{{ secure_media_url('profile_images/' . $q->user->profile_image) }}" alt="">
-                                    @else
-                                        <span>{{ strtoupper(substr($q->user->first_name ?? 'U', 0, 1) . substr($q->user->last_name ?? '', 0, 1)) }}</span>
-                                    @endif
+                                <div class="ask-the-host-meta-left">
+                                    <div class="ask-the-host-avatar">
+                                        @if($q->user->profile_image)
+                                            <img src="{{ secure_media_url('profile_images/' . $q->user->profile_image) }}" alt="">
+                                        @else
+                                            <span>{{ strtoupper(substr($q->user->first_name ?? 'U', 0, 1) . substr($q->user->last_name ?? '', 0, 1)) }}</span>
+                                        @endif
+                                    </div>
+                                    <div class="ask-the-host-meta-text">
+                                        <span class="ask-the-host-name">{{ $q->user->first_name }} {{ $q->user->last_name }}</span>
+                                        @if($q->user->isAdmin())
+                                            <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
+                                        @endif
+                                        <span class="ask-the-host-date">{{ $q->created_at->format('j M h:i a') }}</span>
+                                    </div>
                                 </div>
-                                <div class="ask-the-host-meta-text">
-                                    <span class="ask-the-host-name">{{ $q->user->first_name }} {{ $q->user->last_name }}</span>
-                                    @if($q->user->isAdmin())
-                                        <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
-                                    @endif
-                                    <span class="ask-the-host-date">{{ $q->created_at->format('j M h:i a') }}</span>
+                                @if(Auth::id() == $q->user_id)
+                                <div class="ask-the-host-question-menu-wrap">
+                                    <button type="button" class="ask-the-host-question-menu-btn" aria-label="Question options" aria-expanded="false" aria-haspopup="true" data-query-id="{{ $q->id }}">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="18" r="1.5"/></svg>
+                                    </button>
+                                    <div class="ask-the-host-question-dropdown" id="questionDropdown-{{ $q->id }}" role="menu" aria-hidden="true" data-query-id="{{ $q->id }}">
+                                        <button type="button" class="ask-the-host-dropdown-item ask-the-host-edit-trigger" data-query-id="{{ $q->id }}" role="menuitem">Edit</button>
+                                        <form action="{{ route('ask.the.host.questions.destroy', $q) }}" method="POST" class="ask-the-host-delete-form" data-query-id="{{ $q->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="ask-the-host-dropdown-item ask-the-host-dropdown-item-danger" role="menuitem">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
+                                @endif
                             </div>
-                            <div class="ask-the-host-question-text-wrap">
+                            <div class="ask-the-host-question-text-wrap" id="questionTextWrap-{{ $q->id }}">
                                 <p class="ask-the-host-question-text">
                                     @if($isLong)
                                         <span class="ask-the-host-question-short">{{ $shortText }}</span>
@@ -102,6 +119,21 @@
                                     @endif
                                 </p>
                             </div>
+                            @if(Auth::id() == $q->user_id)
+                            <div class="ask-the-host-edit-wrap" id="editWrap-{{ $q->id }}" style="display: none;">
+                                <form action="{{ route('ask.the.host.questions.update', $q) }}" method="POST" class="ask-the-host-form ask-the-host-edit-form" data-query-id="{{ $q->id }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" class="ask-the-host-edit-initial" value="{{ e($q->question_text) }}" data-query-id="{{ $q->id }}">
+                                    <textarea name="question_text" class="ask-the-host-form-textarea ask-the-host-edit-textarea" rows="4" required minlength="3" maxlength="2000" data-max-words="150" placeholder="Edit your question..."></textarea>
+                                    <span class="ask-the-host-word-count ask-the-host-edit-word-count" aria-live="polite"></span>
+                                    <div class="ask-the-host-form-actions">
+                                        <button type="button" class="ask-the-host-btn ask-the-host-btn-secondary ask-the-host-edit-cancel" data-query-id="{{ $q->id }}">Cancel</button>
+                                        <button type="submit" class="ask-the-host-btn ask-the-host-btn-primary">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                            @endif
                             <div class="ask-the-host-actions">
                                 <button type="button" class="ask-the-host-reply-trigger" data-query-id="{{ $q->id }}">Answer</button>
                                 @if($q->replies_count > 0)
@@ -129,20 +161,36 @@
                             <!-- Replies list: visible by default when there are replies -->
                             <div class="ask-the-host-replies" id="replies-{{ $q->id }}" style="{{ $q->replies_count > 0 ? 'display: block;' : 'display: none;' }}">
                                 @foreach($q->replies as $reply)
-                                    <div class="ask-the-host-reply">
+                                    <div class="ask-the-host-reply" data-reply-id="{{ $reply->id }}">
                                         <div class="ask-the-host-reply-meta">
-                                            <div class="ask-the-host-avatar ask-the-host-avatar-sm">
-                                                @if($reply->user->profile_image)
-                                                    <img src="{{ secure_media_url('profile_images/' . $reply->user->profile_image) }}" alt="">
-                                                @else
-                                                    <span>{{ strtoupper(substr($reply->user->first_name ?? 'U', 0, 1) . substr($reply->user->last_name ?? '', 0, 1)) }}</span>
+                                            <div class="ask-the-host-reply-meta-left">
+                                                <div class="ask-the-host-avatar ask-the-host-avatar-sm">
+                                                    @if($reply->user->profile_image)
+                                                        <img src="{{ secure_media_url('profile_images/' . $reply->user->profile_image) }}" alt="">
+                                                    @else
+                                                        <span>{{ strtoupper(substr($reply->user->first_name ?? 'U', 0, 1) . substr($reply->user->last_name ?? '', 0, 1)) }}</span>
+                                                    @endif
+                                                </div>
+                                                <span class="ask-the-host-name">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
+                                                @if($reply->user->isAdmin())
+                                                    <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
                                                 @endif
+                                                <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
                                             </div>
-                                            <span class="ask-the-host-name">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
-                                            @if($reply->user->isAdmin())
-                                                <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
+                                            @if(Auth::id() == $reply->user_id)
+                                                <div class="ask-the-host-reply-menu-wrap">
+                                                    <button type="button" class="ask-the-host-question-menu-btn ask-the-host-reply-menu-btn" aria-label="Reply options" aria-expanded="false" aria-haspopup="true" data-reply-id="{{ $reply->id }}">
+                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="18" r="1.5"/></svg>
+                                                    </button>
+                                                    <div class="ask-the-host-question-dropdown ask-the-host-reply-dropdown" id="replyDropdown-{{ $reply->id }}" role="menu" aria-hidden="true">
+                                                        <form action="{{ route('ask.the.host.replies.destroy', $reply) }}" method="POST" class="ask-the-host-delete-form ask-the-host-reply-delete-form">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="ask-the-host-dropdown-item ask-the-host-dropdown-item-danger" role="menuitem">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             @endif
-                                            <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
                                         </div>
                                         <p class="ask-the-host-reply-text">{{ $reply->reply_text }}</p>
                                     </div>
@@ -163,6 +211,18 @@
             @endauth
         </div>
     </section>
+
+    <!-- Custom delete confirmation modal -->
+    <div class="ask-the-host-confirm-overlay" id="askTheHostConfirmOverlay" role="dialog" aria-modal="true" aria-labelledby="askTheHostConfirmTitle" aria-hidden="true" style="display: none;">
+        <div class="ask-the-host-confirm-dialog">
+            <h3 class="ask-the-host-confirm-title" id="askTheHostConfirmTitle">Delete?</h3>
+            <p class="ask-the-host-confirm-message" id="askTheHostConfirmMessage"></p>
+            <div class="ask-the-host-confirm-actions">
+                <button type="button" class="ask-the-host-btn ask-the-host-btn-secondary ask-the-host-confirm-cancel" id="askTheHostConfirmCancel">Cancel</button>
+                <button type="button" class="ask-the-host-btn ask-the-host-btn-danger ask-the-host-confirm-delete" id="askTheHostConfirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -284,6 +344,167 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Three-dots dropdown: toggle and close on outside click
+    document.querySelectorAll('.ask-the-host-question-menu-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var id = btn.getAttribute('data-query-id');
+            var dropdown = document.getElementById('questionDropdown-' + id);
+            var isOpen = dropdown && dropdown.classList.contains('ask-the-host-dropdown-open');
+            document.querySelectorAll('.ask-the-host-question-dropdown').forEach(function(d) {
+                d.classList.remove('ask-the-host-dropdown-open');
+            });
+            document.querySelectorAll('.ask-the-host-question-menu-btn').forEach(function(b) {
+                b.setAttribute('aria-expanded', 'false');
+            });
+            if (!isOpen && dropdown) {
+                dropdown.classList.add('ask-the-host-dropdown-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.ask-the-host-question-dropdown, .ask-the-host-reply-dropdown').forEach(function(d) {
+            d.classList.remove('ask-the-host-dropdown-open');
+        });
+        document.querySelectorAll('.ask-the-host-question-menu-btn, .ask-the-host-reply-menu-btn').forEach(function(b) {
+            b.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    // Reply three-dots dropdown: toggle and close on outside click
+    document.querySelectorAll('.ask-the-host-reply-menu-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var id = btn.getAttribute('data-reply-id');
+            var dropdown = document.getElementById('replyDropdown-' + id);
+            var isOpen = dropdown && dropdown.classList.contains('ask-the-host-dropdown-open');
+            document.querySelectorAll('.ask-the-host-reply-dropdown').forEach(function(d) {
+                d.classList.remove('ask-the-host-dropdown-open');
+            });
+            document.querySelectorAll('.ask-the-host-reply-menu-btn').forEach(function(b) {
+                b.setAttribute('aria-expanded', 'false');
+            });
+            if (!isOpen && dropdown) {
+                dropdown.classList.add('ask-the-host-dropdown-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+
+    // Edit: show edit form, hide question text (get initial text from hidden input in edit form)
+    document.querySelectorAll('.ask-the-host-edit-trigger').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var id = btn.getAttribute('data-query-id');
+            var editWrap = document.getElementById('editWrap-' + id);
+            var textWrap = document.getElementById('questionTextWrap-' + id);
+            var dropdown = document.getElementById('questionDropdown-' + id);
+            if (!editWrap || !textWrap) return;
+            var initialInput = editWrap.querySelector('.ask-the-host-edit-initial');
+            var text = (initialInput && initialInput.value) ? initialInput.value : '';
+            var textarea = editWrap.querySelector('.ask-the-host-edit-textarea');
+            var wordCountEl = editWrap.querySelector('.ask-the-host-edit-word-count');
+            if (textarea) {
+                textarea.value = text;
+                if (wordCountEl) {
+                    var n = countWords(text);
+                    wordCountEl.textContent = n + ' / ' + maxWords + ' words';
+                    wordCountEl.classList.toggle('ask-the-host-word-count-over', n > maxWords);
+                }
+            }
+            if (dropdown) dropdown.classList.remove('ask-the-host-dropdown-open');
+            textWrap.style.display = 'none';
+            editWrap.style.display = 'block';
+        });
+    });
+
+    // Edit cancel
+    document.querySelectorAll('.ask-the-host-edit-cancel').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = btn.getAttribute('data-query-id');
+            var textWrap = document.getElementById('questionTextWrap-' + id);
+            var editWrap = document.getElementById('editWrap-' + id);
+            if (textWrap) textWrap.style.display = '';
+            if (editWrap) editWrap.style.display = 'none';
+        });
+    });
+
+    // Edit form: word count and validation
+    document.querySelectorAll('.ask-the-host-edit-textarea').forEach(function(ta) {
+        ta.addEventListener('input', function() {
+            var wrap = ta.closest('.ask-the-host-edit-wrap');
+            var wc = wrap && wrap.querySelector('.ask-the-host-edit-word-count');
+            if (!wc) return;
+            var n = countWords(ta.value);
+            wc.textContent = n + ' / ' + maxWords + ' words';
+            wc.classList.toggle('ask-the-host-word-count-over', n > maxWords);
+        });
+    });
+    document.querySelectorAll('.ask-the-host-edit-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            var ta = form.querySelector('.ask-the-host-edit-textarea');
+            if (ta && countWords(ta.value) > maxWords) {
+                e.preventDefault();
+                alert('The question must not exceed 150 words. Please shorten your question.');
+            }
+        });
+    });
+
+    // Custom delete confirmation modal
+    var confirmOverlay = document.getElementById('askTheHostConfirmOverlay');
+    var confirmMessage = document.getElementById('askTheHostConfirmMessage');
+    var confirmCancelBtn = document.getElementById('askTheHostConfirmCancel');
+    var confirmDeleteBtn = document.getElementById('askTheHostConfirmDelete');
+    var pendingDeleteForm = null;
+
+    function openConfirmModal(message) {
+        if (!confirmOverlay || !confirmMessage) return;
+        pendingDeleteForm = null;
+        confirmMessage.textContent = message;
+        confirmOverlay.style.display = 'flex';
+        confirmOverlay.setAttribute('aria-hidden', 'false');
+        confirmDeleteBtn.focus();
+    }
+    function closeConfirmModal() {
+        if (!confirmOverlay) return;
+        confirmOverlay.style.display = 'none';
+        confirmOverlay.setAttribute('aria-hidden', 'true');
+        pendingDeleteForm = null;
+    }
+    confirmCancelBtn.addEventListener('click', closeConfirmModal);
+    confirmDeleteBtn.addEventListener('click', function() {
+        if (pendingDeleteForm) {
+            pendingDeleteForm.submit();
+        }
+        closeConfirmModal();
+    });
+    confirmOverlay.addEventListener('click', function(e) {
+        if (e.target === confirmOverlay) closeConfirmModal();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && confirmOverlay && confirmOverlay.getAttribute('aria-hidden') === 'false') {
+            closeConfirmModal();
+        }
+    });
+
+    // Delete question: show custom modal instead of submitting
+    document.querySelectorAll('.ask-the-host-delete-form:not(.ask-the-host-reply-delete-form)').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            pendingDeleteForm = form;
+            openConfirmModal('Are you sure you want to delete this question? This cannot be undone.');
+        });
+    });
+    // Delete reply: show custom modal instead of submitting
+    document.querySelectorAll('.ask-the-host-reply-delete-form').forEach(function(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            pendingDeleteForm = form;
+            openConfirmModal('Are you sure you want to delete this reply?');
+        });
+    });
 });
 </script>
 @endpush

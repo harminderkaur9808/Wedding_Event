@@ -91,7 +91,7 @@
                                 <div class="wedding-mele-heart-divider">
                                     <img src="{{ asset('Images/Home/underheartline.png') }}" alt="Divider" class="wedding-mele-divider-image">
                                 </div>
-                                <p class="wedding-mele-heart-text-3">12-31-2026</p>
+                                <p class="wedding-mele-heart-text-3">01-01-2027</p>
                             </div>
                         </div>
                     </div>

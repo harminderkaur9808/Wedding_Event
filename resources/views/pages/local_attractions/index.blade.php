@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/local-attractions.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/book-appointments.css') }}">
     <link rel="stylesheet" href="{{ asset('css/login-gate.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 @endpush

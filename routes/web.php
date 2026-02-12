@@ -68,7 +68,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/book-appointments', [BookAppointmentsController::class, 'index'])->name('book.appointments');
     Route::get('/ask-the-host', [AskTheHostController::class, 'index'])->name('ask.the.host');
     Route::post('/ask-the-host/questions', [AskTheHostController::class, 'storeQuestion'])->name('ask.the.host.questions.store');
+    Route::match(['put', 'patch'], '/ask-the-host/questions/{query}', [AskTheHostController::class, 'updateQuestion'])->name('ask.the.host.questions.update');
+    Route::delete('/ask-the-host/questions/{query}', [AskTheHostController::class, 'destroyQuestion'])->name('ask.the.host.questions.destroy');
     Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store');
+    Route::delete('/ask-the-host/replies/{reply}', [AskTheHostController::class, 'destroyReply'])->name('ask.the.host.replies.destroy');
     Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
     Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');
     Route::get('/travel-accommodation', [ImportantNotificationController::class, 'index'])->name('important.notification');

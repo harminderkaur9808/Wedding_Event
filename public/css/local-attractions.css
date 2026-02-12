@@ -225,11 +225,17 @@
 
 .wm-la-item-card {
     font-family: nunito;
-    background: #D2DFF11F;
+    background: transparent;
     border-radius: 12px;
-    padding: 20px 22px;
-    /* border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06); */
+    padding: 0;
+}
+
+.wm-la-item-card .book-appointments-detail-block {
+    margin-top: 0;
+}
+
+.wm-la-item-card .book-appointments-detail-block-header {
+    margin-top: 0;
 }
 
 .wm-la-item-title {
@@ -286,14 +292,49 @@
     flex: 0 0 16px;
 }
 
-.wm-la-item-map-link {
+.wm-la-item-map-link,
+.wm-la-item-url-link {
     color: #2F4F75;
     text-decoration: underline;
     font-weight: 700;
 }
 
-.wm-la-item-map-link:hover {
+.wm-la-item-map-link:hover,
+.wm-la-item-url-link:hover {
     color: #054C82;
+}
+
+.wm-la-item-url-link {
+    word-break: break-all;
+}
+
+.wm-la-item-field {
+    margin-bottom: 14px;
+}
+
+.wm-la-item-field:first-of-type {
+    margin-top: 0;
+}
+
+.wm-la-item-field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #334155;
+}
+
+.wm-la-item-note {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.wm-la-item-note-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #475569;
+    white-space: pre-line;
 }
 
 .wm-la-empty {

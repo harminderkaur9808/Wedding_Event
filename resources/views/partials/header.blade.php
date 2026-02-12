@@ -4,19 +4,11 @@
         <div class="container">
             <div class="top-header-content">
                 <div class="top-header-left">
-                    <span class="top-header-countdown-title">Date We Getting Married</span>
-                    <div class="top-header-countdown-wrapper" id="header-wedding-countdown" data-wedding-date="{{ $headerWeddingDateIso ?? '2026-12-31T12:00:00' }}">
+                    <span class="top-header-countdown-title">Countdown to Wedding</span>
+                    <div class="top-header-countdown-wrapper" id="header-wedding-countdown" data-wedding-date="{{ $headerWeddingDateIso ?? '2027-01-01T12:00:00' }}">
                         <div class="top-header-countdown-box">
                             <span class="top-header-countdown-number" id="header-days">0</span>
-                            <span class="top-header-countdown-label">Day</span>
-                        </div>
-                        <div class="top-header-countdown-box">
-                            <span class="top-header-countdown-number" id="header-hours">0</span>
-                            <span class="top-header-countdown-label">Hours</span>
-                        </div>
-                        <div class="top-header-countdown-box">
-                            <span class="top-header-countdown-number" id="header-minutes">0</span>
-                            <span class="top-header-countdown-label">Minutes</span>
+                            <span class="top-header-countdown-label">Days</span>
                         </div>
                     </div>
                 </div>
@@ -24,7 +16,7 @@
                     <span class="save-date-text">Save The Date</span>
                     <div class="date-section">
                         <img src="{{ asset('Images/Header/Calender_imghader.png') }}" alt="Calendar" class="calendar-icon">
-                        <span class="wedding-date">{{ $headerWeddingDate ?? '12-31-2026' }}</span>
+                        <span class="wedding-date">{{ $headerWeddingDate ?? '01-01-2027' }}</span>
                     </div>
                 </div>
                 <div class="top-header-right">

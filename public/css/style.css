@@ -202,12 +202,12 @@ body {
     font-family: 'Volkhov', serif;
 }
 
-/* Top header left – "Date We Getting Married" + countdown (compact) */
+/* Top header left – "Countdown to Wedding" + days (one row) */
 .top-header-left {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     flex-wrap: nowrap;
 }
 
@@ -228,17 +228,20 @@ body {
 }
 
 .top-header-countdown-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
     background-color: #ffffff;
     border-radius: 5px;
     padding: 4px 10px;
     min-width: 44px;
-    text-align: center;
     border: 1px solid rgba(47, 79, 117, 0.2);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .top-header-countdown-number {
-    display: block;
+    display: inline;
     font-family: 'Volkhov', serif;
     font-size: 14px;
     font-weight: 700;
@@ -247,8 +250,8 @@ body {
 }
 
 .top-header-countdown-label {
-    display: block;
-    font-size: 9px;
+    display: inline;
+    font-size: 14px;
     font-weight: 500;
     color: #2F4F75;
     text-transform: capitalize;
@@ -874,7 +877,7 @@ main {
     }
 
     .top-header-countdown-label {
-        font-size: 8px;
+        font-size: 12px;
     }
 
     .top-header-center {

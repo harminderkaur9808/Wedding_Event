@@ -1,7 +1,7 @@
 @php
     $weddingDate = \App\Models\PageSection::weddingDate();
-    $weddingDateFormatted = $weddingDate ? $weddingDate->format('F j, Y') : 'December 31, 2026';
-    $saveTheDate = $weddingDate ? $weddingDate->format('m-d-Y') : '12-31-2026';
+    $weddingDateFormatted = $weddingDate ? $weddingDate->format('F j, Y') : 'January 1, 2027';
+    $saveTheDate = $weddingDate ? $weddingDate->format('m-d-Y') : '01-01-2027';
     $baseUrl = config('app.url');
     $logoUrl = $baseUrl . '/Images/Email_template_logo/email_logo.png';
     $bannerUrl = $baseUrl . '/Images/Email_template_logo/maintitlebg.png';

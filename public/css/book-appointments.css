@@ -271,6 +271,11 @@
     display: block;
 }
 
+.book-appointments-detail-icon-note {
+    color: #054C82;
+    stroke: #054C82;
+}
+
 .book-appointments-detail-link {
     color: #2F4F75;
     text-decoration: underline;
@@ -281,6 +286,10 @@
     color: #054C82;
     color: #2F4F75;
     stroke: #2F4F75;
+}
+
+.book-appointments-detail-url {
+    word-break: break-all;
 }
 
 .book-appointments-no-entries {

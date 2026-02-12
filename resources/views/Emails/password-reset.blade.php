@@ -19,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Vikram & Nisha's Wedding Website</title>
+    <title>Reset Password - Vikram & Nisha's Wedding</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -75,9 +75,9 @@
             text-align: center;
         }
         .email-banner h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: #2F4F75;
+            color: #1e3a52;
             margin-bottom: 10px;
             line-height: 1.3;
             font-family: Georgia, serif;
@@ -100,49 +100,36 @@
         }
         .email-body .greeting {
             font-size: 16px;
-            color: #054C82;
-            margin-bottom: 18px;
+            color: #2F4F75;
+            margin-bottom: 12px;
         }
         .email-body .intro {
-            color: #054C82;
-            margin-bottom: 16px;
+            color: #2F4F75;
+            margin-bottom: 20px;
             font-weight: 600;
         }
-        .email-body .intro-highlight {
-            font-weight: 700;
-            color: #054C82;
-            text-decoration: none;
+        .email-cta-wrap {
+            margin: 28px 0 24px;
         }
-        .email-body .credentials-heading {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2F4F75;
-            margin: 24px 0 12px;
-            text-align: center;
-        }
-        .credentials-plain {
-            margin: 0 0 24px;
-            text-align: center;
-        }
-        .credentials-plain .credential-item {
-            margin: 6px 0;
+        .email-cta-btn {
+            display: inline-block;
+            background: #2F4F75;
+            color: #fff !important;
             font-size: 15px;
-            color: #054C82;
-            font-weight: 700;
-        }
-        .credentials-plain .credential-label,
-        .credentials-plain .credential-value {
             font-weight: 400;
-            color: #054C82;
+            padding: 9px 16px;
+            text-decoration: none;
+            font-family: Georgia, serif;
         }
-        .important-notice {
-            padding: 0;
-            margin: 20px 0;
+        .email-cta-btn:hover {
+            background: #1e3a52;
+        }
+        .email-body .note-text {
             font-size: 14px;
-            color: #054C82;
-            text-align: left;
+            color: #2F4F75;
+            margin-top: 20px;
         }
-        .important-notice strong { color: #054C82; }
+        .email-body .note-text strong { color: #2F4F75; }
         .wedding-date-wrap {
             margin-top: 28px;
             padding-top: 24px;
@@ -167,8 +154,8 @@
         .wedding-date-row .date-label,
         .wedding-date-row .date-value {
             font-size: 15px;
-            font-weight: 400;
-            color: #054C82;
+            font-weight: 700;
+            color: #2F4F75;
         }
         .email-footer {
             padding: 32px 28px;
@@ -178,7 +165,7 @@
         }
         .email-footer .closing {
             font-size: 15px;
-            color: #054C82;
+            color: #2F4F75;
             margin-bottom: 24px;
             line-height: 1.6;
         }
@@ -187,22 +174,23 @@
             margin-bottom: 24px;
         }
         .email-footer .signature-intro {
-            color: #054C82;
+            color: #2F4F75;
             font-weight: 400;
         }
         .email-footer .signature-names {
-            color: #054C82;
+            color: #2F4F75;
             font-weight: 700;
-            font-size: 17px;
+            font-size: 18px;
+            font-style: italic;
         }
         .email-footer .save-the-date {
             font-size: 14px;
-            font-weight: 700;
-            color: #054C82;
+            font-weight: 400;
+            color: #2F4F75;
         }
         .email-footer .save-the-date-value {
             font-weight: 700;
-            color: #054C82;
+            color: #2F4F75;
         }
     </style>
 </head>
@@ -215,25 +203,20 @@
         </div>
 
         <div class="email-banner">
-            <h1>Welcome to Vikram & Nisha's Wedding Website!</h1>
-            <p class="subheading">Your Access Request is Pending Approval</p>
+            <h1>Reset Your Password</h1>
+            <p class="subheading">Vikram & Nisha's Wedding Website</p>
         </div>
 
         <div class="email-body">
             <div class="content-inner">
                 <p class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</p>
-                <p class="intro">Thank you for joining Vikram & Nisha's Wedding Website.</p>
-                <p class="intro">Your account has been successfully created and is currently <span class="intro-highlight">pending approval by the host.</span></p>
+                <p class="intro">You are receiving this email because we received a password reset request for your account.</p>
 
-                <p class="credentials-heading">Please find your login credentials below:</p>
-                <div class="credentials-plain">
-                    <div class="credential-item"><span class="credential-label">Email: </span><span class="credential-value">{{ $user->email }}</span></div>
-                    <div class="credential-item"><span class="credential-label">Password: </span><span class="credential-value">{{ $password }}</span></div>
+                <div class="email-cta-wrap">
+                    <a href="{{ $resetUrl }}" class="email-cta-btn">Reset Password</a>
                 </div>
 
-                <div class="important-notice">
-                    <strong>Important:</strong> Your account is currently pending approval. You will receive an email notification once your account has been approved by the administrator. After approval, you'll be able to log in and access all features.
-                </div>
+                <p class="note-text"><strong>Note:</strong> This password reset link will expire in {{ $expireMinutes }} minutes. If you did not request a password reset, no further action is required.</p>
 
                 <div class="wedding-date-wrap">
                     <div class="wedding-date-row">

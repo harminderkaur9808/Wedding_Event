@@ -13,7 +13,7 @@
     const mainCountdownEl = document.getElementById('wedding-countdown');
     const dateStr = (headerCountdownEl && headerCountdownEl.getAttribute('data-wedding-date'))
         || (mainCountdownEl && mainCountdownEl.getAttribute('data-wedding-date'));
-    const weddingDate = dateStr ? new Date(dateStr) : new Date('2026-12-31T12:00:00');
+    const weddingDate = dateStr ? new Date(dateStr) : new Date('2027-01-01T12:00:00');
 
     // Get user's timezone
     const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -22,14 +22,12 @@
     console.log('User Timezone:', userTimezone);
     console.log('User Locale:', userCountry);
 
-    // DOM Elements - main (homepage) and header
+    // DOM Elements - main (homepage) and header (header shows days only)
     const daysElement = document.getElementById('days');
     const hoursElement = document.getElementById('hours');
     const minutesElement = document.getElementById('minutes');
     const secondsElement = document.getElementById('seconds');
     const headerDaysElement = document.getElementById('header-days');
-    const headerHoursElement = document.getElementById('header-hours');
-    const headerMinutesElement = document.getElementById('header-minutes');
 
     /**
      * Calculate time difference and update all countdown displays
@@ -56,10 +54,8 @@
         if (minutesElement) minutesElement.textContent = minutesStr;
         if (secondsElement) secondsElement.textContent = secondsStr;
 
-        // Update header countdown if present
+        // Update header countdown if present (days only)
         if (headerDaysElement) headerDaysElement.textContent = days.toString();
-        if (headerHoursElement) headerHoursElement.textContent = hoursStr;
-        if (headerMinutesElement) headerMinutesElement.textContent = minutesStr;
     }
 
     /**
@@ -67,7 +63,7 @@
      */
     function initCountdown() {
         const hasMain = daysElement && hoursElement && minutesElement;
-        const hasHeader = headerDaysElement && headerHoursElement && headerMinutesElement;
+        const hasHeader = headerDaysElement;
         if (!hasMain && !hasHeader) {
             return;
         }

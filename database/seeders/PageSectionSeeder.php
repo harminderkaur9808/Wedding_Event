@@ -42,7 +42,7 @@ class PageSectionSeeder extends Seeder
                 'title' => 'Date We Getting Married',
                 'subtitle' => 'Wedding Day',
                 'short_description' => null,
-                'event_date' => Carbon::parse('2026-12-31 12:00:00'),
+                'event_date' => Carbon::parse('2027-01-01 12:00:00'),
                 'extra' => null,
                 'sort_order' => 3,
             ],
@@ -130,7 +130,7 @@ class PageSectionSeeder extends Seeder
                 'short_description' => null,
                 'event_date' => null,
                 'extra' => [
-                    'date' => '12-31-2026',
+                    'date' => '01-01-2027',
                     'turban_tying' => 'At 7 am',
                     'venue' => 'Hopitality Room',
                     'barat_leaves' => 'Indian Traditional Outfits',
@@ -144,7 +144,7 @@ class PageSectionSeeder extends Seeder
                 'short_description' => null,
                 'event_date' => null,
                 'extra' => [
-                    'date' => '12-31-2026',
+                    'date' => '01-01-2027',
                     'time' => '9 am-12 pm',
                     'venue' => 'Ramit and Maninder Residence',
                     'dress_code' => 'Indian Traditional Outfits',

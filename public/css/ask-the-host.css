@@ -233,6 +233,60 @@
     background: #dee2e6;
 }
 
+.ask-the-host-btn-danger {
+    background: #dc3545;
+    color: #fff;
+}
+
+.ask-the-host-btn-danger:hover {
+    background: #c82333;
+}
+
+/* Custom delete confirmation modal */
+.ask-the-host-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.ask-the-host-confirm-dialog {
+    background: #fff;
+    /* border-radius: 12px; */
+    max-width: 400px;
+    width: 100%;
+    padding: 24px;
+}
+
+.ask-the-host-confirm-title {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.ask-the-host-confirm-message {
+    margin: 0 0 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #4a5568;
+}
+
+.ask-the-host-confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.ask-the-host-confirm-actions .ask-the-host-btn {
+    min-width: 90px;
+}
+
 .ask-the-host-list {
     display: flex;
     flex-direction: column;
@@ -288,8 +342,100 @@
 .ask-the-host-question-meta {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 10px;
+}
+
+.ask-the-host-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ask-the-host-question-menu-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.ask-the-host-question-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.ask-the-host-question-menu-btn:hover {
+    background: #f3f4f6;
+    color: #054C82;
+}
+
+.ask-the-host-question-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    min-width: 140px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    z-index: 20;
+    padding: 6px 0;
+    display: none;
+}
+
+.ask-the-host-question-dropdown.ask-the-host-dropdown-open {
+    display: block;
+}
+
+.ask-the-host-dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    text-align: left;
+    border: none;
+    background: none;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ask-the-host-dropdown-item:hover {
+    background: #f3f4f6;
+    color: #054C82;
+}
+
+.ask-the-host-dropdown-item-danger {
+    color: #dc3545;
+}
+
+.ask-the-host-dropdown-item-danger:hover {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.ask-the-host-delete-form {
+    margin: 0;
+    padding: 0;
+}
+
+.ask-the-host-edit-wrap {
+    margin-bottom: 12px;
+}
+
+.ask-the-host-edit-wrap .ask-the-host-form-textarea {
+    margin-bottom: 4px;
 }
 
 .ask-the-host-avatar {
@@ -497,8 +643,26 @@
 .ask-the-host-reply-meta {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
     margin-bottom: 6px;
+}
+
+.ask-the-host-reply-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.ask-the-host-reply-menu-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.ask-the-host-reply-menu-wrap .ask-the-host-question-dropdown {
+    min-width: 120px;
 }
 
 .ask-the-host-reply-text {

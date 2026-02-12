@@ -681,6 +681,16 @@
                                     </div>
 
                                     <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Phone</label>
+                                        <input type="text" name="phone" class="admin-dashboard-input" value="{{ old('phone', $attraction->phone ?? '') }}" placeholder="e.g. +1 234 567 8900">
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
+                                        <label class="admin-dashboard-label">Note to Guests</label>
+                                        <textarea name="note_to_guests" class="admin-dashboard-input" rows="3" placeholder="Optional note for guests">{{ old('note_to_guests', $attraction->note_to_guests ?? '') }}</textarea>
+                                    </div>
+
+                                    <div class="admin-dashboard-form-group">
                                         <label class="admin-dashboard-label">Image</label>
                                         @if($attraction->image_path)
                                             <div class="admin-dashboard-image-preview">
@@ -743,6 +753,11 @@
                                     @csrf
                                     <div class="admin-dashboard-form-row">
                                         <div class="admin-dashboard-form-group">
+                                            <label class="admin-dashboard-label">Sort order</label>
+                                            <input type="number" name="sort_order" class="admin-dashboard-input" value="{{ old('sort_order', $entry->sort_order) }}" min="0" max="255" placeholder="0">
+                                            <p class="admin-dashboard-hint" style="margin-top:4px;">Lower number appears first. Use this to reorder entries.</p>
+                                        </div>
+                                        <div class="admin-dashboard-form-group" style="flex:1;">
                                             <label class="admin-dashboard-label">Store / Location name</label>
                                             <input type="text" name="store_name" class="admin-dashboard-input" value="{{ old('store_name', $entry->store_name) }}" placeholder="e.g. ULTA BEAUTY STORE">
                                         </div>
