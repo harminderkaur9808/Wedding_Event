@@ -5,7 +5,7 @@
     $leftDecorUrl = $baseUrl . '/Images/Email_template_logo/left_ICO.png';
     $rightDecorUrl = $baseUrl . '/Images/Email_template_logo/right_ICO.png';
     $bgImageUrl = $baseUrl . '/Images/Email_template_logo/bgimageoftheemail.png';
-    $adminDashboardUrl = url('/admin/dashboard');
+    $adminDashboardUrl = url('/admin/dashboard?tab=all-users');
     try {
         $weddingDate = \App\Models\PageSection::weddingDate();
         $saveTheDate = $weddingDate ? $weddingDate->format('m-d-Y') : '01-01-2027';
