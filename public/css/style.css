@@ -854,6 +854,7 @@ main {
 
     .top-header-left {
         align-items: center;
+        justify-content: center;
         width: 100%;
     }
 
