@@ -101,6 +101,50 @@
     border: 1px solid #c3e6cb;
 }
 
+/* Animated toast for delete success - 4s auto-hide */
+.ask-the-host-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10003;
+    padding: 14px 24px;
+    border-radius: 8px;
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    font-size: 15px;
+    font-weight: 500;
+    animation: ask-the-host-toast-in 0.35s ease-out;
+}
+
+.ask-the-host-toast.ask-the-host-toast-out {
+    animation: ask-the-host-toast-out 0.35s ease-in forwards;
+}
+
+@keyframes ask-the-host-toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes ask-the-host-toast-out {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+}
+
 .ask-the-host-header {
     display: flex;
     flex-wrap: wrap;
@@ -242,11 +286,11 @@
     background: #c82333;
 }
 
-/* Custom delete confirmation modal */
+/* Custom delete confirmation modal - above header/nav (10000) */
 .ask-the-host-confirm-overlay {
     position: fixed;
     inset: 0;
-    z-index: 9999;
+    z-index: 10002;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -261,6 +305,9 @@
     max-width: 400px;
     width: 100%;
     padding: 24px;
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
 }
 
 .ask-the-host-confirm-title {
@@ -352,6 +399,45 @@
     align-items: center;
     gap: 10px;
     min-width: 0;
+}
+
+/* Question actions: Edit and Delete icons (no three-dot dropdown) */
+.ask-the-host-question-actions-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.ask-the-host-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.ask-the-host-action-btn:hover {
+    background: #f3f4f6;
+    color: #054C82;
+}
+
+.ask-the-host-action-btn-delete:hover {
+    background: #fef2f2;
+    color: #dc3545;
+}
+
+.ask-the-host-inline-delete-form {
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 .ask-the-host-question-menu-wrap {

@@ -34,7 +34,11 @@
         <div class="container ask-the-host-container">
             @auth
                 @if(session('success'))
-                    <div class="ask-the-host-alert ask-the-host-alert-success">{{ session('success') }}</div>
+                    @if(session('success') === 'Question deleted.')
+                        <div class="ask-the-host-toast" id="askTheHostDeleteToast" role="alert" aria-live="polite">{{ session('success') }}</div>
+                    @else
+                        <div class="ask-the-host-alert ask-the-host-alert-success">{{ session('success') }}</div>
+                    @endif
                 @endif
 
                 <div class="ask-the-host-header">
@@ -93,18 +97,17 @@
                                     </div>
                                 </div>
                                 @if(Auth::id() == $q->user_id)
-                                <div class="ask-the-host-question-menu-wrap">
-                                    <button type="button" class="ask-the-host-question-menu-btn" aria-label="Question options" aria-expanded="false" aria-haspopup="true" data-query-id="{{ $q->id }}">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="18" r="1.5"/></svg>
+                                <div class="ask-the-host-question-actions-wrap">
+                                    <button type="button" class="ask-the-host-action-btn ask-the-host-edit-trigger" data-query-id="{{ $q->id }}" aria-label="Edit question" title="Edit">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </button>
-                                    <div class="ask-the-host-question-dropdown" id="questionDropdown-{{ $q->id }}" role="menu" aria-hidden="true" data-query-id="{{ $q->id }}">
-                                        <button type="button" class="ask-the-host-dropdown-item ask-the-host-edit-trigger" data-query-id="{{ $q->id }}" role="menuitem">Edit</button>
-                                        <form action="{{ route('ask.the.host.questions.destroy', $q) }}" method="POST" class="ask-the-host-delete-form" data-query-id="{{ $q->id }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="ask-the-host-dropdown-item ask-the-host-dropdown-item-danger" role="menuitem">Delete</button>
-                                        </form>
-                                    </div>
+                                    <form action="{{ route('ask.the.host.questions.destroy', $q) }}" method="POST" class="ask-the-host-delete-form ask-the-host-inline-delete-form" data-query-id="{{ $q->id }}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="ask-the-host-action-btn ask-the-host-action-btn-delete" aria-label="Delete question" title="Delete">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                        </button>
+                                    </form>
                                 </div>
                                 @endif
                             </div>
@@ -228,6 +231,16 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    var deleteToast = document.getElementById('askTheHostDeleteToast');
+    if (deleteToast) {
+        setTimeout(function() {
+            deleteToast.classList.add('ask-the-host-toast-out');
+            setTimeout(function() {
+                if (deleteToast.parentNode) deleteToast.parentNode.removeChild(deleteToast);
+            }, 350);
+        }, 4000);
+    }
+
     var addBtn = document.getElementById('askTheHostAddBtn');
     var formWrap = document.getElementById('askTheHostFormWrap');
     var cancelBtn = document.getElementById('askTheHostCancelBtn');
@@ -345,30 +358,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Three-dots dropdown: toggle and close on outside click
-    document.querySelectorAll('.ask-the-host-question-menu-btn').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            var id = btn.getAttribute('data-query-id');
-            var dropdown = document.getElementById('questionDropdown-' + id);
-            var isOpen = dropdown && dropdown.classList.contains('ask-the-host-dropdown-open');
-            document.querySelectorAll('.ask-the-host-question-dropdown').forEach(function(d) {
-                d.classList.remove('ask-the-host-dropdown-open');
-            });
-            document.querySelectorAll('.ask-the-host-question-menu-btn').forEach(function(b) {
-                b.setAttribute('aria-expanded', 'false');
-            });
-            if (!isOpen && dropdown) {
-                dropdown.classList.add('ask-the-host-dropdown-open');
-                btn.setAttribute('aria-expanded', 'true');
-            }
-        });
-    });
     document.addEventListener('click', function() {
-        document.querySelectorAll('.ask-the-host-question-dropdown, .ask-the-host-reply-dropdown').forEach(function(d) {
+        document.querySelectorAll('.ask-the-host-reply-dropdown').forEach(function(d) {
             d.classList.remove('ask-the-host-dropdown-open');
         });
-        document.querySelectorAll('.ask-the-host-question-menu-btn, .ask-the-host-reply-menu-btn').forEach(function(b) {
+        document.querySelectorAll('.ask-the-host-reply-menu-btn').forEach(function(b) {
             b.setAttribute('aria-expanded', 'false');
         });
     });
@@ -400,7 +394,6 @@ document.addEventListener('DOMContentLoaded', function() {
             var id = btn.getAttribute('data-query-id');
             var editWrap = document.getElementById('editWrap-' + id);
             var textWrap = document.getElementById('questionTextWrap-' + id);
-            var dropdown = document.getElementById('questionDropdown-' + id);
             if (!editWrap || !textWrap) return;
             var initialInput = editWrap.querySelector('.ask-the-host-edit-initial');
             var text = (initialInput && initialInput.value) ? initialInput.value : '';
@@ -414,7 +407,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     wordCountEl.classList.toggle('ask-the-host-word-count-over', n > maxWords);
                 }
             }
-            if (dropdown) dropdown.classList.remove('ask-the-host-dropdown-open');
             textWrap.style.display = 'none';
             editWrap.style.display = 'block';
         });
@@ -459,50 +451,98 @@ document.addEventListener('DOMContentLoaded', function() {
     var confirmDeleteBtn = document.getElementById('askTheHostConfirmDelete');
     var pendingDeleteForm = null;
 
-    function openConfirmModal(message) {
+    function openConfirmModal(message, form) {
         if (!confirmOverlay || !confirmMessage) return;
-        pendingDeleteForm = null;
+        pendingDeleteForm = form || null;
+        if (confirmOverlay) confirmOverlay._pendingDeleteForm = form || null;
         confirmMessage.textContent = message;
         confirmOverlay.style.display = 'flex';
         confirmOverlay.setAttribute('aria-hidden', 'false');
-        confirmDeleteBtn.focus();
+        if (confirmDeleteBtn) confirmDeleteBtn.focus();
     }
     function closeConfirmModal() {
         if (!confirmOverlay) return;
         confirmOverlay.style.display = 'none';
         confirmOverlay.setAttribute('aria-hidden', 'true');
         pendingDeleteForm = null;
+        if (confirmOverlay._pendingDeleteForm !== undefined) delete confirmOverlay._pendingDeleteForm;
     }
-    confirmCancelBtn.addEventListener('click', closeConfirmModal);
-    confirmDeleteBtn.addEventListener('click', function() {
-        if (pendingDeleteForm) {
-            pendingDeleteForm.submit();
-        }
-        closeConfirmModal();
-    });
-    confirmOverlay.addEventListener('click', function(e) {
-        if (e.target === confirmOverlay) closeConfirmModal();
-    });
+
+    if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', closeConfirmModal);
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var formToSubmit = (confirmOverlay && confirmOverlay._pendingDeleteForm) || pendingDeleteForm;
+            closeConfirmModal();
+            if (!formToSubmit) {
+                return;
+            }
+            var url = formToSubmit.getAttribute('action') || formToSubmit.action;
+            var formData = new FormData(formToSubmit);
+            confirmDeleteBtn.disabled = true;
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'text/html'
+                },
+                redirect: 'follow'
+            }).then(function(response) {
+                if (response.redirected && response.url) {
+                    window.location.href = response.url;
+                } else {
+                    location.reload();
+                }
+            }).catch(function() {
+                var backup = document.createElement('form');
+                backup.method = 'POST';
+                backup.action = url;
+                backup.style.display = 'none';
+                formData.forEach(function(value, key) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    backup.appendChild(input);
+                });
+                document.body.appendChild(backup);
+                backup.submit();
+            }).finally(function() {
+                confirmDeleteBtn.disabled = false;
+            });
+        });
+    }
+    if (confirmOverlay) {
+        confirmOverlay.addEventListener('click', function(e) {
+            if (e.target === confirmOverlay) closeConfirmModal();
+        });
+    }
+    var confirmDialog = document.querySelector('.ask-the-host-confirm-dialog');
+    if (confirmDialog) {
+        confirmDialog.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && confirmOverlay && confirmOverlay.getAttribute('aria-hidden') === 'false') {
             closeConfirmModal();
         }
     });
 
-    // Delete question: show custom modal instead of submitting
+    // Delete question: prevent submit, show modal, store form on overlay so Delete button has it
     document.querySelectorAll('.ask-the-host-delete-form:not(.ask-the-host-reply-delete-form)').forEach(function(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            pendingDeleteForm = form;
-            openConfirmModal('Are you sure you want to delete this question? This cannot be undone.');
+            openConfirmModal('Are you sure you want to delete this question? This cannot be undone.', this);
         });
     });
-    // Delete reply: show custom modal instead of submitting
+    // Delete reply: same for reply delete forms
     document.querySelectorAll('.ask-the-host-reply-delete-form').forEach(function(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            pendingDeleteForm = form;
-            openConfirmModal('Are you sure you want to delete this reply?');
+            openConfirmModal('Are you sure you want to delete this reply?', this);
         });
     });
 });

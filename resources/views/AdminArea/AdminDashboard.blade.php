@@ -77,6 +77,13 @@
                         </svg>
                         <span>Local Attractions</span>
                     </a>
+                    <a href="{{ route('admin.dashboard', ['tab' => 'travel-accommodation']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'travel-accommodation' ? 'active' : '' }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>Travel &amp; Accommodation</span>
+                    </a>
                     <a href="{{ route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $bookAppointmentSection ?? 'hair']) }}" class="admin-dashboard-tab {{ ($activeTab ?? 'my-account') === 'book-appointments' ? 'active' : '' }}">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -718,6 +725,87 @@
                         @empty
                             <p class="admin-dashboard-note">No local attractions yet. Click “Add Attraction” to create your first one.</p>
                         @endforelse
+                    </div>
+                @elseif(($activeTab ?? 'my-account') === 'travel-accommodation')
+                    <!-- Travel & Accommodation Tab Content -->
+                    <div class="admin-dashboard-tab-content">
+                        <div class="admin-dashboard-title-section">
+                            <div class="admin-dashboard-decorative-top">
+                                <svg width="60" height="20" viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 10 L15 5 L25 10 L35 5 L45 10 L55 5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="admin-dashboard-decorative-svg">
+                                <img src="{{ asset('Images/AdminAssets/paneltxtframeuper.svg') }}" alt="Decorative Design" class="admin-dashboard-svg-design">
+                            </div>
+                            <h1 class="admin-dashboard-title">Travel &amp; Accommodation</h1>
+                        </div>
+                        <p class="admin-dashboard-description">Manage Travel Information (e.g. airports) and Accommodation entries. These appear on the public Travel &amp; Accommodation page.</p>
+                        @if($travelError ?? $accommodationError ?? null)
+                            <div class="admin-dashboard-alert admin-dashboard-alert-error" style="margin-bottom: 20px;"><span>{{ $travelError ?? $accommodationError }}</span></div>
+                        @endif
+                        <div class="admin-dashboard-travel-acc-two-col">
+                            <div class="admin-dashboard-travel-acc-col">
+                                <h2 class="admin-dashboard-travel-acc-col-title">Travel Information</h2>
+                                <form method="POST" action="{{ route('admin.travel-accommodation.store') }}">@csrf<input type="hidden" name="type" value="travel"><button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary" style="margin-bottom: 16px;">Add Travel Entry</button></form>
+                                <div class="admin-dashboard-book-entry-card" style="margin-bottom: 16px;">
+                                    <h3 class="admin-dashboard-book-entry-title">Note (Travel)</h3>
+                                    <p class="admin-dashboard-hint" style="margin-bottom: 10px;">One note only. Shown first on the public page under Travel Information.</p>
+                                    <form method="POST" action="{{ route('admin.travel-accommodation.note.save') }}" class="admin-dashboard-form">@csrf
+                                        <input type="hidden" name="type" value="travel">
+                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Description</label><textarea name="description" class="admin-dashboard-input" rows="4" placeholder="e.g. Travel from Phoenix to San Diego...">{{ old('type') === 'travel' ? old('description', $travelNote->description ?? '') : ($travelNote->description ?? '') }}</textarea></div>
+                                        <div class="admin-dashboard-form-group"><button type="submit" class="admin-dashboard-action-btn approve-btn">Save note</button></div>
+                                    </form>
+                                </div>
+                                @forelse($travelEntries ?? [] as $entry)
+                                    <div class="admin-dashboard-book-entry-card">
+                                        <h3 class="admin-dashboard-book-entry-title">Travel {{ $loop->iteration }}</h3>
+                                        <form method="POST" action="{{ route('admin.travel-accommodation.update', $entry->id) }}" class="admin-dashboard-form">@csrf
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Order</label><input type="number" name="sort_order" class="admin-dashboard-input" value="{{ old('sort_order', $entry->sort_order) }}" min="0" max="255"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Name</label><input type="text" name="name" class="admin-dashboard-input" value="{{ old('name', $entry->name) }}" placeholder="e.g. Phoenix Sky Harbor International Airport"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="Address"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Phone</label><input type="text" name="phone" class="admin-dashboard-input" value="{{ old('phone', $entry->phone) }}" placeholder="e.g. 602-273-3300"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Website</label><input type="url" name="website" class="admin-dashboard-input" value="{{ old('website', $entry->website) }}" placeholder="https://..."></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Map URL</label><input type="text" name="map_url" class="admin-dashboard-input" value="{{ old('map_url', $entry->map_url) }}" placeholder="Google Maps link"></div>
+                                            <div class="admin-dashboard-form-group admin-dashboard-book-entry-actions"><button type="submit" class="admin-dashboard-action-btn approve-btn">Save</button><a href="#" onclick="if(confirm('Delete this entry?')){ document.getElementById('delete-travel-acc-{{ $entry->id }}').submit(); } return false;" class="admin-dashboard-action-btn admin-dashboard-delete-entry-btn">Delete</a></div>
+                                        </form>
+                                        <form id="delete-travel-acc-{{ $entry->id }}" method="POST" action="{{ route('admin.travel-accommodation.destroy', $entry->id) }}" style="display:none;">@csrf</form>
+                                    </div>
+                                @empty
+                                    <p class="admin-dashboard-note">No travel entries yet. Click "Add Travel Entry" to add one.</p>
+                                @endforelse
+                            </div>
+                            <div class="admin-dashboard-travel-acc-col">
+                                <h2 class="admin-dashboard-travel-acc-col-title">Accommodation</h2>
+                                <form method="POST" action="{{ route('admin.travel-accommodation.store') }}">@csrf<input type="hidden" name="type" value="accommodation"><button type="submit" class="admin-dashboard-btn admin-dashboard-btn-primary" style="margin-bottom: 16px;">Add Accommodation Entry</button></form>
+                                <div class="admin-dashboard-book-entry-card" style="margin-bottom: 16px;">
+                                    <h3 class="admin-dashboard-book-entry-title">Note (Accommodation)</h3>
+                                    <p class="admin-dashboard-hint" style="margin-bottom: 10px;">One note only. Shown first on the public page under Accommodation.</p>
+                                    <form method="POST" action="{{ route('admin.travel-accommodation.note.save') }}" class="admin-dashboard-form">@csrf
+                                        <input type="hidden" name="type" value="accommodation">
+                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Description</label><textarea name="description" class="admin-dashboard-input" rows="4" placeholder="e.g. Hotel booking details...">{{ old('type') === 'accommodation' ? old('description', $accommodationNote->description ?? '') : ($accommodationNote->description ?? '') }}</textarea></div>
+                                        <div class="admin-dashboard-form-group"><button type="submit" class="admin-dashboard-action-btn approve-btn">Save note</button></div>
+                                    </form>
+                                </div>
+                                @forelse($accommodationEntries ?? [] as $entry)
+                                    <div class="admin-dashboard-book-entry-card">
+                                        <h3 class="admin-dashboard-book-entry-title">Accommodation {{ $loop->iteration }}</h3>
+                                        <form method="POST" action="{{ route('admin.travel-accommodation.update', $entry->id) }}" class="admin-dashboard-form">@csrf
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Order</label><input type="number" name="sort_order" class="admin-dashboard-input" value="{{ old('sort_order', $entry->sort_order) }}" min="0" max="255"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Name</label><input type="text" name="name" class="admin-dashboard-input" value="{{ old('name', $entry->name) }}" placeholder="e.g. Hotel name"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="address" class="admin-dashboard-input" value="{{ old('address', $entry->address) }}" placeholder="Address"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Phone</label><input type="text" name="phone" class="admin-dashboard-input" value="{{ old('phone', $entry->phone) }}" placeholder="Phone"></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Website</label><input type="url" name="website" class="admin-dashboard-input" value="{{ old('website', $entry->website) }}" placeholder="https://..."></div>
+                                            <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Map URL</label><input type="text" name="map_url" class="admin-dashboard-input" value="{{ old('map_url', $entry->map_url) }}" placeholder="Google Maps link"></div>
+                                            <div class="admin-dashboard-form-group admin-dashboard-book-entry-actions"><button type="submit" class="admin-dashboard-action-btn approve-btn">Save</button><a href="#" onclick="if(confirm('Delete this entry?')){ document.getElementById('delete-travel-acc-{{ $entry->id }}').submit(); } return false;" class="admin-dashboard-action-btn admin-dashboard-delete-entry-btn">Delete</a></div>
+                                        </form>
+                                        <form id="delete-travel-acc-{{ $entry->id }}" method="POST" action="{{ route('admin.travel-accommodation.destroy', $entry->id) }}" style="display:none;">@csrf</form>
+                                    </div>
+                                @empty
+                                    <p class="admin-dashboard-note">No accommodation entries yet. Click "Add Accommodation Entry" to add one.</p>
+                                @endforelse
+                            </div>
+                        </div>
                     </div>
                 @elseif(($activeTab ?? 'my-account') === 'book-appointments')
                     <!-- Book your appointments Tab Content -->

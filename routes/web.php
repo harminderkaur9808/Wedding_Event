@@ -97,6 +97,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/local-attractions/{id}', [AdminDashboardController::class, 'updateLocalAttraction'])->name('admin.local-attractions.update');
     Route::post('/admin/local-attractions/{id}/delete', [AdminDashboardController::class, 'destroyLocalAttraction'])->name('admin.local-attractions.destroy');
 
+    // Travel & Accommodation (admin) – specific /note route must come before /{id}
+    Route::post('/admin/travel-accommodation', [AdminDashboardController::class, 'storeTravelAccommodation'])->name('admin.travel-accommodation.store');
+    Route::post('/admin/travel-accommodation/note', [AdminDashboardController::class, 'saveTravelAccommodationNote'])->name('admin.travel-accommodation.note.save');
+    Route::post('/admin/travel-accommodation/{id}', [AdminDashboardController::class, 'updateTravelAccommodation'])->name('admin.travel-accommodation.update');
+    Route::post('/admin/travel-accommodation/{id}/delete', [AdminDashboardController::class, 'destroyTravelAccommodation'])->name('admin.travel-accommodation.destroy');
+
     Route::get('/admin/notes/create', [AdminDashboardController::class, 'createNotePage'])->name('admin.notes.create');
     Route::get('/admin/notes/{id}/edit', [AdminDashboardController::class, 'editNotePage'])->name('admin.notes.edit');
     Route::post('/admin/notes', [AdminDashboardController::class, 'storeNote'])->name('admin.notes.store');

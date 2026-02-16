@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\TravelAccommodationEntry;
+use App\Models\TravelAccommodationNote;
 use Illuminate\View\View;
 
 class ImportantNotificationController extends Controller
 {
     /**
-     * Show the Important Notification page. Notes with tags appear as notifications and can be filtered by tag.
+     * Show the Important Notification (Travel & Accommodation) page.
      */
     public function index(): View
     {
@@ -25,17 +27,32 @@ class ImportantNotificationController extends Controller
             ->values();
 
         $notesTotalCount = $allNotes->count();
-        $notes = $allNotes; // Pass all notes; view shows first 10, "See All" reveals the rest on the same page
+        $notes = $allNotes;
 
-        // Only show filter tags that have at least one notification with a message
         $allTagOptions = Note::notificationTagOptions();
         $usedTagSlugs = $allNotes->pluck('tags')->flatten()->unique()->filter()->values()->all();
         $tagOptions = array_intersect_key($allTagOptions, array_flip($usedTagSlugs));
+
+        $travelEntries = TravelAccommodationEntry::where('type', TravelAccommodationEntry::TYPE_TRAVEL)
+            ->orderBy('sort_order')->orderBy('id')->get();
+        $accommodationEntries = TravelAccommodationEntry::where('type', TravelAccommodationEntry::TYPE_ACCOMMODATION)
+            ->orderBy('sort_order')->orderBy('id')->get();
+
+        $travelNote = null;
+        $accommodationNote = null;
+        if (\Illuminate\Support\Facades\Schema::hasTable('travel_accommodation_notes')) {
+            $travelNote = TravelAccommodationNote::where('type', TravelAccommodationNote::TYPE_TRAVEL)->first();
+            $accommodationNote = TravelAccommodationNote::where('type', TravelAccommodationNote::TYPE_ACCOMMODATION)->first();
+        }
 
         return view('pages.important_notification', [
             'notes' => $notes,
             'notesTotalCount' => $notesTotalCount,
             'tagOptions' => $tagOptions,
+            'travelEntries' => $travelEntries,
+            'accommodationEntries' => $accommodationEntries,
+            'travelNote' => $travelNote,
+            'accommodationNote' => $accommodationNote,
         ]);
     }
 }

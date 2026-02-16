@@ -78,6 +78,208 @@
     margin: 0;
 }
 
+/* ========== Travel & Accommodation two-column section ========== */
+
+.ta-section {
+    background: #fff;
+    padding: 48px 0 56px;
+}
+
+.ta-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.ta-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .ta-two-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ta-col {
+    min-width: 0;
+}
+
+.ta-col-accommodation {
+    border-left: 1px solid #e2e8f0;
+    padding-left: 40px;
+}
+
+@media (max-width: 768px) {
+    .ta-col-accommodation {
+        border-left: none;
+        padding-left: 0;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+    }
+}
+
+/* Dark blue header block: icon on top, horizontal line, then title; decors in bottom corners */
+.ta-block-header {
+    position: relative;
+    background-color: #054C82;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 210px;
+}
+
+.ta-block-header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.ta-block-header-icon {
+    flex-shrink: 0;
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.ta-block-header-icon[src$=".svg"] {
+    filter: none;
+}
+
+/* Horizontal line below icon */
+.ta-block-header-line {
+    width: 96%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.8);
+    flex-shrink: 0;
+    font-family: 'Volkhov', serif;
+}
+
+.ta-block-header-title {
+    font-family: 'Volkhov', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.3px;
+    text-transform: none;
+}
+
+/* Decorative leaf images – bottom-left and bottom-right of card */
+.ta-block-header-decor {
+    position: absolute;
+    bottom: 12px;
+    width: auto;
+    height: 24px;
+    max-width: 44px;
+    object-fit: contain;
+    opacity: 0.9;
+}
+
+.ta-block-header-decor--left {
+    left: 12px;
+}
+
+.ta-block-header-decor--right {
+    right: 12px;
+    left: auto;
+    transform: scaleX(-1);
+}
+
+.ta-block-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ta-item {
+    padding: 0 0 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.ta-item:last-child {
+    border-bottom: none;
+}
+
+.ta-item-name {
+    display: inline-block;
+    background: #054C82;
+    color: #fff;
+    font-family: 'Volkhov', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 6px 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.ta-item-row {
+    font-size: 18px;
+    color: #334155;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.ta-item-row:last-child {
+    margin-bottom: 0;
+}
+
+.ta-link {
+    color: #054C82;
+    text-decoration: none;
+}
+
+.ta-link:hover {
+    text-decoration: underline;
+}
+
+.ta-empty {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Simple note (description) – order matches backend (first added = 1, second = 2, etc.) */
+.ta-section-note {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.ta-section-note-number {
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #054C82;
+}
+
+.ta-section-note-text {
+    flex: 1;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #334155;
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+}
+
 /* ========== Second Section - Notification List ========== */
 
 .notif-section {

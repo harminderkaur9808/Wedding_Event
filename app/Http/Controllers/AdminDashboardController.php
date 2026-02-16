@@ -8,6 +8,8 @@ use App\Models\PageSection;
 use App\Models\BookAppointmentEntry;
 use App\Models\LocalAttraction;
 use App\Models\Note;
+use App\Models\TravelAccommodationEntry;
+use App\Models\TravelAccommodationNote;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,6 +102,38 @@ class AdminDashboardController extends Controller
                 'activeTab' => 'notes',
                 'notes' => $notes,
                 'adminUsers' => $adminUsers,
+            ]);
+        }
+
+        if ($tab === 'travel-accommodation') {
+            $travelError = null;
+            $accommodationError = null;
+            $travelNote = null;
+            $accommodationNote = null;
+            try {
+                $travelEntries = TravelAccommodationEntry::where('type', TravelAccommodationEntry::TYPE_TRAVEL)
+                    ->orderBy('sort_order')->orderBy('id')->get();
+                $accommodationEntries = TravelAccommodationEntry::where('type', TravelAccommodationEntry::TYPE_ACCOMMODATION)
+                    ->orderBy('sort_order')->orderBy('id')->get();
+                if (\Illuminate\Support\Facades\Schema::hasTable('travel_accommodation_notes')) {
+                    $travelNote = TravelAccommodationNote::where('type', TravelAccommodationNote::TYPE_TRAVEL)->first();
+                    $accommodationNote = TravelAccommodationNote::where('type', TravelAccommodationNote::TYPE_ACCOMMODATION)->first();
+                }
+            } catch (\Throwable $e) {
+                \Log::error('Travel & Accommodation load failed: ' . $e->getMessage());
+                $travelEntries = collect();
+                $accommodationEntries = collect();
+                $travelError = $accommodationError = 'Database table may be missing. Run: php artisan migrate';
+            }
+            return view('AdminArea.AdminDashboard', [
+                'user' => $user,
+                'activeTab' => 'travel-accommodation',
+                'travelEntries' => $travelEntries,
+                'accommodationEntries' => $accommodationEntries,
+                'travelNote' => $travelNote,
+                'accommodationNote' => $accommodationNote,
+                'travelError' => $travelError,
+                'accommodationError' => $accommodationError,
             ]);
         }
 
@@ -234,6 +268,111 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.dashboard', ['tab' => 'local-attractions'])
             ->with('success', 'Local attraction deleted.');
+    }
+
+    /**
+     * Store a new Travel or Accommodation entry (admin only).
+     */
+    public function storeTravelAccommodation(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $type = $request->input('type', TravelAccommodationEntry::TYPE_TRAVEL);
+        if (!in_array($type, [TravelAccommodationEntry::TYPE_TRAVEL, TravelAccommodationEntry::TYPE_ACCOMMODATION], true)) {
+            $type = TravelAccommodationEntry::TYPE_TRAVEL;
+        }
+
+        $maxOrder = TravelAccommodationEntry::where('type', $type)->max('sort_order') ?? -1;
+        TravelAccommodationEntry::create([
+            'type' => $type,
+            'sort_order' => (int) $maxOrder + 1,
+            'name' => '',
+            'address' => '',
+            'phone' => '',
+            'website' => '',
+            'map_url' => '',
+        ]);
+
+        return redirect()->route('admin.dashboard', ['tab' => 'travel-accommodation'])
+            ->with('success', ($type === TravelAccommodationEntry::TYPE_ACCOMMODATION ? 'Accommodation' : 'Travel') . ' entry added. You can now edit and save.');
+    }
+
+    /**
+     * Update a Travel or Accommodation entry (admin only).
+     */
+    public function updateTravelAccommodation(Request $request, $id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $entry = TravelAccommodationEntry::findOrFail($id);
+
+        $request->validate([
+            'sort_order' => 'nullable|integer|min:0|max:255',
+            'name' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:500',
+            'phone' => 'nullable|string|max:100',
+            'website' => 'nullable|string|max:2048',
+            'map_url' => 'nullable|string|max:2048',
+        ]);
+
+        $entry->sort_order = (int) ($request->input('sort_order', $entry->sort_order ?? 0));
+        $entry->name = $request->input('name') ?? '';
+        $entry->address = $request->input('address') ?? '';
+        $entry->phone = $request->input('phone') ?? '';
+        $entry->website = $request->input('website') ?? '';
+        $entry->map_url = $request->input('map_url') ?? '';
+        $entry->save();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'travel-accommodation'])
+            ->with('success', 'Entry updated.');
+    }
+
+    /**
+     * Delete a Travel or Accommodation entry (admin only).
+     */
+    public function destroyTravelAccommodation($id)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        TravelAccommodationEntry::findOrFail($id)->delete();
+
+        return redirect()->route('admin.dashboard', ['tab' => 'travel-accommodation'])
+            ->with('success', 'Entry deleted.');
+    }
+
+    /**
+     * Save the single Travel or Accommodation note (one note per section). Admin only. Uses updateOrCreate by type.
+     */
+    public function saveTravelAccommodationNote(Request $request)
+    {
+        $admin = Auth::user();
+        if (!$admin || !$admin->isAdmin()) {
+            return redirect()->route('login')->with('error', 'Access denied.');
+        }
+
+        $type = $request->input('type');
+        if (!in_array($type, [TravelAccommodationNote::TYPE_TRAVEL, TravelAccommodationNote::TYPE_ACCOMMODATION], true)) {
+            return redirect()->route('admin.dashboard', ['tab' => 'travel-accommodation'])->with('error', 'Invalid note type.');
+        }
+
+        $request->validate(['description' => 'nullable|string|max:5000']);
+
+        TravelAccommodationNote::updateOrCreate(
+            ['type' => $type],
+            ['description' => $request->input('description') ?? '', 'sort_order' => 0]
+        );
+
+        return redirect()->route('admin.dashboard', ['tab' => 'travel-accommodation'])
+            ->with('success', ($type === TravelAccommodationNote::TYPE_ACCOMMODATION ? 'Accommodation' : 'Travel') . ' note saved.');
     }
 
     /**

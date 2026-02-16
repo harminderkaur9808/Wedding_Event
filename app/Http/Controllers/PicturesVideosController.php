@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserMedia;
 use App\Models\GalleryDisplayOrder;
+use App\Models\PictureVideoCategory;
 
 class PicturesVideosController extends Controller
 {
@@ -15,7 +16,33 @@ class PicturesVideosController extends Controller
      */
     public function index()
     {
-        return view('pages.pictures_videos.index');
+        $categories = collect();
+        if (\Illuminate\Support\Facades\Schema::hasTable('picture_video_categories')) {
+            $categories = PictureVideoCategory::orderBy('sort_order')->get();
+        }
+        if ($categories->isEmpty()) {
+            $categories = $this->getDefaultCategories();
+        }
+        return view('pages.pictures_videos.index', ['categories' => $categories]);
+    }
+
+    /**
+     * Default categories when picture_video_categories table is not yet migrated.
+     */
+    private function getDefaultCategories(): \Illuminate\Support\Collection
+    {
+        return collect([
+            (object)['slug' => 'roka', 'name' => 'ROKA', 'sort_order' => 1, 'image_path' => 'Roka_image.png'],
+            (object)['slug' => 'pre_shagun', 'name' => 'Pre-Shagun pictures', 'sort_order' => 2, 'image_path' => 'Pre_shagun_image.png'],
+            (object)['slug' => 'shagun', 'name' => 'SHAGUN', 'sort_order' => 3, 'image_path' => 'Shagun_image.png'],
+            (object)['slug' => 'vatna', 'name' => 'VATNA', 'sort_order' => 4, 'image_path' => 'Vatna_images.png'],
+            (object)['slug' => 'sangeet', 'name' => 'SANGEET IN PHOENIX', 'sort_order' => 5, 'image_path' => 'Sangeet_in_Phoenix.png'],
+            (object)['slug' => 'mehndi', 'name' => 'MEHNDI', 'sort_order' => 6, 'image_path' => 'Mehndi_wedding.png'],
+            (object)['slug' => 'jaggo', 'name' => 'JAGGO AND GIDDHA', 'sort_order' => 7, 'image_path' => 'Jaggo_and_Giddha.png'],
+            (object)['slug' => 'sehra', 'name' => 'SEHRA BANDHI AND SURMA', 'sort_order' => 8, 'image_path' => 'Sehra_bandhi_and_Surma.png'],
+            (object)['slug' => 'barat', 'name' => 'BARAT AND MILNI', 'sort_order' => 9, 'image_path' => 'Barat_and_Milni.png'],
+            (object)['slug' => 'wedding', 'name' => 'WEDDING', 'sort_order' => 10, 'image_path' => 'Wedding_img.png'],
+        ]);
     }
 
     /**
@@ -110,9 +137,10 @@ class PicturesVideosController extends Controller
             return $item;
         }, $items, array_keys($items)));
         
-        // Category names mapping
+        // Category names mapping (include Pre-Shagun)
         $categoryNames = [
             'roka' => 'Roka',
+            'pre_shagun' => 'Pre-Shagun pictures',
             'shagun' => 'Shagun',
             'vatna' => 'Vatna',
             'sangeet' => 'Sangeet in Phoenix',
@@ -123,7 +151,7 @@ class PicturesVideosController extends Controller
             'wedding' => 'Wedding'
         ];
         
-        $categoryName = $categoryNames[$category] ?? ucfirst($category);
+        $categoryName = $categoryNames[$category] ?? ucfirst(str_replace('_', ' ', $category));
         
         $user = Auth::user();
         $canReorder = $user && $user->isAdmin();

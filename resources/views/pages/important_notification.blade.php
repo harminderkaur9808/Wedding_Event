@@ -28,173 +28,92 @@
         </div>
     </section>
 
-    <!-- Second Section - Notification List -->
-    <section class="notif-section" aria-label="Notification list">
-        <div class="notif-section-side-decor notif-section-side-decor--left" aria-hidden="true">
-            <img src="{{ asset('Images/notifications_imgs/Left_decor_v1.png') }}" alt="" class="notif-section-side-decor-img">
-        </div>
-        <div class="notif-section-side-decor notif-section-side-decor--right" aria-hidden="true">
-            <img src="{{ asset('Images/notifications_imgs/right_decor_v1.png') }}" alt="" class="notif-section-side-decor-img">
-        </div>
-
-        <div class="container notif-section-inner">
-            <h2 class="notif-section-title">Notification</h2>
-
-            <div class="notif-filters">
-                <button type="button" class="notif-filter-btn notif-filter-btn--active" data-filter="all">All</button>
-                @foreach($tagOptions ?? [] as $slug => $label)
-                    <button type="button" class="notif-filter-btn" data-filter="{{ $slug }}">{{ $label }}</button>
-                @endforeach
-            </div>
-
-            <div class="notif-list-wrap">
-            <ul class="notif-list" id="notifList">
-                @forelse($notes ?? [] as $note)
-                    <li class="notif-item {{ $loop->iteration > 10 ? 'notif-item--more' : '' }}" data-tags="{{ is_array($note->tags) ? implode(',', $note->tags) : '' }}" style="{{ $loop->iteration > 10 ? 'display: none;' : '' }}">
-                        <div class="notif-item-avatar">
-                            @if($note->user && $note->user->profile_image)
-                                <img src="{{ secure_media_url('profile_images/' . $note->user->profile_image) }}" alt="" class="notif-item-avatar-img">
-                            @else
-                                <div class="notif-item-avatar-initials">{{ $note->user ? strtoupper(substr($note->user->first_name ?? '', 0, 1) . substr($note->user->last_name ?? '', 0, 1)) : '?' }}</div>
-                            @endif
+    <!-- Second Section - Travel Information & Accommodation (two columns) -->
+    <section class="ta-section" aria-label="Travel and Accommodation details">
+        <div class="container ta-container">
+            <div class="ta-two-col">
+                <!-- Left: Travel Information -->
+                <div class="ta-col ta-col-travel">
+                    <div class="ta-block-header ta-block-header--travel" style="background-image: url('{{ asset('Images/Travel-Accommodation-imgs/Travel-Information-img-1-bg.png') }}');">
+                        <div class="ta-block-header-inner">
+                            <img src="{{ asset('Images/Travel-Accommodation-imgs/TravelInformation_ico.svg') }}" alt="" class="ta-block-header-icon" width="28" height="28" aria-hidden="true">
+                            <span class="ta-block-header-line" aria-hidden="true"></span>
+                            <h2 class="ta-block-header-title">Travel Information</h2>
                         </div>
-                        <div class="notif-item-body">
-                            <div class="notif-item-name">{{ $note->user ? $note->user->first_name . ' ' . $note->user->last_name : 'Admin' }}</div>
-                            <div class="notif-item-meta">
-                                <span class="notif-item-date">
-                                    <svg class="notif-item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                    {{ $note->updated_at->format('d M Y') }}
-                                </span>
-                                <span class="notif-item-time">
-                                    <svg class="notif-item-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                    {{ $note->updated_at->format('h:i A') }}
-                                </span>
+                        <img src="{{ asset('Images/Travel_accommodation/Left_decor_v1.png') }}" alt="" class="ta-block-header-decor ta-block-header-decor--left" aria-hidden="true">
+                        <img src="{{ asset('Images/Travel_accommodation/right_decor_v1.png') }}" alt="" class="ta-block-header-decor ta-block-header-decor--right" aria-hidden="true">
+                    </div>
+                    <div class="ta-block-list">
+                        @if($travelNote && !empty(trim($travelNote->description ?? '')))
+                            <div class="ta-section-note">
+                                <p class="ta-section-note-text">{{ $travelNote->description }}</p>
                             </div>
-                            @php
-                                $noteContent = $note->content ?: (string) $note->title;
-                                $notePreview = Str::limit($noteContent, 200);
-                                $noteIsLong = strlen($noteContent) > 200;
-                            @endphp
-                            <div class="notif-item-message-wrap">
-                                @if($noteIsLong)
-                                    <p class="notif-item-message notif-item-message-preview">{{ $notePreview }}</p>
-                                    <p class="notif-item-message notif-item-message-full" aria-hidden="true" style="display: none;">{{ $noteContent }}</p>
-                                    <button type="button" class="notif-see-more" aria-expanded="false">See more</button>
-                                @else
-                                    <p class="notif-item-message">{{ $noteContent }}</p>
+                        @endif
+                        @forelse($travelEntries ?? [] as $entry)
+                            <div class="ta-item">
+                                <div class="ta-item-name">{{ $entry->name ?: '—' }}</div>
+                                @if(!empty(trim($entry->address ?? '')))
+                                    <div class="ta-item-row"><strong>Address:</strong> {{ $entry->address }}</div>
+                                @endif
+                                @if(!empty(trim($entry->phone ?? '')))
+                                    <div class="ta-item-row"><strong>Phone:</strong> {{ $entry->phone }}</div>
+                                @endif
+                                @if(!empty(trim($entry->website ?? '')))
+                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ Str::limit($entry->website, 50) }}</a></div>
+                                @endif
+                                @if(!empty(trim($entry->map_url ?? '')))
+                                    <div class="ta-item-row"><strong>Map Link:</strong> <a class="ta-link" href="{{ $entry->map_url }}" target="_blank" rel="noopener noreferrer">Click Here</a></div>
                                 @endif
                             </div>
-                            @if(!empty($note->tags) && is_array($note->tags))
-                                @foreach($note->tags as $tagSlug)
-                                    @if(isset($tagOptions[$tagSlug]))
-                                        <span class="notif-item-tag notif-item-tag--{{ $tagSlug }}">{{ $tagOptions[$tagSlug] }}</span>
-                                    @endif
-                                @endforeach
+                        @empty
+                            @if(!$travelNote || empty(trim($travelNote->description ?? '')))
+                                <p class="ta-empty">No travel information or note yet.</p>
                             @endif
-                        </div>
-                    </li>
-                @empty
-                    <li class="notif-item notif-item-empty">
-                        <p class="notif-item-message">No notifications yet. Admins can create notes with tags and they will appear here.</p>
-                    </li>
-                @endforelse
-            </ul>
-            </div>
+                        @endforelse
+                    </div>
+                </div>
 
-            @if(($notesTotalCount ?? 0) > 10)
-            <div class="notif-see-all-wrap">
-                <button type="button" class="notif-see-all" id="notifSeeAllBtn" aria-expanded="false">See All</button>
+                <!-- Right: Accommodation -->
+                <div class="ta-col ta-col-accommodation">
+                    <div class="ta-block-header ta-block-header--accommodation" style="background-image: url('{{ asset('Images/Travel-Accommodation-imgs/Accommodation-1-img-bg.png') }}');">
+                        <div class="ta-block-header-inner">
+                            <img src="{{ asset('Images/Travel-Accommodation-imgs/Accommodation_ico.svg') }}" alt="" class="ta-block-header-icon" width="28" height="28" aria-hidden="true">
+                            <span class="ta-block-header-line" aria-hidden="true"></span>
+                            <h2 class="ta-block-header-title">Accommodation</h2>
+                        </div>
+                        <img src="{{ asset('Images/Travel_accommodation/Left_decor_v1.png') }}" alt="" class="ta-block-header-decor ta-block-header-decor--left" aria-hidden="true">
+                        <img src="{{ asset('Images/Travel_accommodation/right_decor_v1.png') }}" alt="" class="ta-block-header-decor ta-block-header-decor--right" aria-hidden="true">
+                    </div>
+                    <div class="ta-block-list">
+                        @if($accommodationNote && !empty(trim($accommodationNote->description ?? '')))
+                            <div class="ta-section-note">
+                                <p class="ta-section-note-text">{{ $accommodationNote->description }}</p>
+                            </div>
+                        @endif
+                        @forelse($accommodationEntries ?? [] as $entry)
+                            <div class="ta-item">
+                                <div class="ta-item-name">{{ $entry->name ?: '—' }}</div>
+                                @if(!empty(trim($entry->address ?? '')))
+                                    <div class="ta-item-row"><strong>Address:</strong> {{ $entry->address }}</div>
+                                @endif
+                                @if(!empty(trim($entry->phone ?? '')))
+                                    <div class="ta-item-row"><strong>Phone:</strong> {{ $entry->phone }}</div>
+                                @endif
+                                @if(!empty(trim($entry->website ?? '')))
+                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ Str::limit($entry->website, 50) }}</a></div>
+                                @endif
+                                @if(!empty(trim($entry->map_url ?? '')))
+                                    <div class="ta-item-row"><strong>Map Link:</strong> <a class="ta-link" href="{{ $entry->map_url }}" target="_blank" rel="noopener noreferrer">Click Here</a></div>
+                                @endif
+                            </div>
+                        @empty
+                            @if(!$accommodationNote || empty(trim($accommodationNote->description ?? '')))
+                                <p class="ta-empty">No accommodation or note yet.</p>
+                            @endif
+                        @endforelse
+                    </div>
+                </div>
             </div>
-            @endif
         </div>
     </section>
-
-    @push('scripts')
-    <script>
-    (function() {
-        var list = document.getElementById('notifList');
-        var buttons = document.querySelectorAll('.notif-filter-btn');
-        var duration = 350;
-
-        function filterNotifs(filter) {
-            buttons.forEach(function(b) { b.classList.remove('notif-filter-btn--active'); });
-            var activeBtn = document.querySelector('.notif-filter-btn[data-filter="' + filter + '"]');
-            if (activeBtn) activeBtn.classList.add('notif-filter-btn--active');
-
-            var items = list ? list.querySelectorAll('.notif-item') : [];
-            items.forEach(function(item) {
-                if (item.classList.contains('notif-item-empty')) return;
-                var tags = (item.getAttribute('data-tags') || '').split(',');
-                var show = filter === 'all' || tags.indexOf(filter) !== -1;
-                item.classList.remove('notif-item--show', 'notif-item--hidden');
-                if (show) {
-                    item.style.display = '';
-                    item.style.visibility = 'visible';
-                    item.offsetHeight;
-                    item.classList.add('notif-item--show');
-                } else {
-                    item.classList.add('notif-item--hidden');
-                    window.setTimeout(function() {
-                        item.style.display = 'none';
-                        item.classList.remove('notif-item--hidden');
-                    }, duration);
-                }
-            });
-        }
-
-        buttons.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var filter = this.getAttribute('data-filter');
-                filterNotifs(filter);
-            });
-        });
-
-        // See more / See less for long notification messages
-        document.querySelectorAll('.notif-see-more').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var wrap = this.closest('.notif-item-message-wrap');
-                if (!wrap) return;
-                var preview = wrap.querySelector('.notif-item-message-preview');
-                var full = wrap.querySelector('.notif-item-message-full');
-                var expanded = this.getAttribute('aria-expanded') === 'true';
-                if (expanded) {
-                    if (preview) preview.style.display = '';
-                    if (full) full.style.display = 'none';
-                    this.setAttribute('aria-expanded', 'false');
-                    this.textContent = 'See more';
-                } else {
-                    if (preview) preview.style.display = 'none';
-                    if (full) full.style.display = '';
-                    this.setAttribute('aria-expanded', 'true');
-                    this.textContent = 'See less';
-                }
-            });
-        });
-
-        // See All: show/hide notes beyond the first 10 on the same page (no redirect to admin)
-        var seeAllBtn = document.getElementById('notifSeeAllBtn');
-        if (seeAllBtn && list) {
-            seeAllBtn.addEventListener('click', function() {
-                var moreItems = list.querySelectorAll('.notif-item--more');
-                var expanded = this.getAttribute('aria-expanded') === 'true';
-                if (expanded) {
-                    moreItems.forEach(function(el) { el.style.display = 'none'; });
-                    this.setAttribute('aria-expanded', 'false');
-                    this.textContent = 'See All';
-                } else {
-                    var activeBtn = document.querySelector('.notif-filter-btn--active');
-                    var activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
-                    moreItems.forEach(function(el) {
-                        var tags = (el.getAttribute('data-tags') || '').split(',');
-                        var showByFilter = activeFilter === 'all' || tags.indexOf(activeFilter) !== -1;
-                        if (showByFilter) el.style.display = '';
-                    });
-                    this.setAttribute('aria-expanded', 'true');
-                    this.textContent = 'Show less';
-                }
-            });
-        }
-    })();
-    </script>
-    @endpush
 @endsection
