@@ -18,6 +18,7 @@ class TravelAccommodationEntry extends Model
         'address',
         'phone',
         'website',
+        'website_label',
         'map_url',
     ];
 }

@@ -59,7 +59,7 @@
                                     <div class="ta-item-row"><strong>Phone:</strong> {{ $entry->phone }}</div>
                                 @endif
                                 @if(!empty(trim($entry->website ?? '')))
-                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ Str::limit($entry->website, 50) }}</a></div>
+                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ !empty(trim($entry->website_label ?? '')) ? $entry->website_label : Str::limit($entry->website, 50) }}</a></div>
                                 @endif
                                 @if(!empty(trim($entry->map_url ?? '')))
                                     <div class="ta-item-row"><strong>Map Link:</strong> <a class="ta-link" href="{{ $entry->map_url }}" target="_blank" rel="noopener noreferrer">Click Here</a></div>
@@ -100,7 +100,7 @@
                                     <div class="ta-item-row"><strong>Phone:</strong> {{ $entry->phone }}</div>
                                 @endif
                                 @if(!empty(trim($entry->website ?? '')))
-                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ Str::limit($entry->website, 50) }}</a></div>
+                                    <div class="ta-item-row"><strong>Website:</strong> <a class="ta-link" href="{{ $entry->website }}" target="_blank" rel="noopener noreferrer">{{ !empty(trim($entry->website_label ?? '')) ? $entry->website_label : Str::limit($entry->website, 50) }}</a></div>
                                 @endif
                                 @if(!empty(trim($entry->map_url ?? '')))
                                     <div class="ta-item-row"><strong>Map Link:</strong> <a class="ta-link" href="{{ $entry->map_url }}" target="_blank" rel="noopener noreferrer">Click Here</a></div>

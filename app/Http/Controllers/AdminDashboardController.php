@@ -293,6 +293,7 @@ class AdminDashboardController extends Controller
             'address' => '',
             'phone' => '',
             'website' => '',
+            'website_label' => '',
             'map_url' => '',
         ]);
 
@@ -318,6 +319,7 @@ class AdminDashboardController extends Controller
             'address' => 'nullable|string|max:500',
             'phone' => 'nullable|string|max:100',
             'website' => 'nullable|string|max:2048',
+            'website_label' => 'nullable|string|max:255',
             'map_url' => 'nullable|string|max:2048',
         ]);
 
@@ -326,6 +328,7 @@ class AdminDashboardController extends Controller
         $entry->address = $request->input('address') ?? '';
         $entry->phone = $request->input('phone') ?? '';
         $entry->website = $request->input('website') ?? '';
+        $entry->website_label = $request->input('website_label') ?? '';
         $entry->map_url = $request->input('map_url') ?? '';
         $entry->save();
 
