@@ -32,6 +32,7 @@
                     <li><a href="{{ route('ask.the.host') }}" class="footer-link">Ask The Host</a></li>
                     <li><a href="{{ route('updates.by.family') }}" class="footer-link">Updates By Family</a></li>
                     <li><a href="{{ route('local.attractions') }}" class="footer-link">Local Attractions</a></li>
+                    <li><a href="{{ route('important.notification') }}" class="footer-link">Travel & Accommodation</a></li>
                     <li><a href="{{ route('book.appointments') }}" class="footer-link">Book Your Appointments</a></li>
                 </ul>
             </div>
