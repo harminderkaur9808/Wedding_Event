@@ -284,13 +284,30 @@
 
 .ta-section-note-text {
     flex: 1;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.6;
     color: #334155;
     margin: 0;
     white-space: pre-wrap;
     font-family: 'Nunito', sans-serif;
     font-weight: 400;
+}
+
+/* Note as bullet list (each new line/paragraph from backend = one li) */
+.ta-section-note-list {
+    list-style: disc;
+    margin: 0 0 0 1.25em;
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.ta-section-note-list .ta-section-note-text {
+    margin-bottom: 0.5em;
+}
+
+.ta-section-note-list .ta-section-note-text:last-child {
+    margin-bottom: 0;
 }
 
 /* ========== Second Section - Notification List ========== */

@@ -45,8 +45,15 @@
                     </div>
                     <div class="ta-block-list">
                         @if($travelNote && !empty(trim($travelNote->description ?? '')))
+                            @php
+                                $travelParas = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $travelNote->description ?? '')));
+                            @endphp
                             <div class="ta-section-note">
-                                <p class="ta-section-note-text">{{ $travelNote->description }}</p>
+                                <ul class="ta-section-note-list">
+                                    @foreach($travelParas as $para)
+                                        <li class="ta-section-note-text">{{ $para }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
                         @forelse($travelEntries ?? [] as $entry)
@@ -86,8 +93,15 @@
                     </div>
                     <div class="ta-block-list">
                         @if($accommodationNote && !empty(trim($accommodationNote->description ?? '')))
+                            @php
+                                $accommodationParas = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $accommodationNote->description ?? '')));
+                            @endphp
                             <div class="ta-section-note">
-                                <p class="ta-section-note-text">{{ $accommodationNote->description }}</p>
+                                <ul class="ta-section-note-list">
+                                    @foreach($accommodationParas as $para)
+                                        <li class="ta-section-note-text">{{ $para }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         @endif
                         @forelse($accommodationEntries ?? [] as $entry)
