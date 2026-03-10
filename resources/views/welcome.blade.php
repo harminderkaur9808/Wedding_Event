@@ -10,8 +10,8 @@
     {{-- @include('Homepages.partials.third-section') --}}
     @include('Homepages.partials.fourth-section')
     @include('Homepages.partials.fifth-section')
-    @include('Homepages.partials.sixth-section')
     @include('Homepages.partials.seventh-section')
+    @include('Homepages.partials.sixth-section')
     @include('Homepages.partials.ninth-section')
     @include('Homepages.partials.tenth-section')
     @include('Homepages.partials.eleventh-section')

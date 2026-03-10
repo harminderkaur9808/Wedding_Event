@@ -139,7 +139,7 @@
                     </div>
                     <div class="updates-by-family-entry-msg-wrap">
                         <div class="updates-by-family-entry-msg updates-by-family-entry-msg--{{ $color }}">
-                            <p>{{ nl2br(e($update->message)) }}</p>
+                            <p>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $update->message))) !!}</p>
                         </div>
                         @auth
                             @if(Auth::id() === $update->user_id)

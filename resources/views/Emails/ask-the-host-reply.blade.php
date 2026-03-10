@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question Received - Ask the Host</title>
+    <title>Your Question Was Answered - Ask the Host</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -101,63 +101,58 @@
             font-weight: 700;
             color: #2F4F75;
         }
-        .email-body .user-details {
+        .email-body .section-box {
             text-align: left;
-            max-width: 360px;
+            max-width: 460px;
             margin: 0 auto 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .email-body .section-heading {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2F4F75;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .email-body .section-content {
             color: #333;
             font-size: 15px;
-        }
-        .email-body .user-details .detail-row {
-            padding: 6px 0;
-            white-space: nowrap;
-        }
-        .email-body .user-details .detail-label {
-            font-weight: 700;
-            color: #2F4F75;
-            margin-right: 4px;
-        }
-        .email-body .user-details .detail-value {
-            color: #333;
-            font-weight: 400;
-        }
-        .email-body .question-heading {
-            font-size: 16px;
-            font-weight: 700;
-            color: #2F4F75;
-            margin: 24px 0 8px;
-        }
-        .email-body .question-content {
-            color: #333;
-            margin-bottom: 24px;
-            font-weight: 400;
             white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .email-body .reply-meta {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .email-body .reply-meta .replied-by {
+            font-weight: 700;
+            color: #2F4F75;
         }
         .email-cta-row {
-            margin: 12px 0 24px;
+            margin: 20px 0 24px;
             text-align: center;
         }
         .email-cta-row .cta-label {
             font-size: 15px;
             color: #2F4F75;
-            margin: 0;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 10px;
+            margin: 0 0 12px 0;
+            display: block;
         }
         .email-cta-row .email-cta-btn {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .email-cta-btn {
             display: inline-block;
             background: #2F4F75;
             color: #fff !important;
             font-size: 15px;
             font-weight: 400;
-            padding: 4px 11px;
+            padding: 10px 24px;
             text-decoration: none;
             font-family: Georgia, serif;
+            border-radius: 6px;
         }
         .email-cta-btn:hover {
             background: #1e3a52;
@@ -201,35 +196,37 @@
 </head>
 <body>
     <div class="email-wrapper">
-      
+
         <div class="email-logo-block">
             <img src="{{ $logoUrl }}" alt="Vickram & Nisha" width="140">
         </div>
 
         <div class="email-banner">
-            <h1>Question Received</h1>
+            <h1>Your Question Was Answered</h1>
         </div>
 
         <div class="email-body">
             <div class="content-inner">
-                <p class="greeting">Hello,</p>
-                <p class="intro">A new question has been submitted on the <span class="intro-bold">Ask the Host</span> section.</p>
+                <p class="greeting">Hello {{ $questionerName }},</p>
+                <p class="intro">Great news! Someone has replied to your question on the <span class="intro-bold">Ask the Host</span> section.</p>
 
-                <div class="user-details">
-                    <div class="detail-row"><span class="detail-label">Submitted By</span>: <span class="detail-value">{{ $submittedByName }}</span></div>
-                    <div class="detail-row"><span class="detail-label">Email</span>: <span class="detail-value">{{ $submittedByEmail }}</span></div>
-                    <div class="detail-row"><span class="detail-label">Date</span>: <span class="detail-value">{{ $submittedAt }}</span></div>
+                <div class="section-box">
+                    <p class="section-heading">Your Question</p>
+                    <p class="section-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $questionText)) }}</p>
                 </div>
 
-                <p class="question-heading">Question</p>
-                <p class="question-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $questionText)) }}</p>
+                <div class="section-box">
+                    <p class="reply-meta"><span class="replied-by">{{ $repliedByName }}</span> replied on {{ $repliedAt }}</p>
+                    <p class="section-heading">Answer</p>
+                    <p class="section-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $replyText)) }}</p>
+                </div>
 
                 <div class="email-cta-row">
-                    <span class="cta-label">View &amp; Reply</span>
-                    <a href="{{ $viewReplyUrl }}" class="email-cta-btn">Click here</a>
+                    <span class="cta-label">View the full conversation</span>
+                    <a href="{{ $viewUrl }}" class="email-cta-btn">View on Ask the Host</a>
                 </div>
 
-                <p class="note-text">Please log in to respond to the guest at your earliest convenience.</p>
+                <p class="note-text">You can log in at any time to see all replies and add more questions.</p>
             </div>
         </div>
 

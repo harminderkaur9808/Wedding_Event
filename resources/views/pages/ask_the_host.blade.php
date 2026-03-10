@@ -112,15 +112,19 @@
                                 @endif
                             </div>
                             <div class="ask-the-host-question-text-wrap" id="questionTextWrap-{{ $q->id }}">
-                                <p class="ask-the-host-question-text">
+                                <div class="ask-the-host-question-text">
+                                    @php
+                                        $formattedShort = nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $shortText)));
+                                        $formattedFull = nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $fullText)));
+                                    @endphp
                                     @if($isLong)
-                                        <span class="ask-the-host-question-short">{{ $shortText }}</span>
-                                        <span class="ask-the-host-question-full" style="display: none;">{{ $fullText }}</span>
+                                        <span class="ask-the-host-question-short">{!! $formattedShort !!}</span>
+                                        <span class="ask-the-host-question-full" style="display: none;">{!! $formattedFull !!}</span>
                                         <button type="button" class="ask-the-host-see-more-btn" aria-expanded="false">See more</button>
                                     @else
-                                        {{ $fullText }}
+                                        {!! $formattedFull !!}
                                     @endif
-                                </p>
+                                </div>
                             </div>
                             @if(Auth::id() == $q->user_id)
                             <div class="ask-the-host-edit-wrap" id="editWrap-{{ $q->id }}" style="display: none;">
@@ -195,7 +199,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                        <p class="ask-the-host-reply-text">{{ $reply->reply_text }}</p>
+                                        <div class="ask-the-host-reply-text">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $reply->reply_text))) !!}</div>
                                     </div>
                                 @endforeach
                             </div>

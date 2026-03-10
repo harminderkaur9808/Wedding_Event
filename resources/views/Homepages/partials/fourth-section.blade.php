@@ -20,7 +20,7 @@
                 <!-- Left Section - Text Content -->
                 <div class="wedding-mele-invitation-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <h1 class="wedding-mele-invitation-title">Invitation</h1>
-                    <p class="wedding-mele-invitation-intro">{{ $fourth?->short_description ?? 'We inviting you and your family on' }}</p>
+                    <div class="wedding-mele-invitation-intro">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $fourth?->short_description ?? 'We inviting you and your family on'))) !!}</div>
                     
                     <div class="wedding-mele-invitation-details">
                         <div class="wedding-mele-detail-item">

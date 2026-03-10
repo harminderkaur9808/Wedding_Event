@@ -15,7 +15,7 @@
                 </div>
                 <h2 class="wedding-mele-tenth-title">{{ $tenth?->title ?? 'Sehra & Surma Ceremony' }}</h2>
                 @if($tenth?->short_description)
-                    <p class="wedding-mele-section-description">{{ $tenth->short_description }}</p>
+                    <div class="wedding-mele-section-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth->short_description))) !!}</div>
                 @endif
             </div>
 
@@ -29,10 +29,12 @@
                             <span class="wedding-mele-tenth-detail-text">Date: <span>{{ $tenth?->getExtra('date') ?? '01-01-2027' }}</span></span>
                         </div>
 
+                        @if(trim((string)($tenth?->getExtra('turban_tying') ?? '')) !== '')
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/tenthsecimg/TurbanTying_icon.svg') }}" alt="Turban Tying" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Turban Tying: <span>{{ $tenth?->getExtra('turban_tying') ?? 'At 7 am' }}</span></span>
+                            <span class="wedding-mele-tenth-detail-text">Turban Tying: <span>{{ $tenth->getExtra('turban_tying') }}</span></span>
                         </div>
+                        @endif
 
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-tenth-detail-icon">
@@ -40,8 +42,8 @@
                         </div>
 
                         <div class="wedding-mele-tenth-detail-item">
-                            <img src="{{ asset('Images/Home/tenthsecimg/Barat_leaves_ico.svg') }}" alt="Barat leaves" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Barat leaves: <span>{{ $tenth?->getExtra('barat_leaves') ?? 'Indian Traditional Outfits' }}</span></span>
+                            <img src="{{ asset('Images/Home/tenthsecimg/Barat_leaves_ico.svg') }}" alt="Baraat leaves" class="wedding-mele-tenth-detail-icon">
+                            <span class="wedding-mele-tenth-detail-text">Baraat leaves: <span>{{ $tenth?->getExtra('barat_leaves') ?? 'Indian Traditional Outfits' }}</span></span>
                         </div>
                     </div>
                 </div>

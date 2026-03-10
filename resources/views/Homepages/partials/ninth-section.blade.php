@@ -10,7 +10,7 @@
                 </div>
                 <h2 class="wedding-mele-ninth-title">{!! nl2br(e($ninth?->title ?? "Jaggo, Gidha and\nBhangra Night")) !!}</h2>
                 @if($ninth?->short_description)
-                    <p class="wedding-mele-section-description">{{ $ninth->short_description }}</p>
+                    <div class="wedding-mele-section-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $ninth->short_description))) !!}</div>
                 @endif
             </div>
 

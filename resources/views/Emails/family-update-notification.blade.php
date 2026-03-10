@@ -204,7 +204,7 @@
                 <p class="intro">A new update has been shared on Vikram & Nisha's Wedding Website.</p>
 
                 <p class="update-heading">Update information</p>
-                <p class="update-content">{{ $familyUpdate->message }}</p>
+                <p class="update-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $familyUpdate->message)) }}</p>
                 <p class="posted-by">Posted by: {{ $postedByName }}</p>
 
                 <div class="email-cta-row">

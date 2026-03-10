@@ -29,7 +29,7 @@
                         <div class="wedding-mele-bubble-content">
                             @php $ourStory = $sections['our_story'] ?? null; @endphp
                             <h4 class="wedding-mele-person-name">{{ $ourStory?->getExtra('groom_name') ?? 'Vickram' }}</h4>
-                            <p class="wedding-mele-person-description">{{ $ourStory?->getExtra('groom_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.' }}</p>
+                            <div class="wedding-mele-person-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $ourStory?->getExtra('groom_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.'))) !!}</div>
                             <div class="wedding-mele-heart-icon wedding-mele-heart-right">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#A3A5C7"/>
@@ -57,7 +57,7 @@
                     <div class="wedding-mele-text-bubble wedding-mele-right-bubble">
                         <div class="wedding-mele-bubble-content">
                             <h4 class="wedding-mele-person-name">{{ $ourStory?->getExtra('bride_name') ?? 'Nisha' }}</h4>
-                            <p class="wedding-mele-person-description">{{ $ourStory?->getExtra('bride_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.' }}</p>
+                            <div class="wedding-mele-person-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $ourStory?->getExtra('bride_description') ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.'))) !!}</div>
                             <div class="wedding-mele-heart-icon wedding-mele-heart-left">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#A3A5C7"/>

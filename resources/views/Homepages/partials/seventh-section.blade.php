@@ -15,7 +15,7 @@
                 </div>
                 <h2 class="wedding-mele-seventh-title">{{ $seventh?->title ?? 'Sangeet Night' }}</h2>
                 @if($seventh?->short_description)
-                    <p class="wedding-mele-section-description">{{ $seventh->short_description }}</p>
+                    <div class="wedding-mele-section-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh->short_description))) !!}</div>
                 @endif
             </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AskTheHostQuestionNotification;
+use App\Mail\AskTheHostReplyNotification;
 use App\Models\AskTheHostQuery;
 use App\Models\AskTheHostReply;
 use App\Models\User;
@@ -119,11 +120,21 @@ class AskTheHostController extends Controller
             'reply_text' => ['required', 'string', 'min:1', 'max:2000'],
         ]);
 
-        AskTheHostReply::create([
+        $reply = AskTheHostReply::create([
             'ask_the_host_query_id' => $query->id,
             'user_id' => Auth::id(),
             'reply_text' => $request->reply_text,
         ]);
+
+        // Notify the person who asked the question (skip if they replied to themselves)
+        $questioner = $query->user;
+        if ($questioner && $questioner->email && (int) $questioner->id !== (int) Auth::id()) {
+            try {
+                Mail::to($questioner->email)->send(new AskTheHostReplyNotification($query, $reply));
+            } catch (\Throwable $e) {
+                Log::warning('Ask the Host reply notification email failed for questioner ' . $questioner->email, ['exception' => $e->getMessage()]);
+            }
+        }
 
         return redirect()->route('ask.the.host')->with('success', 'Your reply has been posted.');
     }
