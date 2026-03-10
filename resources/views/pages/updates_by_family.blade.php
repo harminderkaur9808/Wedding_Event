@@ -119,6 +119,11 @@
                         }
                     }
                     $dateTime = $update->created_at->format('d M Y, h:i a');
+                    /* Convert all <br> tag variants to line breaks (raw and HTML-entity) so they render as spacing, not literal text */
+                    $msg = $update->message ?? '';
+                    $msg = preg_replace('/<br\s*\/?>\s*|<\s*\/\s*br\s*>/i', "\n", $msg);
+                    $msg = preg_replace('/&lt;br\s*\/?&gt;\s*|&lt;\s*\/\s*br\s*&gt;/i', "\n", $msg);
+                    $formattedMessage = nl2br(e($msg));
                 @endphp
                 <article class="updates-by-family-entry updates-by-family-entry--{{ $side }} updates-by-family-entry--{{ $posClass }} ubf-animate-entry">
                     <div class="updates-by-family-entry-node">
@@ -139,7 +144,7 @@
                     </div>
                     <div class="updates-by-family-entry-msg-wrap">
                         <div class="updates-by-family-entry-msg updates-by-family-entry-msg--{{ $color }}">
-                            <p>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $update->message))) !!}</p>
+                            <p>{!! $formattedMessage !!}</p>
                         </div>
                         @auth
                             @if(Auth::id() === $update->user_id)
