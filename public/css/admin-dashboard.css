@@ -351,6 +351,7 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
 
 .admin-dashboard-input {
     width: 100%;
+    min-width: 0;
     padding: 12px 16px;
     font-family: 'Nunito', sans-serif;
     font-size: 15px;
@@ -361,6 +362,23 @@ span.inline-flex.rtl\:flex-row-reverse.shadow-sm.rounded-md {
     transition: all 0.3s ease;
     outline: none;
     box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Textarea: wrap text, preserve line breaks, max height 400px, scroll when needed */
+.admin-dashboard-form-group textarea.admin-dashboard-input {
+    resize: vertical;
+    min-height: 70px;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+/* Description field (rows=5): larger min so more content visible by default */
+.admin-dashboard-form-group textarea.admin-dashboard-input[rows="5"],
+.admin-dashboard-form-group textarea.admin-dashboard-input.admin-dashboard-textarea-description {
+    min-height: 140px;
 }
 
 .admin-dashboard-input:focus {
@@ -1916,6 +1934,10 @@ body.admin-add-user-modal-open .wedding-header {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
+}
+
+.admin-dashboard-form-row .admin-dashboard-form-group {
+    min-width: 0;
 }
 
 .admin-dashboard-extra-fields {

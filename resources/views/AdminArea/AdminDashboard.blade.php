@@ -479,11 +479,11 @@
                                         <div class="admin-dashboard-form-row">
                                             <div class="admin-dashboard-form-group">
                                                 <label for="title_{{ $sec->slug }}" class="admin-dashboard-label">Title</label>
-                                                <input type="text" id="title_{{ $sec->slug }}" name="title" class="admin-dashboard-input" value="{{ old('title', $sec->title) }}" placeholder="Section title">
+                                                <textarea id="title_{{ $sec->slug }}" name="title" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="Section title">{{ old('title', $sec->title) }}</textarea>
                                             </div>
                                             <div class="admin-dashboard-form-group">
                                                 <label for="subtitle_{{ $sec->slug }}" class="admin-dashboard-label">Subtitle</label>
-                                                <input type="text" id="subtitle_{{ $sec->slug }}" name="subtitle" class="admin-dashboard-input" value="{{ old('subtitle', $sec->subtitle) }}" placeholder="Subtitle / tagline">
+                                                <textarea id="subtitle_{{ $sec->slug }}" name="subtitle" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="Subtitle / tagline">{{ old('subtitle', $sec->subtitle) }}</textarea>
                                             </div>
                                         </div>
 
@@ -496,7 +496,7 @@
 
                                         <div class="admin-dashboard-form-group">
                                             <label for="short_description_{{ $sec->slug }}" class="admin-dashboard-label">Description</label>
-                                            <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input" rows="5" placeholder="Paragraph text shown under the section title on the homepage">{{ old('short_description', $sec->short_description) }}</textarea>
+                                            <textarea id="short_description_{{ $sec->slug }}" name="short_description" class="admin-dashboard-input admin-dashboard-textarea" rows="5" placeholder="Paragraph text shown under the section title on the homepage">{{ old('short_description', $sec->short_description) }}</textarea>
                                         </div>
                                         @endif
 
@@ -504,20 +504,20 @@
                                             <div class="admin-dashboard-form-row">
                                                 <div class="admin-dashboard-form-group">
                                                     <label class="admin-dashboard-label">Groom name</label>
-                                                    <input type="text" name="extra[groom_name]" class="admin-dashboard-input" value="{{ old('extra.groom_name', $sec->getExtra('groom_name')) }}" placeholder="Groom name">
+                                                    <textarea name="extra[groom_name]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="Groom name">{{ old('extra.groom_name', $sec->getExtra('groom_name')) }}</textarea>
                                                 </div>
                                                 <div class="admin-dashboard-form-group">
                                                     <label class="admin-dashboard-label">Bride name</label>
-                                                    <input type="text" name="extra[bride_name]" class="admin-dashboard-input" value="{{ old('extra.bride_name', $sec->getExtra('bride_name')) }}" placeholder="Bride name">
+                                                    <textarea name="extra[bride_name]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="Bride name">{{ old('extra.bride_name', $sec->getExtra('bride_name')) }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="admin-dashboard-form-group">
                                                 <label class="admin-dashboard-label">Groom description</label>
-                                                <textarea name="extra[groom_description]" class="admin-dashboard-input" rows="2">{{ old('extra.groom_description', $sec->getExtra('groom_description')) }}</textarea>
+                                                <textarea name="extra[groom_description]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.groom_description', $sec->getExtra('groom_description')) }}</textarea>
                                             </div>
                                             <div class="admin-dashboard-form-group">
                                                 <label class="admin-dashboard-label">Bride description</label>
-                                                <textarea name="extra[bride_description]" class="admin-dashboard-input" rows="2">{{ old('extra.bride_description', $sec->getExtra('bride_description')) }}</textarea>
+                                                <textarea name="extra[bride_description]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.bride_description', $sec->getExtra('bride_description')) }}</textarea>
                                             </div>
                                         @endif
 
@@ -525,56 +525,57 @@
                                             <div class="admin-dashboard-extra-fields">
                                                 @if($sec->slug === 'fourth')
                                                     <div class="admin-dashboard-form-row">
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}" placeholder="e.g. 2/21/2026"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}" placeholder="e.g. 9 am - 12 pm"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><textarea name="extra[dress_code]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 2/21/2026">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 9 am - 12 pm">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><textarea name="extra[venue]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.venue', $sec->getExtra('venue')) }}</textarea></div>
                                                     </div>
                                                 @endif
                                                 @if($sec->slug === 'fifth')
                                                     <div class="admin-dashboard-form-row">
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date display (pinned note)</label><input type="text" name="extra[date_display]" class="admin-dashboard-input" value="{{ old('extra.date_display', $sec->getExtra('date_display')) }}" placeholder="e.g. 25 Feb 2026"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}" placeholder="e.g. 123 Main St, Phoenix AZ"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date display (pinned note)</label><textarea name="extra[date_display]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 25 Feb 2026">{{ old('extra.date_display', $sec->getExtra('date_display')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><textarea name="extra[venue]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.venue', $sec->getExtra('venue')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><textarea name="extra[dress_code]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><textarea name="extra[address]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 123 Main St, Phoenix AZ">{{ old('extra.address', $sec->getExtra('address')) }}</textarea></div>
                                                     </div>
                                                 @endif
                                                 @if(in_array($sec->slug, ['sixth', 'seventh', 'ninth', 'eleventh']))
                                                     <div class="admin-dashboard-form-row">
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><textarea name="extra[venue]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.venue', $sec->getExtra('venue')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><textarea name="extra[dress_code]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><textarea name="extra[address]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.address', $sec->getExtra('address')) }}</textarea></div>
                                                     </div>
                                                     @if($sec->slug === 'seventh')
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name frame)</label><input type="text" name="extra[entertainment_mc]" class="admin-dashboard-input" value="{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Jastej Sra') }}" placeholder="e.g. MC: Jastej Sra"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name frame)</label><textarea name="extra[entertainment_mc]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. MC: Jastej Sra">{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Jastej Sra') }}</textarea></div>
                                                     @endif
                                                     @if($sec->slug === 'ninth')
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name plate)</label><input type="text" name="extra[entertainment_mc]" class="admin-dashboard-input" value="{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Herman Kahlon') }}" placeholder="e.g. MC: Herman Kahlon"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Performance (text on name plate)</label><input type="text" name="extra[performance_text]" class="admin-dashboard-input" value="{{ old('extra.performance_text', $sec->getExtra('performance_text') ?? 'Giddha by family members') }}" placeholder="e.g. Giddha by family members"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name plate)</label><textarea name="extra[entertainment_mc]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. MC: Herman Kahlon">{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Herman Kahlon') }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Performance (text on name plate)</label><textarea name="extra[performance_text]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Giddha by family members">{{ old('extra.performance_text', $sec->getExtra('performance_text') ?? 'Giddha by family members') }}</textarea></div>
                                                     @endif
                                                     @if($sec->slug === 'eleventh')
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Men (dress code)</label><input type="text" name="extra[dress_code_men]" class="admin-dashboard-input" value="{{ old('extra.dress_code_men', $sec->getExtra('dress_code_men')) }}" placeholder="e.g. Red Turbans Head Covers"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Women (dress code)</label><input type="text" name="extra[dress_code_women]" class="admin-dashboard-input" value="{{ old('extra.dress_code_women', $sec->getExtra('dress_code_women')) }}" placeholder="e.g. Any Color"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Men (dress code)</label><textarea name="extra[dress_code_men]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Red Turbans Head Covers">{{ old('extra.dress_code_men', $sec->getExtra('dress_code_men')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Women (dress code)</label><textarea name="extra[dress_code_women]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Any Color">{{ old('extra.dress_code_women', $sec->getExtra('dress_code_women')) }}</textarea></div>
                                                     @endif
                                                 @endif
                                                 @if($sec->slug === 'tenth')
                                                     <div class="admin-dashboard-form-row">
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Turban tying</label><input type="text" name="extra[turban_tying]" class="admin-dashboard-input" value="{{ old('extra.turban_tying', $sec->getExtra('turban_tying')) }}" placeholder="e.g. At 7 am"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Barat leaves</label><input type="text" name="extra[barat_leaves]" class="admin-dashboard-input" value="{{ old('extra.barat_leaves', $sec->getExtra('barat_leaves')) }}"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 7 am onwards">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Turban tying</label><textarea name="extra[turban_tying]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. At 7 am">{{ old('extra.turban_tying', $sec->getExtra('turban_tying')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><textarea name="extra[venue]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.venue', $sec->getExtra('venue')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Barat leaves</label><textarea name="extra[barat_leaves]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.barat_leaves', $sec->getExtra('barat_leaves')) }}</textarea></div>
                                                     </div>
                                                 @endif
                                                 @if($sec->slug === 'twelfth')
                                                     <div class="admin-dashboard-form-row">
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Reception (date)</label><input type="text" name="extra[date]" class="admin-dashboard-input" value="{{ old('extra.date', $sec->getExtra('date')) }}" placeholder="e.g. 1/2/2027"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><input type="text" name="extra[venue]" class="admin-dashboard-input" value="{{ old('extra.venue', $sec->getExtra('venue')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><input type="text" name="extra[address]" class="admin-dashboard-input" value="{{ old('extra.address', $sec->getExtra('address')) }}"></div>
-                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><input type="text" name="extra[time]" class="admin-dashboard-input" value="{{ old('extra.time', $sec->getExtra('time')) }}" placeholder="e.g. 6 pm onwards"></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Reception (date)</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 1/2/2027">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Venue</label><textarea name="extra[venue]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.venue', $sec->getExtra('venue')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><textarea name="extra[address]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.address', $sec->getExtra('address')) }}</textarea></div>
+                                                        <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 6 pm onwards">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
                                                         {{-- Dress code and Dress code subtext removed for twelfth section
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code</label><input type="text" name="extra[dress_code]" class="admin-dashboard-input" value="{{ old('extra.dress_code', $sec->getExtra('dress_code')) }}" placeholder="e.g. Indian traditional outfits"></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Dress code subtext</label><input type="text" name="extra[dress_code_subtext]" class="admin-dashboard-input" value="{{ old('extra.dress_code_subtext', $sec->getExtra('dress_code_subtext')) }}" placeholder="e.g. Men: Formals. Women: any color"></div>
@@ -1422,6 +1423,34 @@
 <script src="https://unpkg.com/cropperjs@1.6.2/dist/cropper.min.js"></script>
 <script src="{{ asset('js/profile-image-crop.js') }}"></script>
 <script>
+// Auto-resize page-section textareas to show full content (max 400px)
+(function() {
+    var MAX_H = 400;
+    function resizeTa(ta) {
+        ta.style.height = 'auto';
+        var h = Math.min(ta.scrollHeight, MAX_H);
+        ta.style.height = h + 'px';
+        ta.style.overflowY = h >= MAX_H ? 'auto' : 'hidden';
+    }
+    function initTextareaResize() {
+        var cards = document.querySelectorAll('.js-page-section-card');
+        cards.forEach(function(card) {
+            if (card.style.display === 'none') return;
+            var textareas = card.querySelectorAll('textarea.admin-dashboard-input');
+            textareas.forEach(function(ta) {
+                if (!ta._resizeBound) {
+                    ta._resizeBound = true;
+                    ta.addEventListener('input', function() { resizeTa(ta); });
+                }
+                resizeTa(ta);
+            });
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initTextareaResize);
+    else initTextareaResize();
+    window.adminResizePageSectionTextareas = initTextareaResize;
+})();
+
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     const wrapper = input.closest('.admin-dashboard-password-wrapper');
@@ -1625,12 +1654,18 @@ document.addEventListener('DOMContentLoaded', function() {
         pageSectionCards.forEach(function(card) {
             card.style.display = (card.getAttribute('data-section-slug') === slug) ? 'block' : 'none';
         });
+        if (typeof window.adminResizePageSectionTextareas === 'function') {
+            setTimeout(window.adminResizePageSectionTextareas, 50);
+        }
     }
     if (pageSectionSelect && pageSectionCards.length) {
         pageSectionSelect.addEventListener('change', function() {
             showPageSection(this.value);
         });
         showPageSection(pageSectionSelect.value);
+        if (typeof window.adminResizePageSectionTextareas === 'function') {
+            window.adminResizePageSectionTextareas();
+        }
     }
 
     // Hero slider: live preview when user selects a new image

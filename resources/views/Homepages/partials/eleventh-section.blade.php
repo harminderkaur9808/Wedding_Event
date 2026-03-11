@@ -25,30 +25,31 @@
                     <div class="wedding-mele-eleventh-details">
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{{ $eleventh?->getExtra('date') ?? '01-01-2027' }}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh?->getExtra('date') ?? '01-01-2027'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Time: <span>{{ $eleventh?->getExtra('time') ?? '9 am-12 pm' }}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh?->getExtra('time') ?? '9 am-12 pm'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Venue: <span>{{ $eleventh?->getExtra('venue') ?? 'Ramit and Maninder Residence' }}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh?->getExtra('venue') ?? 'Ramit and Maninder Residence'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{{ $eleventh?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ' }}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">
-                                Dress Code: <span>{{ $eleventh?->getExtra('dress_code') ?? 'Indian Traditional Outfits' }}</span>
+                                Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh?->getExtra('dress_code') ?? 'Indian Traditional Outfits'))) !!}</span>
                                 @php $menText = $eleventh?->getExtra('dress_code_men'); $womenText = $eleventh?->getExtra('dress_code_women'); @endphp
                                 @if($menText || $womenText)
-                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> {{ $menText ?? '—' }}&nbsp;&nbsp;&nbsp;<b>Women:</b> {{ $womenText ?? '—' }}</span>
+                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $menText ?? '—'))) !!}&nbsp;&nbsp;&nbsp;<b>Women:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $womenText ?? '—'))) !!}</span>
                                 @elseif($eleventh?->getExtra('dress_code_subtext'))
                                     @php
-                                        $sub = e($eleventh->getExtra('dress_code_subtext'));
+                                        $sub = preg_replace('/<br\s*\/?>/i', "\n", $eleventh->getExtra('dress_code_subtext'));
+                                        $sub = nl2br(e($sub));
                                         $sub = preg_replace('/\bMen:\s*/', '<b>Men:</b> ', $sub);
                                         $sub = preg_replace('/\bWomen:\s*/', '<b>Women:</b> ', $sub);
                                     @endphp

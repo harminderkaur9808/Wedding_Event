@@ -26,24 +26,31 @@
                     <div class="wedding-mele-tenth-details">
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Date: <span>{{ $tenth?->getExtra('date') ?? '01-01-2027' }}</span></span>
+                            <span class="wedding-mele-tenth-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth?->getExtra('date') ?? '01-01-2027'))) !!}</span></span>
                         </div>
+
+                        @if(trim((string)($tenth?->getExtra('time') ?? '')) !== '')
+                        <div class="wedding-mele-tenth-detail-item">
+                            <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-tenth-detail-icon">
+                            <span class="wedding-mele-tenth-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth->getExtra('time')))) !!}</span></span>
+                        </div>
+                        @endif
 
                         @if(trim((string)($tenth?->getExtra('turban_tying') ?? '')) !== '')
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/tenthsecimg/TurbanTying_icon.svg') }}" alt="Turban Tying" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Turban Tying: <span>{{ $tenth->getExtra('turban_tying') }}</span></span>
+                            <span class="wedding-mele-tenth-detail-text">Turban Tying: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth->getExtra('turban_tying')))) !!}</span></span>
                         </div>
                         @endif
 
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Venue: <span>{{ $tenth?->getExtra('venue') ?? 'Hopitality Room' }}</span></span>
+                            <span class="wedding-mele-tenth-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth?->getExtra('venue') ?? 'Hopitality Room'))) !!}</span></span>
                         </div>
 
                         <div class="wedding-mele-tenth-detail-item">
                             <img src="{{ asset('Images/Home/tenthsecimg/Barat_leaves_ico.svg') }}" alt="Baraat leaves" class="wedding-mele-tenth-detail-icon">
-                            <span class="wedding-mele-tenth-detail-text">Baraat leaves: <span>{{ $tenth?->getExtra('barat_leaves') ?? 'Indian Traditional Outfits' }}</span></span>
+                            <span class="wedding-mele-tenth-detail-text">Baraat leaves: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth?->getExtra('barat_leaves') ?? 'Indian Traditional Outfits'))) !!}</span></span>
                         </div>
                     </div>
                 </div>

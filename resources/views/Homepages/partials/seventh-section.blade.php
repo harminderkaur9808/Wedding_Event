@@ -47,23 +47,23 @@
                     <div class="wedding-mele-seventh-details">
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Date: <span>{{ $seventh?->getExtra('date') ?? '2-26-2026' }}</span></span>
+                            <span class="wedding-mele-seventh-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('date') ?? '2-26-2026'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Time: <span>{{ $seventh?->getExtra('time') ?? '6pm - midnight' }}</span></span>
+                            <span class="wedding-mele-seventh-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('time') ?? '6pm - midnight'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Venue: <span>{{ $seventh?->getExtra('venue') ?? 'Jasmine and Mannttej Residence' }}</span></span>
+                            <span class="wedding-mele-seventh-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('venue') ?? 'Jasmine and Mannttej Residence'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Address: <span>{{ $seventh?->getExtra('address') ?? '4608 W El Cortez Pl, Phoenix AZ 85083' }}</span></span>
+                            <span class="wedding-mele-seventh-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('address') ?? '4608 W El Cortez Pl, Phoenix AZ 85083'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-seventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-seventh-detail-icon">
-                            <span class="wedding-mele-seventh-detail-text">Dress Code: <span>{{ $seventh?->getExtra('dress_code') ?? 'Indian. Outside venue. Be warm and comfortable' }}</span></span>
+                            <span class="wedding-mele-seventh-detail-text">Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('dress_code') ?? 'Indian. Outside venue. Be warm and comfortable'))) !!}</span></span>
                         </div>
                     </div>
 
@@ -71,7 +71,7 @@
                         <div class="wedding-mele-seventh-entertainment-title">Entertainment</div>
                         <div class="wedding-mele-seventh-nameplate-wrap">
                             <img src="{{ asset('Images/Home/Seven_sec_img/name_frame_sev_sec.svg') }}" alt="" class="wedding-mele-seventh-nameplate" aria-hidden="true">
-                            <span class="wedding-mele-seventh-nameplate-text">{{ $seventh?->getExtra('entertainment_mc') ?? 'MC: Jastej Sra' }}</span>
+                            <span class="wedding-mele-seventh-nameplate-text">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $seventh?->getExtra('entertainment_mc') ?? 'MC: Jastej Sra'))) !!}</span>
                         </div>
                     </div>
                 </div>

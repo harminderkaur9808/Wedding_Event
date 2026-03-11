@@ -140,6 +140,24 @@ class AskTheHostController extends Controller
     }
 
     /**
+     * Update a reply (only the author can update).
+     */
+    public function updateReply(Request $request, AskTheHostReply $reply)
+    {
+        if (Auth::id() !== (int) $reply->user_id) {
+            abort(403, 'You can only edit your own reply.');
+        }
+
+        $request->validate([
+            'reply_text' => ['required', 'string', 'min:1', 'max:2000'],
+        ]);
+
+        $reply->update(['reply_text' => $request->reply_text]);
+
+        return redirect()->route('ask.the.host')->with('success', 'Reply updated.');
+    }
+
+    /**
      * Delete a reply (only the author can delete their own).
      */
     public function destroyReply(AskTheHostReply $reply)

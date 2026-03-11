@@ -131,6 +131,7 @@ class PageSectionSeeder extends Seeder
                 'event_date' => null,
                 'extra' => [
                     'date' => '01-01-2027',
+                    'time' => '7 am onwards',
                     'turban_tying' => 'At 7 am',
                     'venue' => 'Hopitality Room',
                     'barat_leaves' => 'Indian Traditional Outfits',

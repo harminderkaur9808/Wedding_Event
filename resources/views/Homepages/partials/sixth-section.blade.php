@@ -29,23 +29,23 @@
                     <div class="wedding-mele-sixth-details">
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Date: <span>{{ $sixth?->getExtra('date') ?? '2-25-2026' }}</span></span>
+                            <span class="wedding-mele-sixth-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('date') ?? '2-25-2026'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Time: <span>{{ $sixth?->getExtra('time') ?? '4 - 7 pm' }}</span></span>
+                            <span class="wedding-mele-sixth-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('time') ?? '4 - 7 pm'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Venue: <span>{{ $sixth?->getExtra('venue') ?? 'Ramit and Maninder Residence' }}</span></span>
+                            <span class="wedding-mele-sixth-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('venue') ?? 'Ramit and Maninder Residence'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Address: <span>{{ $sixth?->getExtra('address') ?? '20865 N. 109th Place, Scottsdale AZ' }}</span></span>
+                            <span class="wedding-mele-sixth-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('address') ?? '20865 N. 109th Place, Scottsdale AZ'))) !!}</span></span>
                         </div>
                         <div class="wedding-mele-sixth-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-sixth-detail-icon">
-                            <span class="wedding-mele-sixth-detail-text">Dress Code: <span>{{ $sixth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors' }}</span></span>
+                            <span class="wedding-mele-sixth-detail-text">Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors'))) !!}</span></span>
                         </div>
                     </div>
                 </div>

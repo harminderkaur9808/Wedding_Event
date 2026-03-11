@@ -516,11 +516,13 @@
     padding: 0;
 }
 
-.ask-the-host-edit-wrap {
+.ask-the-host-edit-wrap,
+.ask-the-host-reply-edit-wrap {
     margin-bottom: 12px;
 }
 
-.ask-the-host-edit-wrap .ask-the-host-form-textarea {
+.ask-the-host-edit-wrap .ask-the-host-form-textarea,
+.ask-the-host-reply-edit-wrap .ask-the-host-form-textarea {
     margin-bottom: 4px;
 }
 

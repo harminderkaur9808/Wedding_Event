@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['put', 'patch'], '/ask-the-host/questions/{query}', [AskTheHostController::class, 'updateQuestion'])->name('ask.the.host.questions.update');
     Route::delete('/ask-the-host/questions/{query}', [AskTheHostController::class, 'destroyQuestion'])->name('ask.the.host.questions.destroy');
     Route::post('/ask-the-host/questions/{query}/replies', [AskTheHostController::class, 'storeReply'])->name('ask.the.host.replies.store');
+    Route::match(['put', 'patch'], '/ask-the-host/replies/{reply}', [AskTheHostController::class, 'updateReply'])->name('ask.the.host.replies.update');
     Route::delete('/ask-the-host/replies/{reply}', [AskTheHostController::class, 'destroyReply'])->name('ask.the.host.replies.destroy');
     Route::get('/local-attractions', [LocalAttractionsController::class, 'index'])->name('local.attractions');
     Route::get('/updates-by-family', [UpdatesByFamilyController::class, 'index'])->name('updates.by.family');

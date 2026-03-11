@@ -185,21 +185,35 @@
                                                 <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
                                             </div>
                                             @if(Auth::id() == $reply->user_id)
-                                                <div class="ask-the-host-reply-menu-wrap">
-                                                    <button type="button" class="ask-the-host-question-menu-btn ask-the-host-reply-menu-btn" aria-label="Reply options" aria-expanded="false" aria-haspopup="true" data-reply-id="{{ $reply->id }}">
-                                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="6" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="18" r="1.5"/></svg>
+                                                <div class="ask-the-host-question-actions-wrap">
+                                                    <button type="button" class="ask-the-host-action-btn ask-the-host-reply-edit-trigger" data-reply-id="{{ $reply->id }}" aria-label="Edit reply" title="Edit">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                     </button>
-                                                    <div class="ask-the-host-question-dropdown ask-the-host-reply-dropdown" id="replyDropdown-{{ $reply->id }}" role="menu" aria-hidden="true">
-                                                        <form action="{{ route('ask.the.host.replies.destroy', $reply) }}" method="POST" class="ask-the-host-delete-form ask-the-host-reply-delete-form">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="ask-the-host-dropdown-item ask-the-host-dropdown-item-danger" role="menuitem">Delete</button>
-                                                        </form>
-                                                    </div>
+                                                    <form action="{{ route('ask.the.host.replies.destroy', $reply) }}" method="POST" class="ask-the-host-delete-form ask-the-host-reply-delete-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="ask-the-host-action-btn ask-the-host-action-btn-delete" aria-label="Delete reply" title="Delete">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="ask-the-host-reply-text">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $reply->reply_text))) !!}</div>
+                                        <div class="ask-the-host-reply-text-wrap" id="replyTextWrap-{{ $reply->id }}">
+                                            <p class="ask-the-host-reply-text">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $reply->reply_text))) !!}</p>
+                                        </div>
+                                        <div class="ask-the-host-reply-edit-wrap" id="replyEditWrap-{{ $reply->id }}" style="display: none;">
+                                            <form action="{{ route('ask.the.host.replies.update', $reply) }}" method="POST" class="ask-the-host-form ask-the-host-reply-edit-form" data-reply-id="{{ $reply->id }}">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" class="ask-the-host-reply-edit-initial" value="{{ e($reply->reply_text) }}" data-reply-id="{{ $reply->id }}">
+                                                <textarea name="reply_text" class="ask-the-host-form-textarea ask-the-host-reply-edit-textarea" rows="3" required minlength="1" maxlength="2000" placeholder="Edit your reply...">{{ $reply->reply_text }}</textarea>
+                                                <div class="ask-the-host-form-actions">
+                                                    <button type="button" class="ask-the-host-btn ask-the-host-btn-secondary ask-the-host-reply-edit-cancel" data-reply-id="{{ $reply->id }}">Cancel</button>
+                                                    <button type="submit" class="ask-the-host-btn ask-the-host-btn-primary">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
@@ -422,6 +436,37 @@ document.addEventListener('DOMContentLoaded', function() {
             var id = btn.getAttribute('data-query-id');
             var textWrap = document.getElementById('questionTextWrap-' + id);
             var editWrap = document.getElementById('editWrap-' + id);
+            if (textWrap) textWrap.style.display = '';
+            if (editWrap) editWrap.style.display = 'none';
+        });
+    });
+
+    // Reply edit: show edit form, hide reply text
+    document.querySelectorAll('.ask-the-host-reply-edit-trigger').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var id = btn.getAttribute('data-reply-id');
+            var textWrap = document.getElementById('replyTextWrap-' + id);
+            var editWrap = document.getElementById('replyEditWrap-' + id);
+            var dropdown = document.getElementById('replyDropdown-' + id);
+            if (!editWrap || !textWrap) return;
+            var initialInput = editWrap.querySelector('.ask-the-host-reply-edit-initial');
+            var text = (initialInput && initialInput.value) ? initialInput.value : '';
+            var textarea = editWrap.querySelector('.ask-the-host-reply-edit-textarea');
+            if (textarea) textarea.value = text;
+            if (dropdown) dropdown.classList.remove('ask-the-host-dropdown-open');
+            textWrap.style.display = 'none';
+            editWrap.style.display = 'block';
+        });
+    });
+
+    // Reply edit cancel
+    document.querySelectorAll('.ask-the-host-reply-edit-cancel').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var id = btn.getAttribute('data-reply-id');
+            var textWrap = document.getElementById('replyTextWrap-' + id);
+            var editWrap = document.getElementById('replyEditWrap-' + id);
             if (textWrap) textWrap.style.display = '';
             if (editWrap) editWrap.style.display = 'none';
         });
