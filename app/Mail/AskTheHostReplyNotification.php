@@ -22,10 +22,22 @@ class AskTheHostReplyNotification extends Mailable
     public string $viewUrl;
     public string $saveTheDate;
 
-    public function __construct(AskTheHostQuery $query, AskTheHostReply $reply)
+    /** When set, this reply is under another reply (nested thread). */
+    public ?AskTheHostReply $parentReply = null;
+    public string $parentReplyText = '';
+    public string $parentRepliedByName = '';
+
+    public function __construct(AskTheHostQuery $query, AskTheHostReply $reply, ?AskTheHostReply $parentReply = null)
     {
         $query->load('user');
         $reply->load('user');
+        $this->parentReply = $parentReply;
+        if ($parentReply) {
+            $parentReply->load('user');
+            $this->parentReplyText = $parentReply->reply_text;
+            $prUser = $parentReply->user;
+            $this->parentRepliedByName = $prUser ? trim($prUser->first_name . ' ' . $prUser->last_name) : 'Someone';
+        }
 
         $questioner = $query->user;
         $this->questionerName = $questioner
@@ -51,9 +63,10 @@ class AskTheHostReplyNotification extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Your Question Was Answered - Ask the Host - ' . config('app.name'),
-        );
+        $subject = $this->parentReply
+            ? 'New Reply in Conversation - Ask the Host - ' . config('app.name')
+            : 'Your Question Was Answered - Ask the Host - ' . config('app.name');
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content

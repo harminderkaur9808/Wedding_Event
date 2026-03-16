@@ -40,6 +40,9 @@
                         <div class="ask-the-host-alert ask-the-host-alert-success">{{ session('success') }}</div>
                     @endif
                 @endif
+                @if(session('error'))
+                    <div class="ask-the-host-alert ask-the-host-alert-error">{{ session('error') }}</div>
+                @endif
 
                 <div class="ask-the-host-header">
                     <h2 class="ask-the-host-section-title"></h2>
@@ -149,13 +152,16 @@
                             <div class="ask-the-host-actions">
                                 <button type="button" class="ask-the-host-reply-trigger" data-query-id="{{ $q->id }}">Answer</button>
                                 @if($q->replies_count > 0)
-                                    <button type="button" class="ask-the-host-see-replies {{ $q->replies_count > 0 ? 'replies-open' : '' }}" data-query-id="{{ $q->id }}" data-count="{{ $q->replies_count }}">
-                                        Hide {{ $q->replies_count }} {{ Str::plural('Reply', $q->replies_count) }}
+                                    <button type="button" class="ask-the-host-see-replies ask-the-host-replies-toggle {{ $q->replies_count > 0 ? 'replies-open' : '' }}" data-query-id="{{ $q->id }}" data-count="{{ $q->replies_count }}" aria-expanded="true" aria-controls="replies-{{ $q->id }}">
+                                        <span class="ask-the-host-replies-toggle-chevron">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                                        </span>
+                                        <span class="ask-the-host-replies-toggle-text">Hide {{ $q->replies_count }} {{ Str::plural('Reply', $q->replies_count) }}</span>
                                     </button>
                                 @endif
                             </div>
 
-                            <!-- Reply form (inline, toggled) -->
+                            <!-- Reply form (inline, toggled) - direct reply to question -->
                             <div class="ask-the-host-reply-form-wrap" id="replyFormWrap-{{ $q->id }}" style="display: none;">
                                 <form action="{{ route('ask.the.host.replies.store', $q) }}" method="POST" class="ask-the-host-form ask-the-host-reply-form">
                                     @csrf
@@ -170,61 +176,10 @@
                                 </form>
                             </div>
 
-                            <!-- Replies list: visible by default when there are replies -->
+                            <!-- Replies list (nested thread): top-level replies and their children -->
                             <div class="ask-the-host-replies" id="replies-{{ $q->id }}" style="{{ $q->replies_count > 0 ? 'display: block;' : 'display: none;' }}">
-                                @foreach($q->replies as $reply)
-                                    <div class="ask-the-host-reply" data-reply-id="{{ $reply->id }}">
-                                        <div class="ask-the-host-reply-meta">
-                                            <div class="ask-the-host-reply-meta-left">
-                                                <div class="ask-the-host-avatar ask-the-host-avatar-sm">
-                                                    @if($reply->user->profile_image)
-                                                        <img src="{{ secure_media_url('profile_images/' . $reply->user->profile_image) }}" alt="">
-                                                    @else
-                                                        <span>{{ strtoupper(substr($reply->user->first_name ?? 'U', 0, 1) . substr($reply->user->last_name ?? '', 0, 1)) }}</span>
-                                                    @endif
-                                                </div>
-                                                <span class="ask-the-host-name">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
-                                                @if($reply->user->isAdmin())
-                                                    <span class="ask-the-host-admin-badge" title="Published by admin">Published by admin</span>
-                                                @endif
-                                                <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
-                                            </div>
-                                            @php $canEditReply = Auth::id() == $reply->user_id; $canDeleteReply = Auth::id() == $reply->user_id || (Auth::check() && Auth::user()->isAdmin()); @endphp
-                                            @if($canEditReply || $canDeleteReply)
-                                                <div class="ask-the-host-question-actions-wrap">
-                                                    @if($canEditReply)
-                                                    <button type="button" class="ask-the-host-action-btn ask-the-host-reply-edit-trigger" data-reply-id="{{ $reply->id }}" aria-label="Edit reply" title="Edit">
-                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                                                    </button>
-                                                    @endif
-                                                    @if($canDeleteReply)
-                                                    <form action="{{ route('ask.the.host.replies.destroy', $reply) }}" method="POST" class="ask-the-host-delete-form ask-the-host-reply-delete-form">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="ask-the-host-action-btn ask-the-host-action-btn-delete" aria-label="Delete reply" title="Delete">
-                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                                                        </button>
-                                                    </form>
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="ask-the-host-reply-text-wrap" id="replyTextWrap-{{ $reply->id }}">
-                                            <p class="ask-the-host-reply-text">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $reply->reply_text))) !!}</p>
-                                        </div>
-                                        <div class="ask-the-host-reply-edit-wrap" id="replyEditWrap-{{ $reply->id }}" style="display: none;">
-                                            <form action="{{ route('ask.the.host.replies.update', $reply) }}" method="POST" class="ask-the-host-form ask-the-host-reply-edit-form" data-reply-id="{{ $reply->id }}">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" class="ask-the-host-reply-edit-initial" value="{{ e($reply->reply_text) }}" data-reply-id="{{ $reply->id }}">
-                                                <textarea name="reply_text" class="ask-the-host-form-textarea ask-the-host-reply-edit-textarea" rows="3" required minlength="1" maxlength="2000" placeholder="Edit your reply...">{{ $reply->reply_text }}</textarea>
-                                                <div class="ask-the-host-form-actions">
-                                                    <button type="button" class="ask-the-host-btn ask-the-host-btn-secondary ask-the-host-reply-edit-cancel" data-reply-id="{{ $reply->id }}">Cancel</button>
-                                                    <button type="submit" class="ask-the-host-btn ask-the-host-btn-primary">Save</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                @foreach($q->replies->whereNull('parent_reply_id') as $reply)
+                                    @include('partials.ask_the_host_reply', ['reply' => $reply, 'query' => $q, 'replies' => $q->replies, 'depth' => 0])
                                 @endforeach
                             </div>
                         </article>
@@ -355,14 +310,36 @@ document.addEventListener('DOMContentLoaded', function() {
             var isHidden = repliesEl.style.display === 'none';
             repliesEl.style.display = isHidden ? 'block' : 'none';
             btn.classList.toggle('replies-open', isHidden);
-            btn.textContent = isHidden ? 'Hide ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies') : 'See ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies');
+            btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+            var textEl = btn.querySelector('.ask-the-host-replies-toggle-text');
+            if (textEl) textEl.textContent = isHidden ? 'Hide ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies') : 'See ' + count + ' ' + (count === '1' ? 'Reply' : 'Replies');
         });
     });
+
 
     document.querySelectorAll('.reply-cancel').forEach(function(btn) {
         btn.addEventListener('click', function() {
             var id = btn.getAttribute('data-query-id');
             var wrap = document.getElementById('replyFormWrap-' + id);
+            if (wrap) wrap.style.display = 'none';
+        });
+    });
+
+    // Nested reply: show/hide reply form under a specific reply
+    document.querySelectorAll('.ask-the-host-reply-under-trigger').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var queryId = btn.getAttribute('data-query-id');
+            var replyId = btn.getAttribute('data-reply-id');
+            var wrap = document.getElementById('replyFormWrap-' + queryId + '-' + replyId);
+            if (wrap) wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+    document.querySelectorAll('.reply-under-cancel').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var queryId = btn.getAttribute('data-query-id');
+            var replyId = btn.getAttribute('data-reply-id');
+            var wrap = document.getElementById('replyFormWrap-' + queryId + '-' + replyId);
             if (wrap) wrap.style.display = 'none';
         });
     });

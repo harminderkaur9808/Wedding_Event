@@ -208,16 +208,27 @@
         <div class="email-body">
             <div class="content-inner">
                 <p class="greeting">Hello {{ $questionerName }},</p>
+                @if(!empty($parentReply))
+                <p class="intro">There is a new reply in a conversation you're part of on <span class="intro-bold">Ask the Host</span>.</p>
+                @else
                 <p class="intro">Great news! Someone has replied to your question on the <span class="intro-bold">Ask the Host</span> section.</p>
+                @endif
 
                 <div class="section-box">
-                    <p class="section-heading">Your Question</p>
+                    <p class="section-heading">Original Question</p>
                     <p class="section-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $questionText)) }}</p>
                 </div>
 
+                @if(!empty($parentReply) && !empty($parentReplyText))
+                <div class="section-box">
+                    <p class="reply-meta"><span class="replied-by">{{ $parentRepliedByName }}</span> wrote:</p>
+                    <p class="section-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $parentReplyText)) }}</p>
+                </div>
+                @endif
+
                 <div class="section-box">
                     <p class="reply-meta"><span class="replied-by">{{ $repliedByName }}</span> replied on {{ $repliedAt }}</p>
-                    <p class="section-heading">Answer</p>
+                    <p class="section-heading">{{ !empty($parentReply) ? 'New Reply' : 'Answer' }}</p>
                     <p class="section-content">{{ e(preg_replace('/<br\s*\/?>/i', "\n", $replyText)) }}</p>
                 </div>
 

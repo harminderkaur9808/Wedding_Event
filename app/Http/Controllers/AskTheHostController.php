@@ -23,7 +23,7 @@ class AskTheHostController extends Controller
         $queries = collect();
 
         if (Auth::check()) {
-            $queries = AskTheHostQuery::with(['user', 'replies' => fn ($q) => $q->with('user')])
+            $queries = AskTheHostQuery::with(['user', 'replies' => fn ($q) => $q->with('user')->orderBy('created_at')])
                 ->withCount('replies')
                 ->orderByDesc('created_at')
                 ->get();
@@ -114,27 +114,47 @@ class AskTheHostController extends Controller
     }
 
     /**
-     * Store a reply to a question (auth required).
+     * Store a reply to a question or to another reply (nested thread). Auth required.
      */
     public function storeReply(Request $request, AskTheHostQuery $query)
     {
         $request->validate([
             'reply_text' => ['required', 'string', 'min:1', 'max:2000'],
+            'parent_reply_id' => ['nullable', 'integer', 'exists:ask_the_host_replies,id'],
         ]);
+
+        $parentReply = null;
+        if ($request->filled('parent_reply_id')) {
+            $parentReply = AskTheHostReply::where('id', $request->parent_reply_id)
+                ->where('ask_the_host_query_id', $query->id)
+                ->first();
+            if (! $parentReply) {
+                return redirect()->route('ask.the.host')->with('error', 'Invalid reply thread.');
+            }
+        }
 
         $reply = AskTheHostReply::create([
             'ask_the_host_query_id' => $query->id,
+            'parent_reply_id' => $parentReply?->id,
             'user_id' => Auth::id(),
             'reply_text' => $request->reply_text,
         ]);
 
-        // Notify the person who asked the question (skip if they replied to themselves)
+        // Notify everyone in the conversation (question author + parent reply author if nested); skip self and duplicates
+        $recipients = collect();
         $questioner = $query->user;
         if ($questioner && $questioner->email && (int) $questioner->id !== (int) Auth::id()) {
+            $recipients->put($questioner->email, $questioner);
+        }
+        if ($parentReply && $parentReply->user && $parentReply->user->email && (int) $parentReply->user_id !== (int) Auth::id()) {
+            $recipients->put($parentReply->user->email, $parentReply->user);
+        }
+
+        foreach ($recipients as $email => $user) {
             try {
-                Mail::to($questioner->email)->send(new AskTheHostReplyNotification($query, $reply));
+                Mail::to($email)->send(new AskTheHostReplyNotification($query, $reply, $parentReply));
             } catch (\Throwable $e) {
-                Log::warning('Ask the Host reply notification email failed for questioner ' . $questioner->email, ['exception' => $e->getMessage()]);
+                Log::warning('Ask the Host reply notification email failed for ' . $email, ['exception' => $e->getMessage()]);
             }
         }
 

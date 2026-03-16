@@ -101,6 +101,136 @@
     border: 1px solid #c3e6cb;
 }
 
+.ask-the-host-alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Reply block: clean card per reply (no collapse), reference-style thread */
+.ask-the-host-reply-block {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.ask-the-host-reply-block--nested {
+    margin-left: 0;
+    border-radius: 8px;
+}
+
+.ask-the-host-reply-block-inner {
+    padding: 14px 16px;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-meta {
+    margin-bottom: 8px;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-meta-left {
+    align-items: center;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-text-wrap {
+    margin-left: 0;
+    padding-left: 36px;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #374151;
+    margin: 0;
+    padding-left: 0;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-edit-wrap,
+.ask-the-host-reply-block-inner .ask-the-host-reply-form-wrap {
+    margin-left: 36px;
+}
+
+.ask-the-host-reply-block-inner .ask-the-host-reply-actions {
+    margin-left: 36px;
+}
+
+/* Thread connector: vertical line + horizontal top segment from parent to replies */
+.ask-the-host-replies-nested {
+    position: relative;
+    margin-top: 12px;
+    margin-left: 36px;
+    padding-left: 20px;
+    border-left: 2px solid #d1d5db;
+    padding-top: 4px;
+}
+
+.ask-the-host-replies-nested::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 0;
+    width: 36px;
+    height: 2px;
+    background: #d1d5db;
+}
+
+.ask-the-host-reply-actions {
+    margin-top: 8px;
+}
+
+.ask-the-host-reply-under-trigger {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0 4px;
+    text-decoration: none;
+}
+
+.ask-the-host-reply-under-trigger:hover {
+    color: #054C82;
+    text-decoration: underline;
+}
+
+/* Main thread toggle: "Hide X Replies" / "See X Replies" with chevron */
+.ask-the-host-replies-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #054C82;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.ask-the-host-replies-toggle:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #043a66;
+}
+
+.ask-the-host-replies-toggle-chevron {
+    display: inline-flex;
+    transition: transform 0.25s ease;
+}
+
+.ask-the-host-replies-toggle.replies-open .ask-the-host-replies-toggle-chevron {
+    transform: rotate(180deg); /* up = collapse thread */
+}
+
+.ask-the-host-replies-toggle:not(.replies-open) .ask-the-host-replies-toggle-chevron {
+    transform: rotate(0deg); /* down = expand thread */
+}
+
 /* Animated toast for delete success - 4s auto-hide */
 .ask-the-host-toast {
     position: fixed;
@@ -712,11 +842,23 @@
     margin-top: 10px;
 }
 
+/* Main thread: vertical line from question down to replies (same style as nested) */
 .ask-the-host-replies {
-    margin-top: 12px;
-    margin-left: 24px;
-    padding: 12px 0 0;
-    border-top: 1px solid #e8ecf0;
+    position: relative;
+    margin-top: 14px;
+    margin-left: 28px;
+    padding: 8px 0 0 20px;
+    border-left: 2px solid #cbd5e1;
+}
+
+.ask-the-host-replies::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 0;
+    width: 28px;
+    height: 2px;
+    background: #cbd5e1;
 }
 
 .ask-the-host-reply {
@@ -765,9 +907,30 @@
     .ask-the-host-reply-text {
         padding-left: 0;
     }
-    .ask-the-host-reply-form-wrap,
+    .ask-the-host-reply-block-inner .ask-the-host-reply-text-wrap,
+    .ask-the-host-reply-block-inner .ask-the-host-reply-edit-wrap,
+    .ask-the-host-reply-block-inner .ask-the-host-reply-form-wrap,
+    .ask-the-host-reply-block-inner .ask-the-host-reply-actions {
+        margin-left: 0;
+    }
+    .ask-the-host-reply-form-wrap {
+        margin-left: 0;
+    }
     .ask-the-host-replies {
-        margin-left: 12px;
+        margin-left: 20px;
+        padding-left: 14px;
+    }
+    .ask-the-host-replies::before {
+        left: -20px;
+        width: 20px;
+    }
+    .ask-the-host-replies-nested {
+        margin-left: 24px;
+        padding-left: 14px;
+    }
+    .ask-the-host-replies-nested::before {
+        left: -24px;
+        width: 24px;
     }
 }
 

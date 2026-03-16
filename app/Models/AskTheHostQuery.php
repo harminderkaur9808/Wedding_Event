@@ -27,10 +27,18 @@ class AskTheHostQuery extends Model
     }
 
     /**
-     * Replies to this question.
+     * All replies to this question (flat, any level).
      */
     public function replies(): HasMany
     {
         return $this->hasMany(AskTheHostReply::class, 'ask_the_host_query_id');
+    }
+
+    /**
+     * Top-level replies only (no parent). Use for building nested thread.
+     */
+    public function topLevelReplies(): HasMany
+    {
+        return $this->hasMany(AskTheHostReply::class, 'ask_the_host_query_id')->whereNull('parent_reply_id')->orderBy('created_at');
     }
 }
