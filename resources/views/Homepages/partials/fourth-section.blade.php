@@ -59,7 +59,7 @@
                             <span class="wedding-mele-detail-text">Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $fourth?->getExtra('dress_code') ?? 'Traditional Outfits'))) !!}</span></span>
                         </div>
                         @if(trim((string)($fourth?->getExtra('note') ?? '')) !== '')
-                        <div class="wedding-mele-detail-item">
+                        <div class="wedding-mele-detail-item wedding-mele-detail-item--note">
                             <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-detail-icon">
                             <span class="wedding-mele-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $fourth->getExtra('note')))) !!}</span></span>
                         </div>

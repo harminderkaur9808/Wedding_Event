@@ -152,6 +152,11 @@
     font-size: 20px;
     font-weight: 300;
 }
+
+.wedding-mele-detail-item--note .wedding-mele-detail-text,
+.wedding-mele-detail-item--note .wedding-mele-detail-text span {
+    color: #fff !important;
+}
 /* Right Section - Image */
 .wedding-mele-invitation-right {
     flex: 1;
