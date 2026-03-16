@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserApprovalMail;
@@ -1095,7 +1096,7 @@ class AdminDashboardController extends Controller
             $rules['hero_slider_2'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
             $rules['hero_slider_3'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         }
-        if (in_array($request->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'], true)) {
+        if (in_array($request->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth'], true)) {
             $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120';
         }
         $request->validate($rules);
@@ -1105,6 +1106,9 @@ class AdminDashboardController extends Controller
         $section->subtitle = $request->input('subtitle') ?: null;
         $section->short_description = $request->input('short_description') ?: null;
         $section->event_date = $request->filled('event_date') ? \Carbon\Carbon::parse($request->event_date) : null;
+        if (Schema::hasColumn($section->getTable(), 'is_visible')) {
+            $section->is_visible = $request->boolean('is_visible');
+        }
 
         $extra = $section->extra ?? [];
         if ($request->has('extra') && is_array($request->extra)) {
@@ -1137,8 +1141,8 @@ class AdminDashboardController extends Controller
             }
         }
 
-        // Section image for fourth, fifth, sixth, seventh, ninth, tenth, eleventh, twelfth
-        if (in_array($section->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'], true) && $request->hasFile('image')) {
+        // Section image for fourth, fifth, sixth, seventh, ninth, tenth, eleventh, twelfth, thirteenth
+        if (in_array($section->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth'], true) && $request->hasFile('image')) {
             $storageDir = 'page_sections/' . $section->slug;
             if (!empty($extra['image']) && Storage::disk('public')->exists($extra['image'])) {
                 Storage::disk('public')->delete($extra['image']);
@@ -1175,6 +1179,7 @@ class AdminDashboardController extends Controller
             ['slug' => 'tenth', 'title' => 'Sehra & Surma Ceremony', 'subtitle' => 'Cultural Elegance', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '01-01-2027', 'time' => '7 am onwards', 'turban_tying' => 'At 7 am', 'venue' => 'Hopitality Room', 'barat_leaves' => 'Indian Traditional Outfits'], 'sort_order' => 9],
             ['slug' => 'eleventh', 'title' => 'Wedding', 'subtitle' => 'Sacred Union', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '01-01-2027', 'time' => '9 am-12 pm', 'venue' => 'Ramit and Maninder Residence', 'dress_code' => 'Indian Traditional Outfits', 'dress_code_men' => 'Red Turbans Head Covers', 'dress_code_women' => 'Any Color', 'address' => '20865 N 109th Place Scottsdale AZ'], 'sort_order' => 10],
             ['slug' => 'twelfth', 'title' => 'Reception', 'subtitle' => 'Celebration', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '1/2/2027', 'venue' => 'Park Hyatt Aviara Resort-760-448-1234', 'address' => '7100 Aviara Resort Drive, Carlsbad CA 92011', 'time' => '6 pm onwards', 'dress_code' => 'Indian traditional outfits', 'dress_code_subtext' => 'Men: Formals. Women: any color'], 'sort_order' => 11],
+            ['slug' => 'thirteenth', 'title' => 'Custom sec1', 'subtitle' => 'Sacred Union', 'short_description' => null, 'event_date' => null, 'extra' => ['date' => '01-01-2027', 'time' => '9 am-12 pm', 'venue' => 'Ramit and Maninder Residence', 'dress_code' => 'Indian Traditional Outfits', 'dress_code_men' => 'Red Turbans Head Covers', 'dress_code_women' => 'Any Color', 'address' => '20865 N 109th Place Scottsdale AZ'], 'sort_order' => 12, 'is_visible' => false],
         ];
 
         foreach ($sections as $data) {

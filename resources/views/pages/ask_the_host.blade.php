@@ -91,16 +91,20 @@
                                     <div class="ask-the-host-meta-text">
                                         <span class="ask-the-host-name">{{ $q->user->first_name }} {{ $q->user->last_name }}</span>
                                         @if($q->user->isAdmin())
-                                            <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
+                                            <span class="ask-the-host-admin-badge" title="Published by admin">Published by admin</span>
                                         @endif
                                         <span class="ask-the-host-date">{{ $q->created_at->format('j M h:i a') }}</span>
                                     </div>
                                 </div>
-                                @if(Auth::id() == $q->user_id)
+                                @php $canEditQuestion = Auth::id() == $q->user_id; $canDeleteQuestion = Auth::id() == $q->user_id || (Auth::check() && Auth::user()->isAdmin()); @endphp
+                                @if($canEditQuestion || $canDeleteQuestion)
                                 <div class="ask-the-host-question-actions-wrap">
+                                    @if($canEditQuestion)
                                     <button type="button" class="ask-the-host-action-btn ask-the-host-edit-trigger" data-query-id="{{ $q->id }}" aria-label="Edit question" title="Edit">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </button>
+                                    @endif
+                                    @if($canDeleteQuestion)
                                     <form action="{{ route('ask.the.host.questions.destroy', $q) }}" method="POST" class="ask-the-host-delete-form ask-the-host-inline-delete-form" data-query-id="{{ $q->id }}">
                                         @csrf
                                         @method('DELETE')
@@ -108,6 +112,7 @@
                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                                 @endif
                             </div>
@@ -180,15 +185,19 @@
                                                 </div>
                                                 <span class="ask-the-host-name">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
                                                 @if($reply->user->isAdmin())
-                                                    <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
+                                                    <span class="ask-the-host-admin-badge" title="Published by admin">Published by admin</span>
                                                 @endif
                                                 <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
                                             </div>
-                                            @if(Auth::id() == $reply->user_id)
+                                            @php $canEditReply = Auth::id() == $reply->user_id; $canDeleteReply = Auth::id() == $reply->user_id || (Auth::check() && Auth::user()->isAdmin()); @endphp
+                                            @if($canEditReply || $canDeleteReply)
                                                 <div class="ask-the-host-question-actions-wrap">
+                                                    @if($canEditReply)
                                                     <button type="button" class="ask-the-host-action-btn ask-the-host-reply-edit-trigger" data-reply-id="{{ $reply->id }}" aria-label="Edit reply" title="Edit">
                                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                                     </button>
+                                                    @endif
+                                                    @if($canDeleteReply)
                                                     <form action="{{ route('ask.the.host.replies.destroy', $reply) }}" method="POST" class="ask-the-host-delete-form ask-the-host-reply-delete-form">
                                                         @csrf
                                                         @method('DELETE')
@@ -196,6 +205,7 @@
                                                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                                                         </button>
                                                     </form>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>

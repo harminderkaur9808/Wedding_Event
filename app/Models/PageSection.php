@@ -15,11 +15,13 @@ class PageSection extends Model
         'event_date',
         'extra',
         'sort_order',
+        'is_visible',
     ];
 
     protected $casts = [
         'event_date' => 'datetime',
         'extra' => 'array',
+        'is_visible' => 'boolean',
     ];
 
     /**

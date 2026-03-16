@@ -410,10 +410,21 @@
                                 {{-- Our Story and Date We Getting Married (wedding_day) sections hidden from admin for now --}}
                                 @if(!in_array($sec->slug, ['our_story', 'wedding_day']))
                                 <div class="admin-dashboard-section-card js-page-section-card" id="page-section-card-{{ $sec->slug }}" data-section-slug="{{ $sec->slug }}" style="display: none;">
-                                    <h3 class="admin-dashboard-section-card-title">{{ ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
-                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero' || in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth'])) enctype="multipart/form-data" @endif>
+                                    <form method="POST" action="{{ route('admin.page-sections.update') }}" class="admin-dashboard-form admin-dashboard-section-form" @if($sec->slug === 'hero' || in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth'])) enctype="multipart/form-data" @endif>
                                         @csrf
                                         <input type="hidden" name="slug" value="{{ $sec->slug }}">
+                                        <div class="admin-dashboard-section-card-header">
+                                            <h3 class="admin-dashboard-section-card-title">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
+                                            @if($sec->slug === 'thirteenth')
+                                            <div class="admin-dashboard-section-toggle-wrap" title="When on, this section appears on the homepage below the Twelfth section.">
+                                                <label class="admin-dashboard-toggle">
+                                                    <input type="checkbox" name="is_visible" value="1" {{ old('is_visible', $sec->is_visible ?? false) ? 'checked' : '' }} class="admin-dashboard-toggle-input">
+                                                    <span class="admin-dashboard-toggle-slider"></span>
+                                                </label>
+                                                <span class="admin-dashboard-toggle-label">Show on homepage</span>
+                                            </div>
+                                            @endif
+                                        </div>
 
                                         @if($sec->slug === 'hero')
                                             <div class="admin-dashboard-form-group">
@@ -464,7 +475,7 @@
                                             </div>
                                         @endif
                                         --}}
-                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth']))
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth']))
                                             <div class="admin-dashboard-form-group">
                                                 <label class="admin-dashboard-label">Section image (shown on homepage)</label>
                                                 @if($sec->getExtra('image'))
@@ -521,7 +532,7 @@
                                             </div>
                                         @endif
 
-                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth']))
+                                        @if(in_array($sec->slug, ['fourth', 'fifth', 'sixth', 'seventh', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth']))
                                             <div class="admin-dashboard-extra-fields">
                                                 @if($sec->slug === 'fourth')
                                                     <div class="admin-dashboard-form-row">
@@ -541,7 +552,7 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Address</label><textarea name="extra[address]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. 123 Main St, Phoenix AZ">{{ old('extra.address', $sec->getExtra('address')) }}</textarea></div>
                                                     </div>
                                                 @endif
-                                                @if(in_array($sec->slug, ['sixth', 'seventh', 'ninth', 'eleventh']))
+                                                @if(in_array($sec->slug, ['sixth', 'seventh', 'ninth', 'eleventh', 'thirteenth']))
                                                     <div class="admin-dashboard-form-row">
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Date</label><textarea name="extra[date]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.date', $sec->getExtra('date')) }}</textarea></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Time</label><textarea name="extra[time]" class="admin-dashboard-input admin-dashboard-textarea" rows="2">{{ old('extra.time', $sec->getExtra('time')) }}</textarea></div>
@@ -556,7 +567,7 @@
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Entertainment (text on name plate)</label><textarea name="extra[entertainment_mc]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. MC: Herman Kahlon">{{ old('extra.entertainment_mc', $sec->getExtra('entertainment_mc') ?? 'MC: Herman Kahlon') }}</textarea></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Performance (text on name plate)</label><textarea name="extra[performance_text]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Giddha by family members">{{ old('extra.performance_text', $sec->getExtra('performance_text') ?? 'Giddha by family members') }}</textarea></div>
                                                     @endif
-                                                    @if($sec->slug === 'eleventh')
+                                                    @if(in_array($sec->slug, ['eleventh', 'thirteenth']))
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Men (dress code)</label><textarea name="extra[dress_code_men]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Red Turbans Head Covers">{{ old('extra.dress_code_men', $sec->getExtra('dress_code_men')) }}</textarea></div>
                                                         <div class="admin-dashboard-form-group"><label class="admin-dashboard-label">Women (dress code)</label><textarea name="extra[dress_code_women]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="e.g. Any Color">{{ old('extra.dress_code_women', $sec->getExtra('dress_code_women')) }}</textarea></div>
                                                     @endif

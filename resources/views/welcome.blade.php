@@ -16,6 +16,9 @@
     @include('Homepages.partials.tenth-section')
     @include('Homepages.partials.eleventh-section')
     @include('Homepages.partials.twelfth-section')
+    @if(($sections['thirteenth'] ?? null)?->is_visible)
+        @include('Homepages.partials.thirteenth-section')
+    @endif
 
     <!-- <div class="wedding-mele-welcome-content">
         <div class="container">

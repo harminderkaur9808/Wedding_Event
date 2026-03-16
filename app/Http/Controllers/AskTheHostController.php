@@ -69,7 +69,7 @@ class AskTheHostController extends Controller
     }
 
     /**
-     * Update a question (only the author can update).
+     * Update a question (only the author can edit their own).
      */
     public function updateQuestion(Request $request, AskTheHostQuery $query)
     {
@@ -97,11 +97,13 @@ class AskTheHostController extends Controller
     }
 
     /**
-     * Delete a question (only the author can delete their own).
+     * Delete a question (author or admin can delete; admin can delete any question including duplicates).
      */
     public function destroyQuestion(AskTheHostQuery $query)
     {
-        if (Auth::id() !== (int) $query->user_id) {
+        $isAuthor = Auth::id() === (int) $query->user_id;
+        $isAdmin = Auth::check() && Auth::user()->isAdmin();
+        if (! $isAuthor && ! $isAdmin) {
             abort(403, 'You can only delete your own question.');
         }
 
@@ -140,7 +142,7 @@ class AskTheHostController extends Controller
     }
 
     /**
-     * Update a reply (only the author can update).
+     * Update a reply (only the author can edit their own).
      */
     public function updateReply(Request $request, AskTheHostReply $reply)
     {
@@ -158,11 +160,13 @@ class AskTheHostController extends Controller
     }
 
     /**
-     * Delete a reply (only the author can delete their own).
+     * Delete a reply (author or admin can delete; admin can delete any reply).
      */
     public function destroyReply(AskTheHostReply $reply)
     {
-        if (Auth::id() !== (int) $reply->user_id) {
+        $isAuthor = Auth::id() === (int) $reply->user_id;
+        $isAdmin = Auth::check() && Auth::user()->isAdmin();
+        if (! $isAuthor && ! $isAdmin) {
             abort(403, 'You can only delete your own reply.');
         }
 

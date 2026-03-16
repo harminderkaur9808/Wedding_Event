@@ -1918,12 +1918,99 @@ body.admin-add-user-modal-open .wedding-header {
     padding: 20px 24px;
 }
 
+.admin-dashboard-section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+}
+
 .admin-dashboard-section-card-title {
     font-size: 18px;
     color: #2F4F75;
-    margin: 0 0 16px 0;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e2e8f0;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Toggle: "Show on homepage" — top right of section card */
+.admin-dashboard-section-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.admin-dashboard-toggle-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    white-space: nowrap;
+}
+
+.admin-dashboard-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.admin-dashboard-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.admin-dashboard-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    border-radius: 24px;
+    transition: background-color 0.25s ease, box-shadow 0.2s ease;
+}
+
+.admin-dashboard-toggle-slider::before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.25s ease;
+}
+
+.admin-dashboard-toggle-input:checked + .admin-dashboard-toggle-slider {
+    background: linear-gradient(135deg, #2F4F75 0%, #3d6a9e 100%);
+    box-shadow: 0 0 0 2px rgba(47, 79, 117, 0.2);
+}
+
+.admin-dashboard-toggle-input:checked + .admin-dashboard-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+.admin-dashboard-toggle-input:focus-visible + .admin-dashboard-toggle-slider {
+    outline: 2px solid #2F4F75;
+    outline-offset: 2px;
+}
+
+.admin-dashboard-toggle:hover .admin-dashboard-toggle-slider {
+    background-color: #94a3b8;
+}
+
+.admin-dashboard-toggle-input:checked:hover + .admin-dashboard-toggle-slider {
+    background: linear-gradient(135deg, #3d6a9e 0%, #2F4F75 100%);
 }
 
 .admin-dashboard-section-form .admin-dashboard-form-group {
