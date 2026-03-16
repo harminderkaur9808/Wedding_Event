@@ -157,6 +157,10 @@
 .wedding-mele-detail-item--note .wedding-mele-detail-text span {
     color: #fff !important;
 }
+
+.wedding-mele-detail-item--note .wedding-mele-detail-icon {
+    filter: brightness(0) invert(1);
+}
 /* Right Section - Image */
 .wedding-mele-invitation-right {
     flex: 1;
