@@ -1,52 +1,89 @@
+@php
+    $thirteenth = $sections['thirteenth'] ?? null;
+    $hasSubtitle = $thirteenth && trim((string) $thirteenth->subtitle) !== '';
+    $hasTitle = $thirteenth && trim((string) $thirteenth->title) !== '';
+    $hasDescription = $thirteenth && trim((string) ($thirteenth->short_description ?? '')) !== '';
+    $hasDate = $thirteenth && trim((string) ($thirteenth->getExtra('date') ?? '')) !== '';
+    $hasTime = $thirteenth && trim((string) ($thirteenth->getExtra('time') ?? '')) !== '';
+    $hasVenue = $thirteenth && trim((string) ($thirteenth->getExtra('venue') ?? '')) !== '';
+    $hasAddress = $thirteenth && trim((string) ($thirteenth->getExtra('address') ?? '')) !== '';
+    $hasDressCode = $thirteenth && trim((string) ($thirteenth->getExtra('dress_code') ?? '')) !== '';
+    $hasDressMen = $thirteenth && trim((string) ($thirteenth->getExtra('dress_code_men') ?? '')) !== '';
+    $hasDressWomen = $thirteenth && trim((string) ($thirteenth->getExtra('dress_code_women') ?? '')) !== '';
+    $hasDressSubtext = $thirteenth && trim((string) ($thirteenth->getExtra('dress_code_subtext') ?? '')) !== '';
+    $thirteenthImg = $thirteenth?->getExtra('image');
+    $hasImage = $thirteenthImg && trim((string) $thirteenthImg) !== '';
+    $boardDate = $thirteenth?->getBoardDateFormatted();
+    $hasBoardDate = $boardDate && !empty($boardDate['day']) && !empty($boardDate['month']) && !empty($boardDate['year']);
+    $hasAnyHeader = $hasSubtitle || $hasTitle || $hasDescription;
+    $hasAnyDetail = $hasDate || $hasTime || $hasVenue || $hasAddress || $hasDressCode || $hasDressMen || $hasDressWomen || $hasDressSubtext;
+    $hasAnyContent = $hasAnyHeader || $hasAnyDetail || $hasImage;
+@endphp
+@if($hasAnyContent)
 <section class="wedding-mele-eleventh-section">
-    <!-- Decorative hearts -->
     <img src="{{ asset('Images/Home/eleventhsecimg/heart_img_decor.svg') }}" alt="" class="wedding-mele-eleventh-heart wedding-mele-eleventh-heart--left" aria-hidden="true">
     <img src="{{ asset('Images/Home/eleventhsecimg/heart_img_decor.svg') }}" alt="" class="wedding-mele-eleventh-heart wedding-mele-eleventh-heart--right" aria-hidden="true">
 
     <div class="container">
         <div class="wedding-mele-eleventh-content">
-            <!-- Header -->
+            @if($hasAnyHeader)
             <div class="wedding-mele-eleventh-header wm-reveal" style="--reveal-delay: 0ms;">
-                @php $thirteenth = $sections['thirteenth'] ?? null; @endphp
-                <h3 class="wedding-mele-eleventh-subtitle">{{ $thirteenth?->subtitle ?? 'Sacred Union' }}</h3>
+                @if($hasSubtitle)
+                    <h3 class="wedding-mele-eleventh-subtitle">{{ $thirteenth->subtitle }}</h3>
+                @endif
+                @if($hasSubtitle || $hasTitle)
                 <div class="wedding-mele-eleventh-between">
-                    <img src="{{ asset('Images/Home/eleventhsecimg/between_txtframe.png') }}" alt="Decorative Element" class="wedding-mele-eleventh-between-img">
+                    <img src="{{ asset('Images/Home/eleventhsecimg/between_txtframe.png') }}" alt="" class="wedding-mele-eleventh-between-img">
                 </div>
-                <h2 class="wedding-mele-eleventh-title">{{ $thirteenth?->title ?? 'Wedding' }}</h2>
-                @if($thirteenth?->short_description)
+                @endif
+                @if($hasTitle)
+                    <h2 class="wedding-mele-eleventh-title">{{ $thirteenth->title }}</h2>
+                @endif
+                @if($hasDescription)
                     <div class="wedding-mele-section-description">{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->short_description))) !!}</div>
                 @endif
             </div>
+            @endif
 
-            <!-- Main -->
+            @if($hasAnyDetail || $hasImage)
             <div class="wedding-mele-eleventh-main">
-                <!-- Left: Details -->
+                @if($hasAnyDetail)
                 <div class="wedding-mele-eleventh-left wm-reveal wm-reveal--left" style="--reveal-delay: 220ms;">
                     <div class="wedding-mele-eleventh-details">
+                        @if($hasDate)
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/date_svg_fifth.svg') }}" alt="Date" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth?->getExtra('date') ?? '01-01-2027'))) !!}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Date: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('date')))) !!}</span></span>
                         </div>
+                        @endif
+                        @if($hasTime)
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/time_svg_fifth.svg') }}" alt="Time" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth?->getExtra('time') ?? '9 am-12 pm'))) !!}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Time: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('time')))) !!}</span></span>
                         </div>
+                        @endif
+                        @if($hasVenue)
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/venue_svg_fifth.svg') }}" alt="Venue" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth?->getExtra('venue') ?? 'Ramit and Maninder Residence'))) !!}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Venue: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('venue')))) !!}</span></span>
                         </div>
+                        @endif
+                        @if($hasAddress)
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-eleventh-detail-icon">
-                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth?->getExtra('address') ?? '20865 N 109th Place Scottsdale AZ'))) !!}</span></span>
+                            <span class="wedding-mele-eleventh-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('address')))) !!}</span></span>
                         </div>
+                        @endif
+                        @if($hasDressCode || $hasDressMen || $hasDressWomen || $hasDressSubtext)
                         <div class="wedding-mele-eleventh-detail-item">
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-eleventh-detail-icon">
                             <span class="wedding-mele-eleventh-detail-text">
-                                Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth?->getExtra('dress_code') ?? 'Indian Traditional Outfits'))) !!}</span>
-                                @php $menText = $thirteenth?->getExtra('dress_code_men'); $womenText = $thirteenth?->getExtra('dress_code_women'); @endphp
-                                @if($menText || $womenText)
-                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $menText ?? '—'))) !!}&nbsp;&nbsp;&nbsp;<b>Women:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $womenText ?? '—'))) !!}</span>
-                                @elseif($thirteenth?->getExtra('dress_code_subtext'))
+                                @if($hasDressCode)
+                                    Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('dress_code')))) !!}</span>
+                                @endif
+                                @if($hasDressMen || $hasDressWomen)
+                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('dress_code_men') ?? ''))) !!}&nbsp;&nbsp;&nbsp;<b>Women:</b> {!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('dress_code_women') ?? ''))) !!}</span>
+                                @elseif($hasDressSubtext)
                                     @php
                                         $sub = preg_replace('/<br\s*\/?>/i', "\n", $thirteenth->getExtra('dress_code_subtext'));
                                         $sub = nl2br(e($sub));
@@ -54,35 +91,35 @@
                                         $sub = preg_replace('/\bWomen:\s*/', '<b>Women:</b> ', $sub);
                                     @endphp
                                     <span class="wedding-mele-eleventh-detail-subtext">{!! $sub !!}</span>
-                                @else
-                                    <span class="wedding-mele-eleventh-detail-subtext"><b>Men:</b> Red Turbans Head Covers&nbsp;&nbsp;&nbsp;<b>Women:</b> Any Color</span>
                                 @endif
                             </span>
                         </div>
+                        @endif
                     </div>
                 </div>
+                @endif
 
-                <!-- Right: Image with board on it (top-right as indicated) -->
+                @if($hasImage)
                 <div class="wedding-mele-eleventh-right wm-reveal wm-reveal--right" style="--reveal-delay: 260ms;">
                     <div class="wedding-mele-eleventh-image-wrapper">
-                        @php $thirteenthImg = $thirteenth?->getExtra('image'); @endphp
-                        <img src="{{ $thirteenthImg ? secure_media_url($thirteenthImg) : asset('Images/Home/eleventhsecimg/wedding_img_sec_last.png') }}" alt="Wedding" class="wedding-mele-eleventh-image">
-                        <!-- Board on image + date text (top-right corner) -->
+                        <img src="{{ secure_media_url($thirteenthImg) }}" alt="Wedding" class="wedding-mele-eleventh-image">
+                        @if($hasBoardDate)
                         <div class="wedding-mele-eleventh-board-on-image">
                             <img src="{{ asset('Images/Home/Dynmaic_image_board.png') }}" alt="" class="wedding-mele-eleventh-dynamic-board">
                             <div class="wedding-mele-eleventh-board-date-text" aria-label="Event date">
-                                @php
-                                    $boardDate = $thirteenth?->getBoardDateFormatted();
-                                @endphp
                                 <span class="wedding-mele-eleventh-board-line1">
-                                    <span class="wedding-mele-eleventh-board-day">{{ ($boardDate ?? [])['day'] ?? '31' }}</span> <span class="wedding-mele-eleventh-board-month">{{ ($boardDate ?? [])['month'] ?? 'Dec' }}</span>
+                                    <span class="wedding-mele-eleventh-board-day">{{ $boardDate['day'] }}</span> <span class="wedding-mele-eleventh-board-month">{{ $boardDate['month'] }}</span>
                                 </span>
-                                <span class="wedding-mele-eleventh-board-year">{{ ($boardDate ?? [])['year'] ?? '2026' }}</span>
+                                <span class="wedding-mele-eleventh-board-year">{{ $boardDate['year'] }}</span>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
+                @endif
             </div>
+            @endif
         </div>
     </div>
 </section>
+@endif

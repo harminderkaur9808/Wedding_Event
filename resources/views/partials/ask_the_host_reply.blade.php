@@ -15,7 +15,7 @@
                 </div>
                 <span class="ask-the-host-name">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
                 @if($reply->user->isAdmin())
-                    <span class="ask-the-host-admin-badge" title="Published by admin">Published by admin</span>
+                    <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
                 @endif
                 <span class="ask-the-host-date">{{ $reply->created_at->format('j M h:i a') }}</span>
             </div>

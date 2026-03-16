@@ -94,7 +94,7 @@
                                     <div class="ask-the-host-meta-text">
                                         <span class="ask-the-host-name">{{ $q->user->first_name }} {{ $q->user->last_name }}</span>
                                         @if($q->user->isAdmin())
-                                            <span class="ask-the-host-admin-badge" title="Published by admin">Published by admin</span>
+                                            <span class="ask-the-host-admin-badge" title="Admin">Admin</span>
                                         @endif
                                         <span class="ask-the-host-date">{{ $q->created_at->format('j M h:i a') }}</span>
                                     </div>
