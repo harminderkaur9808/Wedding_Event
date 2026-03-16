@@ -39,6 +39,12 @@
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-ninth-detail-icon">
                             <span class="wedding-mele-ninth-detail-text">Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $ninth?->getExtra('dress_code') ?? 'Indian Traditional Outfits'))) !!}</span></span>
                         </div>
+                        @if(trim((string)($ninth?->getExtra('note') ?? '')) !== '')
+                        <div class="wedding-mele-ninth-detail-item">
+                            <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-ninth-detail-icon">
+                            <span class="wedding-mele-ninth-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $ninth->getExtra('note')))) !!}</span></span>
+                        </div>
+                        @endif
                     </div>
 
                     <div class="wedding-mele-ninth-entertainment">

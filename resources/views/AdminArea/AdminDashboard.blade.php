@@ -593,6 +593,10 @@
                                                         --}}
                                                     </div>
                                                 @endif
+                                                <div class="admin-dashboard-form-group">
+                                                    <label class="admin-dashboard-label">Note</label>
+                                                    <textarea name="extra[note]" class="admin-dashboard-input admin-dashboard-textarea" rows="2" placeholder="Optional note for this section (e.g. parking, entry instructions)">{{ old('extra.note', $sec->getExtra('note')) }}</textarea>
+                                                </div>
                                             </div>
                                         @endif
 

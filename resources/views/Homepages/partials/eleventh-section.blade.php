@@ -59,6 +59,12 @@
                                 @endif
                             </span>
                         </div>
+                        @if(trim((string)($eleventh?->getExtra('note') ?? '')) !== '')
+                        <div class="wedding-mele-eleventh-detail-item">
+                            <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-eleventh-detail-icon">
+                            <span class="wedding-mele-eleventh-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $eleventh->getExtra('note')))) !!}</span></span>
+                        </div>
+                        @endif
                     </div>
                 </div>
 

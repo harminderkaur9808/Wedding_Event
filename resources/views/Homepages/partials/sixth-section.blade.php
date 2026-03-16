@@ -47,6 +47,12 @@
                             <img src="{{ asset('Images/Home/fifthsec/dresscode_svg_fifth.svg') }}" alt="Dress Code" class="wedding-mele-sixth-detail-icon">
                             <span class="wedding-mele-sixth-detail-text">Dress Code: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth?->getExtra('dress_code') ?? 'Casual Indian Orange Yellow, Green Colors'))) !!}</span></span>
                         </div>
+                        @if(trim((string)($sixth?->getExtra('note') ?? '')) !== '')
+                        <div class="wedding-mele-sixth-detail-item">
+                            <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-sixth-detail-icon">
+                            <span class="wedding-mele-sixth-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $sixth->getExtra('note')))) !!}</span></span>
+                        </div>
+                        @endif
                     </div>
                 </div>
 

@@ -52,6 +52,12 @@
                             <img src="{{ asset('Images/Home/tenthsecimg/Barat_leaves_ico.svg') }}" alt="Baraat leaves" class="wedding-mele-tenth-detail-icon">
                             <span class="wedding-mele-tenth-detail-text">Baraat leaves: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth?->getExtra('barat_leaves') ?? 'Indian Traditional Outfits'))) !!}</span></span>
                         </div>
+                        @if(trim((string)($tenth?->getExtra('note') ?? '')) !== '')
+                        <div class="wedding-mele-tenth-detail-item">
+                            <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-tenth-detail-icon">
+                            <span class="wedding-mele-tenth-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $tenth->getExtra('note')))) !!}</span></span>
+                        </div>
+                        @endif
                     </div>
                 </div>
 

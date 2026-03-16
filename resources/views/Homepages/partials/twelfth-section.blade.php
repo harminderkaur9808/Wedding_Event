@@ -40,6 +40,12 @@
                             <img src="{{ asset('Images/Home/sixthSec/address_ico_main.svg') }}" alt="Address" class="wedding-mele-twelfth-detail-icon">
                             <span class="wedding-mele-twelfth-detail-text">Address: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $twelfth?->getExtra('address') ?? '7100 Aviara Resort Drive, Carlsbad CA 92011'))) !!}</span></span>
                         </div>
+                        @if(trim((string)($twelfth?->getExtra('note') ?? '')) !== '')
+                        <div class="wedding-mele-twelfth-detail-item">
+                            <img src="{{ asset('Images/Home/note_icon.svg') }}" alt="Note" class="wedding-mele-twelfth-detail-icon">
+                            <span class="wedding-mele-twelfth-detail-text">Note: <span>{!! nl2br(e(preg_replace('/<br\s*\/?>/i', "\n", $twelfth->getExtra('note')))) !!}</span></span>
+                        </div>
+                        @endif
 
                         {{-- Dress code and Dress code subtext removed for twelfth section
                         <div class="wedding-mele-twelfth-detail-item">
