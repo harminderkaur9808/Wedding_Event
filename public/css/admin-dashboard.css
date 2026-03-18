@@ -1929,12 +1929,60 @@ body.admin-add-user-modal-open .wedding-header {
     flex-wrap: wrap;
 }
 
+.admin-dashboard-section-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
 .admin-dashboard-section-card-title {
     font-size: 18px;
     color: #2F4F75;
     margin: 0;
-    flex: 1;
-    min-width: 0;
+}
+
+.admin-dashboard-section-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.admin-dashboard-section-status-badge::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.admin-dashboard-section-status-visible {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.admin-dashboard-section-status-visible::before {
+    background-color: #22c55e;
+}
+
+.admin-dashboard-section-status-hidden {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.admin-dashboard-section-status-hidden::before {
+    background-color: #ef4444;
 }
 
 /* Toggle: "Show on homepage" — top right of section card */

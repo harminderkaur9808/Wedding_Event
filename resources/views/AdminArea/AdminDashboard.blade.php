@@ -399,7 +399,7 @@
                                 @foreach($pageSections ?? [] as $sec)
                                     {{-- Our Story and Date We Getting Married (wedding_day) sections hidden from admin for now --}}
                                     @if(!in_array($sec->slug, ['our_story', 'wedding_day']))
-                                        <option value="{{ $sec->slug }}">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</option>
+                                        <option value="{{ $sec->slug }}" data-visible="{{ $sec->is_visible ? '1' : '0' }}">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}{{ !$sec->is_visible ? ' (hidden)' : '' }}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -414,16 +414,21 @@
                                         @csrf
                                         <input type="hidden" name="slug" value="{{ $sec->slug }}">
                                         <div class="admin-dashboard-section-card-header">
-                                            <h3 class="admin-dashboard-section-card-title">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
-                                            @if($sec->slug === 'thirteenth')
-                                            <div class="admin-dashboard-section-toggle-wrap" title="When on, this section appears on the homepage below the Twelfth section.">
+                                            <div class="admin-dashboard-section-card-title-row">
+                                                <h3 class="admin-dashboard-section-card-title">{{ $sec->title ?: ucfirst(str_replace('_', ' ', $sec->slug)) }}</h3>
+                                                @if($sec->is_visible)
+                                                    <span class="admin-dashboard-section-status-badge admin-dashboard-section-status-visible">Visible</span>
+                                                @else
+                                                    <span class="admin-dashboard-section-status-badge admin-dashboard-section-status-hidden">Hidden</span>
+                                                @endif
+                                            </div>
+                                            <div class="admin-dashboard-section-toggle-wrap" title="Toggle to show or hide this section on the homepage.">
                                                 <label class="admin-dashboard-toggle">
-                                                    <input type="checkbox" name="is_visible" value="1" {{ old('is_visible', $sec->is_visible ?? false) ? 'checked' : '' }} class="admin-dashboard-toggle-input">
+                                                    <input type="checkbox" name="is_visible" value="1" {{ old('is_visible', $sec->is_visible ?? true) ? 'checked' : '' }} class="admin-dashboard-toggle-input js-visibility-toggle">
                                                     <span class="admin-dashboard-toggle-slider"></span>
                                                 </label>
                                                 <span class="admin-dashboard-toggle-label">Show on homepage</span>
                                             </div>
-                                            @endif
                                         </div>
 
                                         @if($sec->slug === 'hero')
@@ -1682,6 +1687,32 @@ document.addEventListener('DOMContentLoaded', function() {
             window.adminResizePageSectionTextareas();
         }
     }
+
+    // Visibility toggle: update badge and dropdown option live when toggled
+    document.querySelectorAll('.js-visibility-toggle').forEach(function(toggle) {
+        toggle.addEventListener('change', function() {
+            var card = this.closest('.js-page-section-card');
+            if (!card) return;
+            var slug = card.getAttribute('data-section-slug');
+            var badge = card.querySelector('.admin-dashboard-section-status-badge');
+            var isVisible = this.checked;
+            if (badge) {
+                badge.textContent = isVisible ? 'Visible' : 'Hidden';
+                badge.className = 'admin-dashboard-section-status-badge ' +
+                    (isVisible ? 'admin-dashboard-section-status-visible' : 'admin-dashboard-section-status-hidden');
+            }
+            // Update dropdown option label
+            if (pageSectionSelect) {
+                var opt = pageSectionSelect.querySelector('option[value="' + slug + '"]');
+                if (opt) {
+                    var baseLabel = opt.getAttribute('data-base-label') || opt.textContent.replace(/ \(hidden\)$/, '').trim();
+                    opt.setAttribute('data-base-label', baseLabel);
+                    opt.textContent = isVisible ? baseLabel : baseLabel + ' (hidden)';
+                    opt.setAttribute('data-visible', isVisible ? '1' : '0');
+                }
+            }
+        });
+    });
 
     // Hero slider: live preview when user selects a new image
     document.querySelectorAll('.admin-dashboard-hero-slider-input').forEach(function(input) {
