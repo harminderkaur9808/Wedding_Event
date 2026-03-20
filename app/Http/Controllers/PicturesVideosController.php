@@ -62,41 +62,39 @@ class PicturesVideosController extends Controller
 
             foreach ($allUserMedia as $userMedia) {
                 if ($type === 'images' && $userMedia->images && is_array($userMedia->images)) {
-                    // Newest filenames are at end of array (time() in filename); reverse so newest first
-                    $imagesList = array_reverse($userMedia->images);
-                    foreach ($imagesList as $index => $imagePath) {
+                    // preserve_keys=true keeps original DB-array index so download_url resolves to the CORRECT file
+                    $imagesList = array_reverse($userMedia->images, true);
+                    foreach ($imagesList as $originalIndex => $imagePath) {
                         $storagePath = 'user_media/' . ltrim($imagePath, '/\\');
                         if (Storage::disk('public')->exists($storagePath)) {
                             $items[] = [
-                                'id'             => 'media_' . $userMedia->id . '_img_' . $index,
-                                // Direct static URL — no PHP per image, served by web server instantly
-                                'url'            => Storage::disk('public')->url($storagePath),
-                                'title'          => 'Uploaded Image',
-                                'is_user_media'  => true,
-                                'user_id'        => $userMedia->user_id,
-                                'is_current_user'=> $userMedia->user_id === Auth::id(),
-                                'sort_ts'        => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
-                                // Download route still used to serve the original uncompressed file
-                                'download_url'   => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
+                                'id'              => 'media_' . $userMedia->id . '_img_' . $originalIndex,
+                                'url'             => Storage::disk('public')->url($storagePath),
+                                'title'           => 'Uploaded Image',
+                                'is_user_media'   => true,
+                                'user_id'         => $userMedia->user_id,
+                                'is_current_user' => $userMedia->user_id === Auth::id(),
+                                'sort_ts'         => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
+                                // originalIndex = position in the DB array → downloadMedia fetches the right file
+                                'download_url'    => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $originalIndex]),
                             ];
                         }
                     }
                 } elseif ($type === 'videos' && $userMedia->videos && is_array($userMedia->videos)) {
-                    $videosList = array_reverse($userMedia->videos);
-                    foreach ($videosList as $index => $videoPath) {
+                    $videosList = array_reverse($userMedia->videos, true);
+                    foreach ($videosList as $originalIndex => $videoPath) {
                         $storagePath = 'user_media/' . ltrim($videoPath, '/\\');
                         if (Storage::disk('public')->exists($storagePath)) {
                             $items[] = [
-                                'id'             => 'media_' . $userMedia->id . '_vid_' . $index,
-                                // Direct static URL for videos too
-                                'url'            => Storage::disk('public')->url($storagePath),
-                                'title'          => 'Uploaded Video',
-                                'is_user_media'  => true,
-                                'is_video'       => true,
-                                'user_id'        => $userMedia->user_id,
-                                'is_current_user'=> $userMedia->user_id === Auth::id(),
-                                'sort_ts'        => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
-                                'download_url'   => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
+                                'id'              => 'media_' . $userMedia->id . '_vid_' . $originalIndex,
+                                'url'             => Storage::disk('public')->url($storagePath),
+                                'title'           => 'Uploaded Video',
+                                'is_user_media'   => true,
+                                'is_video'        => true,
+                                'user_id'         => $userMedia->user_id,
+                                'is_current_user' => $userMedia->user_id === Auth::id(),
+                                'sort_ts'         => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
+                                'download_url'    => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $originalIndex]),
                             ];
                         }
                     }
@@ -124,13 +122,15 @@ class PicturesVideosController extends Controller
                     unset($byId[$id]);
                 }
             }
-            // Append any items not in saved order (e.g. newly uploaded) at end, keeping their relative order
+            // Items not in the saved order are newly uploaded — put them FIRST (newest at top)
+            // $items is already sorted newest-first by sort_ts so $byId remainders are newest-first
+            $newItems = [];
             foreach ($items as $item) {
                 if (isset($byId[$item['id']])) {
-                    $ordered[] = $item;
+                    $newItems[] = $item;
                 }
             }
-            $items = $ordered;
+            $items = array_merge($newItems, $ordered);
         }
 
         // Set title by position (1, 2, 3...) and remove sort_ts
@@ -249,8 +249,11 @@ class PicturesVideosController extends Controller
 
         // Handle image uploads — save original + compressed display copy
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $base    = time() . '_' . $user->id . '_' . uniqid();
+            // Use millisecond-precision base timestamp so each file in the same batch
+            // gets a unique, ordered sort_ts even when uploaded within the same second.
+            $batchMs = (int) (microtime(true) * 1000);
+            foreach ($request->file('images') as $loopIdx => $image) {
+                $base    = ($batchMs + $loopIdx) . '_' . $user->id . '_' . uniqid();
                 $origExt = strtolower($image->getClientOriginalExtension() ?: 'jpg');
                 $origName    = $base . '.' . $origExt;   // e.g. 17000000_1_abc.png
                 $displayName = $base . '.jpg';            // e.g. 17000000_1_abc.jpg  (always JPEG for display)
@@ -274,8 +277,9 @@ class PicturesVideosController extends Controller
 
         // Handle video uploads — saved as-is, no originals folder needed
         if ($request->hasFile('videos')) {
-            foreach ($request->file('videos') as $video) {
-                $videoName = time() . '_' . $user->id . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+            $videoBatchMs = (int) (microtime(true) * 1000);
+            foreach ($request->file('videos') as $loopIdx => $video) {
+                $videoName = ($videoBatchMs + $loopIdx) . '_' . $user->id . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
                 $video->storeAs('user_media', $videoName, 'public');
                 $videos[] = $videoName;
             }
