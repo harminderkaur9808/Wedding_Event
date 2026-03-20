@@ -201,26 +201,48 @@
                 <form action="{{ route('pictures_videos.upload', ['category' => $category]) }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                     @csrf
                     <input type="hidden" name="type" value="{{ $type }}">
-                    
+
                     <div class="wm-pv-upload-form-group">
                         <label class="wm-pv-upload-label">
-                            <span>Images (JPEG, PNG, JPG, GIF, WEBP - Max 10MB each)</span>
+                            <span>Images (JPEG, PNG, GIF, WEBP — Max 20 MB each)
+                                <span class="wm-pv-compress-badge">Auto-compressed for fast loading &bull; originals kept for download</span>
+                            </span>
                             <input type="file" name="images[]" accept="image/*" multiple class="wm-pv-upload-input" id="imagesInput">
-                            <div class="wm-pv-upload-file-info" id="imagesInfo"></div>
                         </label>
+                        <div class="wm-pv-upload-file-info" id="imagesInfo"></div>
                     </div>
-                    
+
                     <div class="wm-pv-upload-form-group">
                         <label class="wm-pv-upload-label">
-                            <span>Videos (MP4, AVI, MOV, WMV, FLV, WEBM - Max 200MB each)</span>
+                            <span>Videos (MP4, AVI, MOV, WMV, FLV, WEBM — Max 200 MB each)</span>
                             <input type="file" name="videos[]" accept="video/*" multiple class="wm-pv-upload-input" id="videosInput">
-                            <div class="wm-pv-upload-file-info" id="videosInfo"></div>
                         </label>
+                        <div class="wm-pv-upload-file-info" id="videosInfo"></div>
                     </div>
-                    
-                    <div class="wm-pv-upload-form-actions">
-                        <button type="button" class="wm-pv-upload-btn-cancel" onclick="closeUploadModal()">Cancel</button>
-                        <button type="submit" class="wm-pv-upload-btn-submit">Upload Media</button>
+
+                    <!-- Upload progress (shown while uploading) -->
+                    <div class="wm-pv-upload-progress-wrap" id="uploadProgressWrap" style="display:none;">
+                        <div class="wm-pv-upload-progress-track">
+                            <div class="wm-pv-upload-progress-fill" id="uploadProgressFill"></div>
+                        </div>
+                        <div class="wm-pv-upload-progress-label" id="uploadProgressLabel">Uploading… 0%</div>
+                    </div>
+
+                    <!-- Success state (shown after upload) -->
+                    <div class="wm-pv-upload-success-wrap" id="uploadSuccessWrap" style="display:none;">
+                        <svg class="wm-pv-upload-success-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" fill="#dcfce7"/>
+                            <path d="M7 12.5L10.5 16L17 9" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="wm-pv-upload-success-text">Upload complete! Refreshing…</span>
+                    </div>
+
+                    <div class="wm-pv-upload-form-actions" id="uploadFormActions">
+                        <button type="button" class="wm-pv-upload-btn-cancel" id="uploadCancelBtn" onclick="closeUploadModal()">Cancel</button>
+                        <button type="submit" class="wm-pv-upload-btn-submit" id="uploadSubmitBtn" disabled>
+                            <span class="wm-pv-upload-btn-spinner" id="uploadBtnSpinner" style="display:none;"></span>
+                            <span id="uploadSubmitText">Upload Media</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -340,59 +362,141 @@ function updateImageViewer() {
     document.getElementById('nextBtn').style.opacity = galleryItems.length > 1 ? '1' : '0.5';
 }
 
-// Upload Modal Functions
+// ── Upload Modal ────────────────────────────────────────────────────
+var pvUploading = false;
+
 function openUploadModal() {
     document.getElementById('uploadModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeUploadModal() {
+    if (pvUploading) return; // block close while uploading
     document.getElementById('uploadModal').classList.remove('active');
     document.body.style.overflow = '';
-    // Reset form
-    document.getElementById('uploadForm').reset();
-    document.getElementById('imagesInfo').textContent = '';
-    document.getElementById('videosInfo').textContent = '';
+    pvResetUploadModal();
 }
 
-// File input change handlers
+function pvResetUploadModal() {
+    document.getElementById('uploadForm').reset();
+    pvUploading = false;
+    ['uploadProgressWrap', 'uploadSuccessWrap'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+    var info = document.getElementById('imagesInfo');
+    if (info) { info.textContent = ''; info.removeAttribute('style'); }
+    var vinfo = document.getElementById('videosInfo');
+    if (vinfo) { vinfo.textContent = ''; vinfo.removeAttribute('style'); }
+    var actions = document.getElementById('uploadFormActions');
+    if (actions) actions.style.display = '';
+    pvSetSubmitBtn(false, 'Upload Media');
+}
+
+function pvSetSubmitBtn(enabled, label) {
+    var btn  = document.getElementById('uploadSubmitBtn');
+    var txt  = document.getElementById('uploadSubmitText');
+    var spin = document.getElementById('uploadBtnSpinner');
+    if (!btn) return;
+    btn.disabled = !enabled;
+    if (txt)  txt.textContent = label || 'Upload Media';
+    if (spin) spin.style.display = 'none';
+}
+
+// File input handlers + XHR upload
 document.addEventListener('DOMContentLoaded', function() {
-    const imagesInput = document.getElementById('imagesInput');
-    const videosInput = document.getElementById('videosInput');
-    
+    var imagesInput = document.getElementById('imagesInput');
+    var videosInput = document.getElementById('videosInput');
+    var uploadForm  = document.getElementById('uploadForm');
+
+    function pvCheckReady() {
+        var hasImages = imagesInput && imagesInput.files && imagesInput.files.length > 0;
+        var hasVideos = videosInput && videosInput.files && videosInput.files.length > 0;
+        pvSetSubmitBtn(hasImages || hasVideos, 'Upload Media');
+    }
+
     if (imagesInput) {
-        imagesInput.addEventListener('change', function(e) {
-            const files = e.target.files;
-            const info = document.getElementById('imagesInfo');
-            if (files.length > 0) {
-                info.textContent = `${files.length} image(s) selected`;
-                info.style.color = '#28a745';
+        imagesInput.addEventListener('change', function() {
+            var info = document.getElementById('imagesInfo');
+            if (this.files.length > 0) {
+                info.textContent = this.files.length + ' image' + (this.files.length > 1 ? 's' : '') + ' selected';
+                info.style.color = '#2F4F75';
             } else {
                 info.textContent = '';
+                info.removeAttribute('style');
             }
+            pvCheckReady();
         });
     }
-    
+
     if (videosInput) {
-        videosInput.addEventListener('change', function(e) {
-            const files = e.target.files;
-            const info = document.getElementById('videosInfo');
-            if (files.length > 0) {
-                info.textContent = `${files.length} video(s) selected`;
-                info.style.color = '#28a745';
+        videosInput.addEventListener('change', function() {
+            var info = document.getElementById('videosInfo');
+            if (this.files.length > 0) {
+                info.textContent = this.files.length + ' video' + (this.files.length > 1 ? 's' : '') + ' selected';
+                info.style.color = '#2F4F75';
             } else {
                 info.textContent = '';
+                info.removeAttribute('style');
             }
+            pvCheckReady();
         });
     }
-    
-    // Close modal on Escape key
+
+    // Intercept form submit — XHR so we can track upload progress
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (pvUploading) return;
+
+            var hasImages = imagesInput && imagesInput.files && imagesInput.files.length > 0;
+            var hasVideos = videosInput && videosInput.files && videosInput.files.length > 0;
+            if (!hasImages && !hasVideos) return;
+
+            pvUploading = true;
+
+            var fd = new FormData(uploadForm);
+
+            document.getElementById('uploadProgressWrap').style.display = 'block';
+            document.getElementById('uploadFormActions').style.display = 'none';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', uploadForm.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.upload.onprogress = function(ev) {
+                if (!ev.lengthComputable) return;
+                var pct = Math.round((ev.loaded / ev.total) * 100);
+                var fill  = document.getElementById('uploadProgressFill');
+                var label = document.getElementById('uploadProgressLabel');
+                if (fill)  fill.style.width = pct + '%';
+                if (label) label.textContent = 'Uploading… ' + pct + '%';
+            };
+
+            xhr.onload = function() {
+                pvUploading = false;
+                document.getElementById('uploadProgressWrap').style.display = 'none';
+                document.getElementById('uploadSuccessWrap').style.display = 'flex';
+                setTimeout(function() { window.location.reload(); }, 1200);
+            };
+
+            xhr.onerror = function() {
+                pvUploading = false;
+                document.getElementById('uploadProgressWrap').style.display = 'none';
+                document.getElementById('uploadFormActions').style.display = '';
+                pvSetSubmitBtn(true, 'Upload Media');
+                alert('Upload failed. Please try again.');
+            };
+
+            xhr.send(fd);
+        });
+    }
+
+    // Escape closes modal
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            const uploadModal = document.getElementById('uploadModal');
-            if (uploadModal && uploadModal.classList.contains('active')) {
-                closeUploadModal();
-            }
+            var m = document.getElementById('uploadModal');
+            if (m && m.classList.contains('active')) closeUploadModal();
         }
     });
 });

@@ -1006,9 +1006,17 @@ class AdminDashboardController extends Controller
 
         $userMedia = UserMedia::findOrFail($request->media_id);
         
-        // Remove file from storage
+        // Remove display copy from storage
         if (Storage::disk('public')->exists('user_media/' . $request->file_path)) {
             Storage::disk('public')->delete('user_media/' . $request->file_path);
+        }
+
+        // Also remove the original from user_media_originals/ (images only)
+        if ($request->file_type === 'image') {
+            $origPath = $this->findOriginalPathAdmin($request->file_path);
+            if ($origPath && Storage::disk('public')->exists($origPath)) {
+                Storage::disk('public')->delete($origPath);
+            }
         }
 
         // Remove from array
@@ -1044,34 +1052,61 @@ class AdminDashboardController extends Controller
 
     /**
      * Download a media file (admin only). Query: path (relative to user_media/), type=image|video.
+     * For images: serves the original uncompressed file from user_media_originals/ when available,
+     * falling back to the display copy in user_media/. Videos always served from user_media/.
      */
     public function downloadMedia(Request $request)
     {
         $admin = Auth::user();
-        if (!$admin || !$admin->isAdmin()) {
+        if (! $admin || ! $admin->isAdmin()) {
             return redirect()->route('login')->with('error', 'Access denied.');
         }
 
         $path = $request->query('path');
         $type = $request->query('type', 'image');
-        if (!in_array($type, ['image', 'video'], true) || empty($path)) {
+        if (! in_array($type, ['image', 'video'], true) || empty($path)) {
             abort(400, 'Invalid request.');
         }
 
         $path = ltrim(str_replace('\\', '/', $path), '/');
-        if (strpos($path, '..') !== false || strpos($path, 'user_media/') === 0) {
-            $path = preg_replace('#^user_media/#', '', $path);
-        }
-        $fullPath = 'user_media/' . $path;
+        $path = preg_replace('#^user_media/#', '', $path);
 
-        if (!Storage::disk('public')->exists($fullPath)) {
+        if (strpos($path, '..') !== false) {
+            abort(400, 'Invalid path.');
+        }
+
+        // For images: prefer the original uncompressed file; fall back to display copy
+        if ($type === 'image') {
+            $origPath = $this->findOriginalPathAdmin($path);
+            $fullPath = $origPath ?? 'user_media/' . $path;
+        } else {
+            $fullPath = 'user_media/' . $path;
+        }
+
+        if (! Storage::disk('public')->exists($fullPath)) {
             abort(404, 'File not found.');
         }
 
-        $filename = basename($path);
+        $filename = basename($fullPath);
         return Storage::disk('public')->download($fullPath, $filename, [
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
+    }
+
+    /**
+     * Find the original (uncompressed) path for a display filename.
+     * Strips extension from the display name and checks user_media_originals/ for any image extension.
+     */
+    private function findOriginalPathAdmin(string $displayFilename): ?string
+    {
+        $base = pathinfo($displayFilename, PATHINFO_FILENAME);
+        foreach (['jpg', 'jpeg', 'png', 'gif', 'webp'] as $ext) {
+            $try = 'user_media_originals/' . $base . '.' . $ext;
+            if (Storage::disk('public')->exists($try)) {
+                return $try;
+            }
+        }
+        return null;
     }
 
     /**
@@ -1261,5 +1296,162 @@ class AdminDashboardController extends Controller
         $entry->delete();
         return redirect()->route('admin.dashboard', ['tab' => 'book-appointments', 'section' => $section])
             ->with('success', 'Entry deleted.');
+    }
+
+    /**
+     * Compress all pre-existing images in user_media/ and save originals to user_media_originals/.
+     * Called from the admin panel "Compress Existing Images" button.
+     * Returns JSON with per-file results for live display.
+     */
+    public function compressExistingMedia(\Illuminate\Http\Request $request)
+    {
+        $admin = Auth::user();
+        if (! $admin || ! $admin->isAdmin()) {
+            return response()->json(['error' => 'Access denied.'], 403);
+        }
+
+        $disk      = \Illuminate\Support\Facades\Storage::disk('public');
+        $imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $targetB   = 500 * 1024; // 500 KB
+        $force     = (bool) $request->input('force', false);
+
+        $disk->makeDirectory('user_media');
+        $disk->makeDirectory('user_media_originals');
+
+        $files = collect($disk->files('user_media'))
+            ->filter(fn ($f) => in_array(strtolower(pathinfo($f, PATHINFO_EXTENSION)), $imageExts))
+            ->values();
+
+        $results = [];
+
+        foreach ($files as $file) {
+            $basename = basename($file);
+            $base     = pathinfo($basename, PATHINFO_FILENAME);
+
+            // Skip if already processed (original exists) unless force=true
+            if (! $force) {
+                $alreadyDone = false;
+                foreach ($imageExts as $ext) {
+                    if ($disk->exists('user_media_originals/' . $base . '.' . $ext)) {
+                        $alreadyDone = true;
+                        break;
+                    }
+                }
+                if ($alreadyDone) {
+                    $results[] = ['file' => $basename, 'status' => 'skipped', 'note' => 'already done'];
+                    continue;
+                }
+            }
+
+            $srcPath  = $disk->path('user_media/' . $basename);
+            $origDest = $disk->path('user_media_originals/' . $basename);
+            $sizeBefore = round(filesize($srcPath) / 1024);
+
+            // 1. Copy untouched original
+            copy($srcPath, $origDest);
+
+            // 2. Compress in-place
+            $ok = $this->compressImageToJpegAdmin($srcPath, $srcPath, $targetB);
+
+            if ($ok) {
+                $sizeAfter = round(filesize($srcPath) / 1024);
+                $results[] = [
+                    'file'   => $basename,
+                    'status' => 'compressed',
+                    'before' => $sizeBefore,
+                    'after'  => $sizeAfter,
+                    'saved'  => max(0, $sizeBefore - $sizeAfter),
+                ];
+            } else {
+                // Restore original on GD failure
+                copy($origDest, $srcPath);
+                $results[] = ['file' => $basename, 'status' => 'failed', 'note' => 'GD could not process'];
+            }
+        }
+
+        $compressed = collect($results)->where('status', 'compressed');
+        $summary = [
+            'total'      => $files->count(),
+            'compressed' => $compressed->count(),
+            'skipped'    => collect($results)->where('status', 'skipped')->count(),
+            'failed'     => collect($results)->where('status', 'failed')->count(),
+            'saved_kb'   => $compressed->sum('saved'),
+        ];
+
+        return response()->json(['summary' => $summary, 'results' => $results]);
+    }
+
+    /**
+     * Identical GD compression helper used by compressExistingMedia().
+     * (Mirrors the logic in PicturesVideosController — kept local to avoid coupling.)
+     */
+    private function compressImageToJpegAdmin(string $sourcePath, string $destPath, int $targetBytes): bool
+    {
+        if (! extension_loaded('gd')) {
+            return false;
+        }
+
+        $mime = @mime_content_type($sourcePath);
+        $img  = match (true) {
+            in_array($mime, ['image/jpeg', 'image/jpg'], true)                    => @imagecreatefromjpeg($sourcePath),
+            $mime === 'image/png'                                                  => @imagecreatefrompng($sourcePath),
+            $mime === 'image/gif'                                                  => @imagecreatefromgif($sourcePath),
+            $mime === 'image/webp' && function_exists('imagecreatefromwebp')      => @imagecreatefromwebp($sourcePath),
+            default                                                                => null,
+        };
+
+        if (! $img) {
+            return false;
+        }
+
+        $origW = imagesx($img);
+        $origH = imagesy($img);
+        $flat  = imagecreatetruecolor($origW, $origH);
+        $white = imagecolorallocate($flat, 255, 255, 255);
+        imagefill($flat, 0, 0, $white);
+        imagecopy($flat, $img, 0, 0, 0, 0, $origW, $origH);
+        imagedestroy($img);
+        $img = $flat;
+
+        $scale    = 1.0;
+        $quality  = 82;
+        $attempts = 0;
+
+        while ($attempts < 20) {
+            $attempts++;
+            $sw = max(1, (int) round($origW * $scale));
+            $sh = max(1, (int) round($origH * $scale));
+
+            if ($scale < 1.0) {
+                $work = imagecreatetruecolor($sw, $sh);
+                imagecopyresampled($work, $img, 0, 0, 0, 0, $sw, $sh, $origW, $origH);
+            } else {
+                $work = $img;
+            }
+
+            ob_start();
+            imagejpeg($work, null, $quality);
+            $buffer = ob_get_clean();
+
+            if ($scale < 1.0) {
+                imagedestroy($work);
+            }
+
+            if (strlen($buffer) <= $targetBytes || $attempts >= 20) {
+                file_put_contents($destPath, $buffer);
+                imagedestroy($img);
+                return true;
+            }
+
+            if ($quality > 25) {
+                $quality -= 10;
+            } else {
+                $scale   *= 0.72;
+                $quality  = 72;
+            }
+        }
+
+        imagedestroy($img);
+        return false;
     }
 }

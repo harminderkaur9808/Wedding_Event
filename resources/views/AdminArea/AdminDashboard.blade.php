@@ -947,6 +947,56 @@
                             <h1 class="admin-dashboard-title">Media Files</h1>
                         </div>
 
+                        <!-- ── Compress Existing Images Tool ───────────────────────── -->
+                        <div class="admin-compress-tool-card" id="compressToolCard">
+                            <div class="admin-compress-tool-header">
+                                <div class="admin-compress-tool-icon" aria-hidden="true">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 16.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round"/>
+                                        <path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5" stroke="#2F4F75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="18" cy="8" r="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+                                        <path d="M16.5 8h3M18 6.5v3" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="admin-compress-tool-meta">
+                                    <h3 class="admin-compress-tool-title">Compress Existing Images</h3>
+                                    <p class="admin-compress-tool-desc">
+                                        Compresses all images already in the gallery to <strong>≤ 500 KB</strong> for fast loading.
+                                        Originals are automatically saved to a separate folder so downloads always serve the full-quality original.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Progress bar (hidden until running) -->
+                            <div class="admin-compress-progress-wrap" id="adminCompressProgressWrap" style="display:none;">
+                                <div class="admin-compress-progress-track">
+                                    <div class="admin-compress-progress-fill" id="adminCompressProgressFill"></div>
+                                </div>
+                                <div class="admin-compress-progress-label" id="adminCompressProgressLabel">Processing…</div>
+                            </div>
+
+                            <!-- Results log (hidden until done) -->
+                            <div class="admin-compress-results" id="adminCompressResults" style="display:none;">
+                                <div class="admin-compress-summary" id="adminCompressSummary"></div>
+                                <div class="admin-compress-log" id="adminCompressLog"></div>
+                            </div>
+
+                            <div class="admin-compress-tool-actions" id="adminCompressActions">
+                                <button type="button" class="admin-dashboard-action-btn approve-btn" id="adminCompressBtn"
+                                        onclick="adminRunCompress(false)">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:6px;">
+                                        <path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Compress All Images Now
+                                </button>
+                                <button type="button" class="admin-dashboard-action-btn" id="adminCompressForceBtn"
+                                        onclick="adminRunCompress(true)"
+                                        style="background:#f0f4f8;color:#2F4F75;border:1px solid #c7d9f5;">
+                                    Re-compress All (overwrite)
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- Filter Section -->
                         <div class="admin-dashboard-media-filters">
                             <div class="admin-dashboard-filter-group">
@@ -1486,6 +1536,106 @@ function togglePassword(inputId) {
         eyeOpen.style.display = 'block';
         eyeClosed.style.display = 'none';
     }
+}
+
+// ── Compress Existing Images ─────────────────────────────────────────
+function adminRunCompress(force) {
+    var btn       = document.getElementById('adminCompressBtn');
+    var forceBtn  = document.getElementById('adminCompressForceBtn');
+    var progWrap  = document.getElementById('adminCompressProgressWrap');
+    var progFill  = document.getElementById('adminCompressProgressFill');
+    var progLabel = document.getElementById('adminCompressProgressLabel');
+    var results   = document.getElementById('adminCompressResults');
+    var summary   = document.getElementById('adminCompressSummary');
+    var log       = document.getElementById('adminCompressLog');
+    var actions   = document.getElementById('adminCompressActions');
+
+    if (!btn) return;
+
+    // Reset UI
+    results.style.display = 'none';
+    log.innerHTML = '';
+    summary.innerHTML = '';
+    progFill.style.width = '0%';
+    progLabel.textContent = 'Processing… please wait';
+    progWrap.style.display = 'block';
+    actions.style.display = 'none';
+
+    // Animate indeterminate progress while waiting
+    var pct = 0;
+    var animTimer = setInterval(function() {
+        pct = Math.min(pct + 1.5, 92);
+        progFill.style.width = pct + '%';
+    }, 200);
+
+    var fd = new FormData();
+    fd.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    fd.append('force', force ? '1' : '0');
+
+    fetch('{{ route("admin.media.compress-existing") }}', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: fd
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        clearInterval(animTimer);
+        progFill.style.width = '100%';
+
+        if (data.error) {
+            progLabel.textContent = 'Error: ' + data.error;
+            actions.style.display = '';
+            return;
+        }
+
+        var s = data.summary;
+        var savedMB = (s.saved_kb / 1024).toFixed(1);
+        progWrap.style.display = 'none';
+
+        // Build summary pill row
+        summary.innerHTML =
+            '<span class="admin-compress-stat admin-compress-stat-green">' +
+                '<strong>' + s.compressed + '</strong> compressed' +
+            '</span>' +
+            '<span class="admin-compress-stat admin-compress-stat-gray">' +
+                '<strong>' + s.skipped + '</strong> already done' +
+            '</span>' +
+            (s.failed > 0 ?
+                '<span class="admin-compress-stat admin-compress-stat-red"><strong>' + s.failed + '</strong> failed</span>' : '') +
+            '<span class="admin-compress-stat admin-compress-stat-blue">' +
+                '<strong>' + savedMB + ' MB</strong> saved' +
+            '</span>';
+
+        // Build log rows
+        var rows = '';
+        (data.results || []).forEach(function(r) {
+            if (r.status === 'compressed') {
+                rows += '<div class="admin-compress-log-row admin-compress-log-ok">' +
+                    '<span class="admin-compress-log-icon">&#10003;</span>' +
+                    '<span class="admin-compress-log-name">' + r.file + '</span>' +
+                    '<span class="admin-compress-log-size">' + r.before + ' KB &rarr; <strong>' + r.after + ' KB</strong></span>' +
+                '</div>';
+            } else if (r.status === 'failed') {
+                rows += '<div class="admin-compress-log-row admin-compress-log-fail">' +
+                    '<span class="admin-compress-log-icon">&#10007;</span>' +
+                    '<span class="admin-compress-log-name">' + r.file + '</span>' +
+                    '<span class="admin-compress-log-size">' + (r.note || '') + '</span>' +
+                '</div>';
+            }
+            // skip 'skipped' rows to keep log clean
+        });
+        log.innerHTML = rows;
+
+        results.style.display = 'block';
+        actions.style.display = '';
+        // Change primary button to "Run Again"
+        btn.innerHTML = 'Run Again';
+    })
+    .catch(function(err) {
+        clearInterval(animTimer);
+        progLabel.textContent = 'Request failed. Please try again.';
+        actions.style.display = '';
+    });
 }
 
 // Media Files Filter Function

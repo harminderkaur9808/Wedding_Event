@@ -212,7 +212,9 @@ class PicturesVideosController extends Controller
     }
 
     /**
-     * Upload media for a category
+     * Upload media for a category.
+     * Images: saves original to user_media_originals/ and a compressed JPEG to user_media/ for display.
+     * Videos: saved as-is to user_media/.
      */
     public function uploadMedia(Request $request, $category)
     {
@@ -221,36 +223,53 @@ class PicturesVideosController extends Controller
         }
 
         $user = Auth::user();
-        
+
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:10240', // 10MB max
-            'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv,flv,webm|max:204800', // 200MB max
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:20480', // 20 MB max per image
+            'videos.*' => 'nullable|mimes:mp4,avi,mov,wmv,flv,webm|max:204800',   // 200 MB max per video
         ]);
 
-        // Get or create user media record for this category
         $userMedia = UserMedia::firstOrNew([
-            'user_id' => $user->id,
+            'user_id'  => $user->id,
             'category' => strtolower($category),
         ]);
 
-        // Auto-fill email and role from user
         $userMedia->email = $user->email;
-        $userMedia->role = $user->role;
-        
-        // Initialize arrays if they don't exist
+        $userMedia->role  = $user->role;
+
         $images = $userMedia->images ?? [];
         $videos = $userMedia->videos ?? [];
 
-        // Handle image uploads
+        // Ensure storage directories exist
+        Storage::disk('public')->makeDirectory('user_media');
+        Storage::disk('public')->makeDirectory('user_media_originals');
+
+        // Handle image uploads — save original + compressed display copy
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $imageName = time() . '_' . $user->id . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('user_media', $imageName, 'public');
-                $images[] = $imageName;
+                $base    = time() . '_' . $user->id . '_' . uniqid();
+                $origExt = strtolower($image->getClientOriginalExtension() ?: 'jpg');
+                $origName    = $base . '.' . $origExt;   // e.g. 17000000_1_abc.png
+                $displayName = $base . '.jpg';            // e.g. 17000000_1_abc.jpg  (always JPEG for display)
+
+                // 1. Save untouched original for download
+                $image->storeAs('user_media_originals', $origName, 'public');
+
+                // 2. Compress to JPEG for fast gallery display
+                $origFullPath    = Storage::disk('public')->path('user_media_originals/' . $origName);
+                $displayFullPath = Storage::disk('public')->path('user_media/' . $displayName);
+
+                $ok = $this->compressImageToJpeg($origFullPath, $displayFullPath);
+                if (! $ok) {
+                    // GD unavailable or unreadable — copy original as fallback
+                    copy($origFullPath, $displayFullPath);
+                }
+
+                $images[] = $displayName;
             }
         }
 
-        // Handle video uploads
+        // Handle video uploads — saved as-is, no originals folder needed
         if ($request->hasFile('videos')) {
             foreach ($request->file('videos') as $video) {
                 $videoName = time() . '_' . $user->id . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
@@ -266,6 +285,99 @@ class PicturesVideosController extends Controller
         $type = $request->get('type', 'images');
         return redirect()->route('pictures_videos.category', ['category' => $category, 'type' => $type])
             ->with('success', 'Media uploaded successfully!');
+    }
+
+    /**
+     * Compress an image to JPEG targeting ≤ 500 KB using PHP GD.
+     * Iteratively reduces quality (82 → 25) then scales dimensions (×0.72 each pass) until target is met.
+     * Returns true on success, false if GD is unavailable or the source cannot be decoded.
+     */
+    private function compressImageToJpeg(string $sourcePath, string $destPath, int $targetBytes = 500 * 1024): bool
+    {
+        if (! extension_loaded('gd')) {
+            return false;
+        }
+
+        $mime = @mime_content_type($sourcePath);
+        $img  = match (true) {
+            in_array($mime, ['image/jpeg', 'image/jpg'], true) => @imagecreatefromjpeg($sourcePath),
+            $mime === 'image/png'  => @imagecreatefrompng($sourcePath),
+            $mime === 'image/gif'  => @imagecreatefromgif($sourcePath),
+            $mime === 'image/webp' && function_exists('imagecreatefromwebp') => @imagecreatefromwebp($sourcePath),
+            default => null,
+        };
+
+        if (! $img) {
+            return false;
+        }
+
+        // Flatten transparency onto a white background (PNG/GIF → JPEG loses alpha otherwise)
+        $origW = imagesx($img);
+        $origH = imagesy($img);
+        $flat  = imagecreatetruecolor($origW, $origH);
+        $white = imagecolorallocate($flat, 255, 255, 255);
+        imagefill($flat, 0, 0, $white);
+        imagecopy($flat, $img, 0, 0, 0, 0, $origW, $origH);
+        imagedestroy($img);
+        $img = $flat;
+
+        $scale    = 1.0;
+        $quality  = 82;
+        $attempts = 0;
+
+        while ($attempts < 20) {
+            $attempts++;
+            $sw = max(1, (int) round($origW * $scale));
+            $sh = max(1, (int) round($origH * $scale));
+
+            if ($scale < 1.0) {
+                $work = imagecreatetruecolor($sw, $sh);
+                imagecopyresampled($work, $img, 0, 0, 0, 0, $sw, $sh, $origW, $origH);
+            } else {
+                $work = $img;
+            }
+
+            ob_start();
+            imagejpeg($work, null, $quality);
+            $buffer = ob_get_clean();
+
+            if ($scale < 1.0) {
+                imagedestroy($work);
+            }
+
+            if (strlen($buffer) <= $targetBytes || $attempts >= 20) {
+                file_put_contents($destPath, $buffer);
+                imagedestroy($img);
+                return true;
+            }
+
+            // Reduce quality first; once at floor, shrink dimensions
+            if ($quality > 25) {
+                $quality -= 10;
+            } else {
+                $scale   *= 0.72;
+                $quality  = 72;
+            }
+        }
+
+        imagedestroy($img);
+        return false;
+    }
+
+    /**
+     * Find the original (uncompressed) file path for a display filename.
+     * The display file is always .jpg; the original may have been .png, .gif, .webp, etc.
+     */
+    private function findOriginalPath(string $displayFilename): ?string
+    {
+        $base = pathinfo($displayFilename, PATHINFO_FILENAME);
+        foreach (['jpg', 'jpeg', 'png', 'gif', 'webp'] as $ext) {
+            $try = 'user_media_originals/' . $base . '.' . $ext;
+            if (Storage::disk('public')->exists($try)) {
+                return $try;
+            }
+        }
+        return null;
     }
 
     /**
@@ -307,10 +419,13 @@ class PicturesVideosController extends Controller
 
     /**
      * Download a single image or video (auth required).
+     * Images: serves the original uncompressed file from user_media_originals/ if available,
+     * falling back to the display copy in user_media/.
+     * Videos: served directly from user_media/.
      */
     public function downloadMedia($mediaId, $type, $index)
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login')->with('error', 'Please login to download media.');
         }
 
@@ -319,19 +434,22 @@ class PicturesVideosController extends Controller
 
         if ($type === 'image') {
             $files = $userMedia->images ?? [];
-            if (!isset($files[$index])) {
+            if (! isset($files[$index])) {
                 abort(404);
             }
-            $path = 'user_media/' . ltrim($files[$index], '/\\');
+            $displayFilename = ltrim($files[$index], '/\\');
+            // Prefer original (uncompressed); fall back to display copy
+            $origPath = $this->findOriginalPath($displayFilename);
+            $path     = $origPath ?? 'user_media/' . $displayFilename;
         } else {
             $files = $userMedia->videos ?? [];
-            if (!isset($files[$index])) {
+            if (! isset($files[$index])) {
                 abort(404);
             }
             $path = 'user_media/' . ltrim($files[$index], '/\\');
         }
 
-        if (!Storage::disk('public')->exists($path)) {
+        if (! Storage::disk('public')->exists($path)) {
             abort(404);
         }
 

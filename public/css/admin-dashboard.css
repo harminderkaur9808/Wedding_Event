@@ -2809,3 +2809,155 @@ select.admin-notes-form-input {
     flex-shrink: 0;
     accent-color: #054C82;
 }
+
+/* ── Compress Existing Images Tool Card ────────────────────────────── */
+.admin-compress-tool-card {
+    background: #f8faff;
+    border: 1px solid #c7d9f5;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+}
+
+.admin-compress-tool-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.admin-compress-tool-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: #e0eaf8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-compress-tool-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-compress-tool-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2F4F75;
+    margin: 0 0 6px;
+}
+
+.admin-compress-tool-desc {
+    font-size: 13.5px;
+    color: #475569;
+    margin: 0;
+    line-height: 1.55;
+}
+
+.admin-compress-tool-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Progress bar */
+.admin-compress-progress-wrap {
+    margin-bottom: 16px;
+}
+
+.admin-compress-progress-track {
+    height: 8px;
+    background: #dde9f9;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.admin-compress-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2F4F75, #4d84c0);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.admin-compress-progress-label {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #2F4F75;
+    font-weight: 500;
+}
+
+/* Results area */
+.admin-compress-results {
+    margin-bottom: 20px;
+}
+
+.admin-compress-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.admin-compress-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.admin-compress-stat-green  { background: #dcfce7; color: #15803d; }
+.admin-compress-stat-gray   { background: #f1f5f9; color: #475569; }
+.admin-compress-stat-red    { background: #fee2e2; color: #b91c1c; }
+.admin-compress-stat-blue   { background: #dbeafe; color: #1d4ed8; }
+
+.admin-compress-log {
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 12.5px;
+}
+
+.admin-compress-log-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-compress-log-row:last-child { border-bottom: none; }
+
+.admin-compress-log-ok   { color: #166534; }
+.admin-compress-log-fail { color: #991b1b; }
+
+.admin-compress-log-icon {
+    flex-shrink: 0;
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+}
+
+.admin-compress-log-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: monospace;
+    font-size: 12px;
+    color: #334155;
+}
+
+.admin-compress-log-size {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+}
