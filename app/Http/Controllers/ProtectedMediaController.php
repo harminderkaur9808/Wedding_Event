@@ -30,12 +30,25 @@ class ProtectedMediaController extends Controller
         }
 
         $fullPath = Storage::disk('public')->path($path);
-        $mime = \Illuminate\Support\Facades\File::mimeType($fullPath);
+        $mime     = \Illuminate\Support\Facades\File::mimeType($fullPath);
         $filename = basename($path);
+        $mtime    = filemtime($fullPath);
+        $etag     = '"' . md5($path . $mtime) . '"';
+
+        // Return 304 Not Modified if browser already has this version cached
+        $ifNoneMatch   = request()->header('If-None-Match');
+        $ifModifiedSince = request()->header('If-Modified-Since');
+        $lastModified  = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+        if ($ifNoneMatch === $etag || ($ifModifiedSince && strtotime($ifModifiedSince) >= $mtime)) {
+            return response('', 304);
+        }
 
         return response()->file($fullPath, [
-            'Content-Type' => $mime,
+            'Content-Type'     => $mime,
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'Cache-Control'    => 'private, max-age=86400, must-revalidate',
+            'ETag'             => $etag,
+            'Last-Modified'    => $lastModified,
         ]);
     }
 }

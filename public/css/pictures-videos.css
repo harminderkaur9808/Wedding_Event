@@ -514,6 +514,9 @@ a.wm-pv-category-tab.active {
 }
 
 .wm-pv-category-view-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     padding: 14px 40px;
     background-color: #2F4F75;
     color: #ffffff;
@@ -526,10 +529,77 @@ a.wm-pv-category-tab.active {
     transition: all 0.3s ease;
 }
 
-.wm-pv-category-view-more-btn:hover {
+.wm-pv-category-view-more-btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+    transform: none !important;
+}
+
+.wm-pv-category-view-more-btn:hover:not(:disabled) {
     background-color: #0055A5;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(47, 79, 117, 0.3);
+}
+
+/* Spinner inside View More button */
+.wm-pv-view-more-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: wm-pv-spin 0.7s linear infinite;
+}
+
+/* ── Skeleton loading shimmer ─────────────────────────────────────── */
+@keyframes wm-pv-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.wm-pv-skeleton {
+    background: #e8edf2;
+    background-image: linear-gradient(
+        90deg,
+        #e8edf2 0px,
+        #f4f6f8 60px,
+        #e8edf2 120px
+    );
+    background-size: 800px 100%;
+    animation: wm-pv-shimmer 1.4s ease-in-out infinite;
+}
+
+/* New items fade in once image is loaded */
+.wm-pv-item-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.wm-pv-item-hidden:not(.wm-pv-item-hidden) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* triggered by JS: classList.remove('wm-pv-item-hidden') */
+.wm-pv-category-item:not(.wm-pv-item-hidden) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* "Your Upload" badge */
+.wm-pv-your-upload-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(46, 125, 50, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
 }
 
 /* Hide header when image/video viewer is open */

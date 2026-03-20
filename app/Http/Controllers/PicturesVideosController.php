@@ -65,35 +65,38 @@ class PicturesVideosController extends Controller
                     // Newest filenames are at end of array (time() in filename); reverse so newest first
                     $imagesList = array_reverse($userMedia->images);
                     foreach ($imagesList as $index => $imagePath) {
-                        $path = 'user_media/' . ltrim($imagePath, '/\\');
-                        if (Storage::disk('public')->exists($path)) {
+                        $storagePath = 'user_media/' . ltrim($imagePath, '/\\');
+                        if (Storage::disk('public')->exists($storagePath)) {
                             $items[] = [
-                                'id' => 'media_' . $userMedia->id . '_img_' . $index,
-                                'url' => route('pictures_videos.serve', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
-                                'title' => 'Uploaded Image',
-                                'is_user_media' => true,
-                                'user_id' => $userMedia->user_id,
-                                'is_current_user' => $userMedia->user_id === Auth::id(),
-                                'sort_ts' => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
-                                'download_url' => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
+                                'id'             => 'media_' . $userMedia->id . '_img_' . $index,
+                                // Direct static URL — no PHP per image, served by web server instantly
+                                'url'            => Storage::disk('public')->url($storagePath),
+                                'title'          => 'Uploaded Image',
+                                'is_user_media'  => true,
+                                'user_id'        => $userMedia->user_id,
+                                'is_current_user'=> $userMedia->user_id === Auth::id(),
+                                'sort_ts'        => $this->getSortTimestampFromFilename($imagePath, $userMedia->updated_at),
+                                // Download route still used to serve the original uncompressed file
+                                'download_url'   => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'image', 'index' => $index]),
                             ];
                         }
                     }
                 } elseif ($type === 'videos' && $userMedia->videos && is_array($userMedia->videos)) {
                     $videosList = array_reverse($userMedia->videos);
                     foreach ($videosList as $index => $videoPath) {
-                        $path = 'user_media/' . ltrim($videoPath, '/\\');
-                        if (Storage::disk('public')->exists($path)) {
+                        $storagePath = 'user_media/' . ltrim($videoPath, '/\\');
+                        if (Storage::disk('public')->exists($storagePath)) {
                             $items[] = [
-                                'id' => 'media_' . $userMedia->id . '_vid_' . $index,
-                                'url' => route('pictures_videos.serve', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
-                                'title' => 'Uploaded Video',
-                                'is_user_media' => true,
-                                'is_video' => true,
-                                'user_id' => $userMedia->user_id,
-                                'is_current_user' => $userMedia->user_id === Auth::id(),
-                                'sort_ts' => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
-                                'download_url' => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
+                                'id'             => 'media_' . $userMedia->id . '_vid_' . $index,
+                                // Direct static URL for videos too
+                                'url'            => Storage::disk('public')->url($storagePath),
+                                'title'          => 'Uploaded Video',
+                                'is_user_media'  => true,
+                                'is_video'       => true,
+                                'user_id'        => $userMedia->user_id,
+                                'is_current_user'=> $userMedia->user_id === Auth::id(),
+                                'sort_ts'        => $this->getSortTimestampFromFilename($videoPath, $userMedia->updated_at),
+                                'download_url'   => route('pictures_videos.download', ['mediaId' => $userMedia->id, 'type' => 'video', 'index' => $index]),
                             ];
                         }
                     }
@@ -408,12 +411,24 @@ class PicturesVideosController extends Controller
         }
 
         $fullPath = Storage::disk('public')->path($path);
-        $mime = \Illuminate\Support\Facades\File::mimeType($fullPath);
+        $mime     = \Illuminate\Support\Facades\File::mimeType($fullPath);
         $filename = basename($path);
+        $mtime    = filemtime($fullPath);
+        $etag     = '"' . md5($path . $mtime) . '"';
+
+        $ifNoneMatch    = request()->header('If-None-Match');
+        $ifModifiedSince = request()->header('If-Modified-Since');
+        $lastModified   = gmdate('D, d M Y H:i:s', $mtime) . ' GMT';
+        if ($ifNoneMatch === $etag || ($ifModifiedSince && strtotime($ifModifiedSince) >= $mtime)) {
+            return response('', 304);
+        }
 
         return response()->file($fullPath, [
-            'Content-Type' => $mime,
+            'Content-Type'        => $mime,
             'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            'Cache-Control'       => 'private, max-age=86400, must-revalidate',
+            'ETag'                => $etag,
+            'Last-Modified'       => $lastModified,
         ]);
     }
 

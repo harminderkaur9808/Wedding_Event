@@ -72,7 +72,7 @@
                 $totalItems = count($items);
                 $hasMore = $totalItems > $perPage;
             @endphp
-            <!-- Image/Video Grid (28 shown by default, View More loads next 28). Admin can drag to reorder. -->
+            <!-- Image/Video Grid -->
             <div class="wm-pv-category-grid" id="galleryGrid" data-shown="{{ count($itemsInitial) }}" data-total="{{ $totalItems }}" data-per-page="{{ $perPage }}">
                 @auth
                     @forelse($itemsInitial as $index => $item)
@@ -82,22 +82,24 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                             </div>
                             @endif
-                            <div class="wm-pv-category-item-image">
+                            <div class="wm-pv-category-item-image wm-pv-skeleton">
                                 @if(isset($item['is_video']) && $item['is_video'])
-                                    <video src="{{ $item['url'] }}" class="wm-pv-category-item-img" style="object-fit: cover;"></video>
+                                    <video src="{{ $item['url'] }}" class="wm-pv-category-item-img"
+                                           style="object-fit:cover;"
+                                           onloadeddata="this.closest('.wm-pv-skeleton')?.classList.remove('wm-pv-skeleton')"></video>
                                 @else
                                     <img src="{{ $item['url'] }}" alt="{{ $item['title'] }}" class="wm-pv-category-item-img"
                                          loading="{{ $index < 6 ? 'eager' : 'lazy' }}"
                                          {{ $index < 4 ? 'fetchpriority="high"' : '' }}
                                          decoding="async"
-                                         onload="this.classList.add('loaded')"
-                                         onerror="this.style.opacity=1">
+                                         onload="this.classList.add('loaded');this.closest('.wm-pv-skeleton')?.classList.remove('wm-pv-skeleton')"
+                                         onerror="this.closest('.wm-pv-skeleton')?.classList.remove('wm-pv-skeleton');this.style.opacity=1">
                                 @endif
                                 <div class="wm-pv-category-item-overlay">
                                     <img src="{{ asset('Images/picturesandvideos/Showfullviewicon.png') }}" alt="View Full" class="wm-pv-category-item-hover-icon">
                                 </div>
                                 @if(isset($item['is_current_user']) && $item['is_current_user'])
-                                    <div style="position: absolute; top: 8px; right: 8px; background: rgba(46, 125, 50, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">Your Upload</div>
+                                    <div class="wm-pv-your-upload-badge">Your Upload</div>
                                 @endif
                             </div>
                         </div>
@@ -108,7 +110,6 @@
                         </div>
                     @endforelse
                 @else
-                    <!-- Lock Icon for Non-Logged In Users -->
                     <div class="wm-pv-category-lock-container">
                         <a href="{{ route('login') }}" class="wm-pv-category-lock-link">
                             <div class="wm-pv-category-lock-icon">
@@ -125,10 +126,13 @@
                 @endauth
             </div>
 
-            <!-- View More Button (shows when more than 28 items; loads next 28 on click) -->
+            <!-- View More Button -->
             @if($hasMore)
                 <div class="wm-pv-category-view-more" id="viewMoreContainer">
-                    <button type="button" class="wm-pv-category-view-more-btn" id="viewMoreBtn">View More</button>
+                    <button type="button" class="wm-pv-category-view-more-btn" id="viewMoreBtn">
+                        <span id="viewMoreLabel">View More</span>
+                        <span class="wm-pv-view-more-spinner" id="viewMoreSpinner" style="display:none;"></span>
+                    </button>
                 </div>
             @endif
             @if(!empty($canReorder))
@@ -585,42 +589,83 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// View More: load next 28 items
+// View More: append next batch with skeleton → reveal as images load
 document.addEventListener('DOMContentLoaded', function() {
-    const viewMoreBtn = document.getElementById('viewMoreBtn');
-    const galleryGrid = document.getElementById('galleryGrid');
+    var viewMoreBtn  = document.getElementById('viewMoreBtn');
+    var viewMoreLabel   = document.getElementById('viewMoreLabel');
+    var viewMoreSpinner = document.getElementById('viewMoreSpinner');
+    var galleryGrid  = document.getElementById('galleryGrid');
     if (!viewMoreBtn || !galleryGrid) return;
 
     viewMoreBtn.addEventListener('click', function() {
-        const shown = parseInt(galleryGrid.getAttribute('data-shown') || '0', 10);
-        const total = galleryItems.length;
-        const next = Math.min(shown + perPage, total);
+        var shown = parseInt(galleryGrid.getAttribute('data-shown') || '0', 10);
+        var total = galleryItems.length;
+        var next  = Math.min(shown + perPage, total);
+        if (shown >= total) return;
 
-        for (let i = shown; i < next; i++) {
-            const item = galleryItems[i];
-            const div = document.createElement('div');
-            div.className = 'wm-pv-category-item';
-            div.setAttribute('data-id', item.id);
-            div.setAttribute('data-index', i);
-            div.onclick = function() { openImageViewer(i); };
+        // Show spinner in button
+        viewMoreBtn.disabled = true;
+        if (viewMoreLabel)  viewMoreLabel.textContent = 'Loading…';
+        if (viewMoreSpinner) viewMoreSpinner.style.display = 'inline-block';
 
-            let mediaHtml;
-            if (item.is_video) {
-                mediaHtml = '<video src="' + escapeHtml(item.url) + '" class="wm-pv-category-item-img" style="object-fit: cover;"></video>';
-            } else {
-                mediaHtml = '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" class="wm-pv-category-item-img" loading="lazy" decoding="async" onload="this.classList.add(\'loaded\')" onerror="this.style.opacity=1">';
-            }
-            const badgeHtml = item.is_current_user ? '<div style="position: absolute; top: 8px; right: 8px; background: rgba(46, 125, 50, 0.9); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">Your Upload</div>' : '';
-            const handleHtml = canReorder ? '<div class="wm-pv-drag-handle" title="Drag to reorder (admin)" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>' : '';
-            div.innerHTML = handleHtml + '<div class="wm-pv-category-item-image">' + mediaHtml +
-                '<div class="wm-pv-category-item-overlay"><img src="' + escapeHtml(showFullViewIconUrl) + '" alt="View Full" class="wm-pv-category-item-hover-icon"></div>' +
-                badgeHtml + '</div>';
-            galleryGrid.appendChild(div);
+        var handleHtml = canReorder
+            ? '<div class="wm-pv-drag-handle" title="Drag to reorder (admin)" onclick="event.stopPropagation();" onmousedown="event.stopPropagation();" aria-hidden="true">' +
+              '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>'
+            : '';
+
+        var fragment = document.createDocumentFragment();
+
+        for (var i = shown; i < next; i++) {
+            (function(idx) {
+                var item = galleryItems[idx];
+                var div  = document.createElement('div');
+                div.className = 'wm-pv-category-item wm-pv-item-hidden';
+                div.setAttribute('data-id', item.id);
+                div.setAttribute('data-index', idx);
+                div.addEventListener('click', (function(n){ return function(){ openImageViewer(n); }; })(idx));
+
+                var badgeHtml = item.is_current_user
+                    ? '<div class="wm-pv-your-upload-badge">Your Upload</div>' : '';
+
+                if (item.is_video) {
+                    div.innerHTML = handleHtml +
+                        '<div class="wm-pv-category-item-image wm-pv-skeleton">' +
+                        '<video src="' + escapeHtml(item.url) + '" class="wm-pv-category-item-img" style="object-fit:cover;" ' +
+                        'onloadeddata="this.closest(\'.wm-pv-skeleton\')?.classList.remove(\'wm-pv-skeleton\');' +
+                        'this.closest(\'.wm-pv-item-hidden\')?.classList.remove(\'wm-pv-item-hidden\')"></video>' +
+                        '<div class="wm-pv-category-item-overlay"><img src="' + escapeHtml(showFullViewIconUrl) + '" alt="View Full" class="wm-pv-category-item-hover-icon"></div>' +
+                        badgeHtml + '</div>';
+                } else {
+                    div.innerHTML = handleHtml +
+                        '<div class="wm-pv-category-item-image wm-pv-skeleton">' +
+                        '<img src="' + escapeHtml(item.url) + '" alt="' + escapeHtml(item.title) + '" ' +
+                        'class="wm-pv-category-item-img" loading="lazy" decoding="async" ' +
+                        'onload="this.classList.add(\'loaded\');' +
+                        'this.closest(\'.wm-pv-skeleton\')?.classList.remove(\'wm-pv-skeleton\');' +
+                        'this.closest(\'.wm-pv-item-hidden\')?.classList.remove(\'wm-pv-item-hidden\')" ' +
+                        'onerror="this.closest(\'.wm-pv-skeleton\')?.classList.remove(\'wm-pv-skeleton\');' +
+                        'this.closest(\'.wm-pv-item-hidden\')?.classList.remove(\'wm-pv-item-hidden\');this.style.opacity=1">' +
+                        '<div class="wm-pv-category-item-overlay"><img src="' + escapeHtml(showFullViewIconUrl) + '" alt="View Full" class="wm-pv-category-item-hover-icon"></div>' +
+                        badgeHtml + '</div>';
+                }
+
+                fragment.appendChild(div);
+            })(i);
         }
 
+        galleryGrid.appendChild(fragment);
         galleryGrid.setAttribute('data-shown', next);
+
+        // Re-enable button after a short delay (images are loading in background via lazy)
+        setTimeout(function() {
+            viewMoreBtn.disabled = false;
+            if (viewMoreLabel)   viewMoreLabel.textContent = 'View More';
+            if (viewMoreSpinner) viewMoreSpinner.style.display = 'none';
+        }, 400);
+
         if (next >= total) {
-            document.getElementById('viewMoreContainer').style.display = 'none';
+            var container = document.getElementById('viewMoreContainer');
+            if (container) container.style.display = 'none';
         }
     });
 });
