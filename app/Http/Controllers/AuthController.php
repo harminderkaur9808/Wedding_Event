@@ -62,9 +62,8 @@ class AuthController extends Controller
         }
 
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (Auth::attempt($credentials, true)) {
             $user = Auth::user();
             
             // Check if user is approved (admins are always approved)
